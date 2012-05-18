@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
-    <user name="test1" email="test1" password="test1" salt='test' created_at="2012-01-01 00:00:00" updated_at="2012-02-02 00:00:00"/>
-    <user name="test2" email="test2" password="test2" salt='test' created_at="2012-01-01 00:00:00" />
-    <user name="testuser" email="testuser" password="F2Dsz3mbKI0+0pj4FJOFBlWIzAOvjJQChoEnNFA7nJ8=" salt='test' created_at="2012-01-01 00:00:00" />
+    <user name="test1" email="test1" password="test1" salt='test' birthday="2000-01-01" created_at="2012-01-01 00:00:00" updated_at="2012-02-02 00:00:00"/>
+    <user name="test2" email="test2" password="test2" salt='test' birthday="2000-01-01" created_at="2012-01-01 00:00:00" />
+    <user name="testuser" email="testuser" password="F2Dsz3mbKI0+0pj4FJOFBlWIzAOvjJQChoEnNFA7nJ8=" salt='test' birthday="2000-01-01" created_at="2012-01-01 00:00:00" />
 </dataset>
