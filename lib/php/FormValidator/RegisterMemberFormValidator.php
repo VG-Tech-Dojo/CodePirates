@@ -6,7 +6,8 @@ class FormValidator_RegisterMemberFormValidator extends FormValidator_UserFormVa
     public $labels = array(
         'user_name' => 'ユーザー名',
         'password' => 'パスワード',
-        'email' => 'メールアドレス'
+        'email' => 'メールアドレス',
+        'birthday' => '誕生日'
     );
 
     public function __construct()
@@ -18,7 +19,25 @@ class FormValidator_RegisterMemberFormValidator extends FormValidator_UserFormVa
             ->addRule('email', 'required', $this->labels['email'])
             ->addRule('email', 'email', $this->labels['email'])
             ->addRule('password', 'required', $this->labels['password'])
-            ->addRule('password', 'password', $this->labels['password']);
+            ->addRule('password', 'password', $this->labels['password'])
+            ->addRule('birthday', 'required', $this->labels['birthday'])
+            ->addRule('birthday', 'date', $this->labels['birthday']);
+    }
+
+    public function date($field, $val, $label)
+    {
+        $pattern = array(
+            'pattern' => '/\A[0-9]{4}-(0[1-9]|1[1-2])-(0[0-9]|[1-2][0-9]|3[0-1])\z/',
+            'pattern_name' => 'yyyy-mm-dd'
+        );
+        if ($this->regExp($field, $val, $label, $pattern)) {
+            $date = explode('-', $val);
+            $year = $date[0];
+            $month = $date[1];
+            $day = $date[2];
+            return checkdate($month, $day, $year);
+        }
+        return false;
     }
 }
 

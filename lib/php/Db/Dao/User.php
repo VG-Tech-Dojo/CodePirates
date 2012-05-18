@@ -44,7 +44,7 @@ class Db_Dao_User extends Db_Dao_Abstract
     {
         $dbh = $this->getDbHandler();
 
-        $query = 'select id, name, email, password, salt from user where name = :NAME';
+        $query = 'select id, name, email, password, salt, birthday from user where name = :NAME';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':NAME', $name, PDO::PARAM_STR);
         $statement->execute();
@@ -80,15 +80,16 @@ class Db_Dao_User extends Db_Dao_Abstract
      * @param string $email E-Mail
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
-    public function insert($name, $pass, $salt, $email)
+    public function insert($name, $pass, $salt, $email, $birthday)
     {
         $dbh = $this->getDbHandler();
-        $query = 'insert into user (name, password, salt, email, created_at) values (:NAME, :PASSWORD, :SALT, :EMAIL, now())';
+        $query = 'insert into user (name, password, salt, email, birthday, created_at) values (:NAME, :PASSWORD, :SALT, :EMAIL, :BIRTHDAY, now())';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':NAME', $name, PDO::PARAM_STR);
         $statement->bindValue(':PASSWORD', $pass, PDO::PARAM_STR);
         $statement->bindValue(':SALT', $salt, PDO::PARAM_STR);
         $statement->bindValue(':EMAIL', $email, PDO::PARAM_STR);
+        $statement->bindValue(':BIRTHDAY', $birthday, PDO::PARAM_STR);
         $statement->execute();
 
         return ($statement->rowCount() === 1);

@@ -53,6 +53,24 @@
                         </div>
                     </div>
                     {% endif %}
+                    {% if errors.birthday %}
+                    <div class="control-group error">
+                        <label class="control-label" for="birthday">誕生日</label>
+                        <div class="controls">
+                            <input type="text" id="birthday" name="birthday" class="span3" value="{{ params.birthday }}" />
+                            <span class="help-inline">{{ errors.birthday }}</span>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="control-group">
+                        <label class="control-label" for="birthday">誕生日</label>
+                        <div class="controls">
+                            <input type="text" id="birthday" name="birthday" class="span3" value="{{ params.birthday }}" />
+                            <span class="help-inline">yyyy-mm-dd形式</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
                     <div class="controls">
                         <button type="submit" class="btn btn-primary">新規登録</button>
                     </div>

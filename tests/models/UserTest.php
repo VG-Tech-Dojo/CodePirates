@@ -57,11 +57,12 @@ class UserTest extends PHPUnit_Framework_TestCase
         $pass = 'PASS';
         $salt = 'SALT';
         $email = 'EMAIL';
+        $birthday = 'BIRTHDAY';
 
         $user = $this->getMock('Db_Dao_User');
         $user->expects($this->once())
             ->method('insert')
-            ->with($name, $pass, $salt, $email)
+            ->with($name, $pass, $salt, $email, $birthday)
             ->will($this->returnValue(true));
 
         $factory = $this->getMock('Factory');
@@ -71,7 +72,7 @@ class UserTest extends PHPUnit_Framework_TestCase
 
         $this->obj->setFactory($factory);
 
-        $this->assertTrue($this->obj->register($name, $pass, $salt, $email));
+        $this->assertTrue($this->obj->register($name, $pass, $salt, $email, $birthday));
     }
 
     public function test_ユーザー名を指定してDBからデータを取得してプロパティに設定されること()
@@ -81,7 +82,8 @@ class UserTest extends PHPUnit_Framework_TestCase
             'name' => 'test',
             'password' => 'pass',
             'salt' => 'salt',
-            'email' => 'email'
+            'email' => 'email',
+            'birthday' => 'birthday'
         );
         $user = $this->getMock('Db_Dao_User');
         $user->expects($this->once())

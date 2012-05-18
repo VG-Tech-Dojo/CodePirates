@@ -37,6 +37,7 @@ class Db_Dao_UserTest extends PHPUnit_Extensions_Database_TestCase
             'email' => 'test1',
             'password' => 'test1',
             'salt' => 'test',
+            'birthday' => '2000-01-01',
             'created_at' => '2012-01-01 00:00:00',
             'updated_at' => '2012-02-02 00:00:00'
         );
@@ -59,7 +60,8 @@ class Db_Dao_UserTest extends PHPUnit_Extensions_Database_TestCase
             'name' => 'test1',
             'email' => 'test1',
             'password' => 'test1',
-            'salt' => 'test'
+            'salt' => 'test',
+            'birthday' => '2000-01-01',
         );
 
         $result = $this->obj->findByName('test1');
@@ -85,16 +87,17 @@ class Db_Dao_UserTest extends PHPUnit_Extensions_Database_TestCase
         $this->assertSame(0, $result);
     }
 
-    public function findData($name, $password, $salt, $email)
+    public function findData($name, $password, $salt, $email, $birthday)
     {
         $dbh = $this->obj->getDbHandler();
 
-        $query  = 'select * from user where name = :NAME and password = :PASSWORD and salt = :SALT and email = :EMAIL';
+        $query  = 'select * from user where name = :NAME and password = :PASSWORD and salt = :SALT and email = :EMAIL and birthday = :BIRTHDAY';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':NAME', $name, PDO::PARAM_STR);
         $statement->bindValue(':PASSWORD', $password, PDO::PARAM_STR);
         $statement->bindValue(':SALT', $salt, PDO::PARAM_STR);
         $statement->bindValue(':EMAIL', $email, PDO::PARAM_STR);
+        $statement->bindValue(':BIRTHDAY', $birthday, PDO::PARAM_STR);
         $statement->execute();
 
         return $statement->fetch(PDO::FETCH_ASSOC);
@@ -106,9 +109,10 @@ class Db_Dao_UserTest extends PHPUnit_Extensions_Database_TestCase
         $password = 'TEST-USER-PASS';
         $salt = 'TEST-USER-SALT';
         $email = 'TEST-USER';
-        $this->assertTrue($this->obj->insert($name, $password, $salt, $email));
+        $birthday = '2000-01-01';
+        $this->assertTrue($this->obj->insert($name, $password, $salt, $email, $birthday));
 
-        $result = $this->findData($name, $password, $salt, $email);
+        $result = $this->findData($name, $password, $salt, $email, $birthday);
         $this->assertNotNull($result['id']);
         $this->assertNotNull($result['created_at']);
     }
