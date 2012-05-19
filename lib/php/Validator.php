@@ -9,7 +9,7 @@ class Validator
     /**
      * @var array エラーメッセージ
      */
-    private $_errors;
+    protected $_errors;
 
     /**
      * @var array filterルール
