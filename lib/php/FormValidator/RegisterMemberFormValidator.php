@@ -35,7 +35,11 @@ class FormValidator_RegisterMemberFormValidator extends FormValidator_UserFormVa
             $year = $date[0];
             $month = $date[1];
             $day = $date[2];
-            return checkdate($month, $day, $year);
+            if (!checkdate($month, $day, $year)) {
+                $this->errors[$field] = '無効な日付が入力されました';
+                return false;
+            };
+            return true;
         }
         return false;
     }
