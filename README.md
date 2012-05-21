@@ -39,7 +39,7 @@ public_htmlをドキュメントルートに設定する
 ### htaccess（もしくはhttpd.conf）に記述
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [QSA,L]%
+    RewriteRule ^ index.php [QSA,L]
 
 ### DB設定
 config/database.php内を環境にあわせて設定
