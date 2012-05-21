@@ -27,7 +27,7 @@ class FormValidator_RegisterMemberFormValidator extends FormValidator_UserFormVa
     public function date($field, $val, $label)
     {
         $pattern = array(
-            'pattern' => '/\A[0-9]{4}-(0[1-9]|1[1-2])-(0[0-9]|[1-2][0-9]|3[0-1])\z/',
+            'pattern' => '/\A[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\z/',
             'pattern_name' => 'yyyy-mm-dd'
         );
         if ($this->regExp($field, $val, $label, $pattern)) {
