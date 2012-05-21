@@ -91,6 +91,7 @@ class FormValidator_RegisterMemberFormValidatorTest extends PHPUnit_Framework_Te
         $this->assertTrue($this->form_validator->date('test', '2000-11-21', ''), '2000-12-21の場合true');
         $this->assertTrue($this->form_validator->date('test', '2000-12-31', ''), '2000-12-31の場合true');
         $this->assertTrue($this->form_validator->date('test', '2004-02-29', ''), '2004-02-29の場合true');
+        $this->assertTrue($this->form_validator->date('test', '2004-10-01', ''), '2004-10-01の場合true');
         $this->assertFalse($this->form_validator->date('test', '2002-02-29', ''), '2002-02-29の場合false');
         $this->assertFalse($this->form_validator->date('test', '2002-13-29', ''), '2002-13-29の場合false');
         $this->assertFalse($this->form_validator->date('test', '2002-12-32', ''), '2002-12-32の場合false');
@@ -106,5 +107,6 @@ class FormValidator_RegisterMemberFormValidatorTest extends PHPUnit_Framework_Te
         $this->assertFalse($this->form_validator->date('test', '', ''), '""の場合false');
         $this->assertFalse($this->form_validator->date('test', 'aaaaaaaaaaaa', ''), 'aaaaaaaaaaaaの場合false');
         $this->assertFalse($this->form_validator->date('test', '20011221', ''), '20011221の場合false');
+        $this->assertFalse($this->form_validator->date('test', '2002-12-00', ''), '2002-12-00の場合false');
     }
 }
