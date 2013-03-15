@@ -1,0 +1,2 @@
+use demo;
+source ./deletesql/delete_all_table.sql;
