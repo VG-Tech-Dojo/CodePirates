@@ -44,3 +44,6 @@ public_htmlをドキュメントルートに設定する
 ### DB設定
 config/database.php内を環境にあわせて設定
 
+=======
+CodePirates
+===========
