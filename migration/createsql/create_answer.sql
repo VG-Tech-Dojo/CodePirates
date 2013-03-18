@@ -5,7 +5,5 @@ CREATE  TABLE IF NOT EXISTS `answer` (
   `content` TEXT NOT NULL ,
   `created_at` DATETIME NOT NULL ,
   `updated_at` DATETIME NULL ,
-  PRIMARY KEY (`id`),
-  foreign key(u_id) references user(id),
-  foreign key(q_id) references question(id) )
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;

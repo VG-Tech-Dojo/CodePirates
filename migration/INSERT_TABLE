@@ -1,0 +1,2 @@
+use demo;
+source ./insertsql/insert_user.sql
