@@ -85,6 +85,7 @@ $app->post('/user/register', 'noauthorized', function () use ($app) {
                 $app->redirect('/user/login');
             }
         } catch (PDOException $e) {
+            echo $e->getMessage();
             $app->error('登録に失敗しました。');
         }
     } else {

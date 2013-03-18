@@ -48,8 +48,6 @@ class User extends Model
      * @param string $name ユーザー名
      * @param string $password パスワード
      * @param string $salt サルト
-     * @param string $email Email
-     * @param string $birthday 誕生日
      * @return boolean 処理が成功した場合true, 失敗した場合false
      */
     public function register($user_name, $password, $salt)

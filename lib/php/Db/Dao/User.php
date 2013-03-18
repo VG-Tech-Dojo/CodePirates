@@ -82,12 +82,13 @@ class Db_Dao_User extends Db_Dao_Abstract
     public function insert($name, $pass, $salt)
     {
         $dbh = $this->getDbHandler();
-        $query = 'insert into user (name, password, salt, email, birthday, created_at) values (:NAME, :PASSWORD, :SALT, now())';
+        $query = 'insert into user (name, password, salt, created_time) values (:NAME, :PASSWORD, :SALT, now())';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':NAME', $name, PDO::PARAM_STR);
         $statement->bindValue(':PASSWORD', $pass, PDO::PARAM_STR);
         $statement->bindValue(':SALT', $salt, PDO::PARAM_STR);
         $statement->execute();
+        echo "OK";
 
         return ($statement->rowCount() === 1);
     }

@@ -59,6 +59,7 @@ class Db_HandlerFactory
 
         if (!self::hasAvaiableConnectionForKey($key)) {
             self::$_pdoPool[$key] = new PDO($dsn, $db_config['user'], $db_config['password']);
+            self::$_pdoPool[$key]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
 
         return self::$_pdoPool[$key];

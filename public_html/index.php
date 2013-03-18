@@ -19,6 +19,9 @@ TwigView::$twigDirectory = PROJECT_DIR . '/vendor/Twig/lib/Twig';
  */
 $app = new Slim($config);
 
+ini_set('display_errors', 1);
+error_reporting(-1);
+
 require PROJECT_DIR . '/config/bootstrap.php';
 require PROJECT_DIR . '/config/routes.php';
 

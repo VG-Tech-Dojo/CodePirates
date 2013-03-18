@@ -21,22 +21,6 @@
                         </div>
                     </div>
                     {% endif %}
-                    {% if errors.email %}
-                    <div class="control-group error">
-                        <label class="control-label for="email"">メールアドレス</label>
-                        <div class="controls">
-                            <input type="text" id="email" name="email" class="span3" value="{{ params.email }}" />
-                            <span class="help-inline">{{ errors.email }}</span>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="control-group">
-                        <label class="control-label for="email"">メールアドレス</label>
-                        <div class="controls">
-                            <input type="text" id="email" name="email" class="span3" value="{{ params.email }}" />
-                        </div>
-                    </div>
-                    {% endif %}
                     {% if errors.password %}
                     <div class="control-group error">
                         <label class="control-label" for="password">パスワード</label>
@@ -50,23 +34,6 @@
                         <label class="control-label" for="password">パスワード</label>
                         <div class="controls">
                             <input type="password" id="password" name="password" class="span3" />
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% if errors.birthday %}
-                    <div class="control-group error">
-                        <label class="control-label" for="birthday">誕生日</label>
-                        <div class="controls">
-                            <input type="text" id="birthday" name="birthday" class="span3" value="{{ params.birthday }}" />
-                            <span class="help-inline">{{ errors.birthday }}</span>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="control-group">
-                        <label class="control-label" for="birthday">誕生日</label>
-                        <div class="controls">
-                            <input type="text" id="birthday" name="birthday" class="span3" value="{{ params.birthday }}" />
-                            <span class="help-inline">yyyy-mm-dd形式</span>
                         </div>
                     </div>
                     {% endif %}
