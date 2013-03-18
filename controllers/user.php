@@ -80,9 +80,7 @@ $app->post('/user/register', 'noauthorized', function () use ($app) {
                 $user->register(
                     $params['user_name'],
                     PasswordUtil::hashPassword($params['password'], $salt),
-                    $salt,
-                    $params['email'],
-                    $params['birthday']
+                    $salt
                 );
                 $app->redirect('/user/login');
             }

@@ -8,8 +8,6 @@ class User extends Model
     public $name;
     public $password;
     public $salt;
-    public $email;
-    public $birthday;
 
     /**
      * ユーザー名を指定してDBからデータを取得してプロパティに設定する
@@ -28,8 +26,6 @@ class User extends Model
         $this->name = $user_info['name'];
         $this->password = $user_info['password'];
         $this->salt = $user_info['salt'];
-        $this->email = $user_info['email'];
-        $this->birthday = $user_info['birthday'];
 
         return true;
     }
@@ -56,9 +52,9 @@ class User extends Model
      * @param string $birthday 誕生日
      * @return boolean 処理が成功した場合true, 失敗した場合false
      */
-    public function register($user_name, $password, $salt, $email, $birthday)
+    public function register($user_name, $password, $salt)
     {
         $user = $this->getFactory()->getDb_Dao_User();
-        return $user->insert($user_name, $password, $salt, $email, $birthday);
+        return $user->insert($user_name, $password, $salt);
     }
 }
