@@ -46,9 +46,9 @@ class Db_Dao_Question extends Db_Dao_Abstract
 
         $query = 'select * from question';
         $statement = $dbh->prepare($query);
-        $statement = execute();
-
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -59,9 +59,9 @@ class Db_Dao_Question extends Db_Dao_Abstract
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
     public function insert($title, $content)
-    
+    { 
         $dbh = $this->getDbHandler();
-        $query = 'insert into user (title, content, created_at) values (:TITLE, :CONTENT, now())';
+        $query = 'insert into question (title, content, created_at) values (:TITLE, :CONTENT, now())';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':TITLE', $title, PDO::PARAM_STR);
         $statement->bindValue(':CONTENT', $content, PDO::PARAM_STR);
