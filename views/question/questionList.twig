@@ -14,9 +14,17 @@
             <tr>
                 {% for questionItem in question %}
                     <td>
-                    {{questionItem}}
+                        {{questionList.content}}
+                        {% if question.content == questionItem %}
+                            <a href="/answer/{{question.id}}">{{questionItem}}</a>
+                        {% else %}
+                            {{questionItem}}
+                        {% endif %}
                     </td>
                 {% endfor %}
+                <td>
+                    <a href="/question/{{question.id}}">問題に答える</a>
+                </td>
             </tr>
             {% endfor %}
         </table>

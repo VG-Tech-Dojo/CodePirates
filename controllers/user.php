@@ -28,7 +28,7 @@ $app->post('/user/login', 'noauthorized', function () use ($app) {
             $session->regenerate();
             $session->set('user_id', $user->id);
             $session->set('user_name', $user->name);
-            $app->redirect('/');
+            $app->redirect('/question');
         } else {
             $errors['user_name'] = 'ユーザー名とパスワードの組み合わせが間違っています';
         }

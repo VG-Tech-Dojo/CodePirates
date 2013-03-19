@@ -3,7 +3,7 @@
 /**
  * 質問の一覧表示 
  */
-$app->get('/question', 'noauthorized', function () use ($app) {
+$app->get('/question', 'authorized', function () use ($app) {
     require_once MODELS_DIR . '/Question.php';
 
     $question = $app->factory->getQuestion();
@@ -22,7 +22,7 @@ $app->get('/question', 'noauthorized', function () use ($app) {
 /**
  * 問題と解答フォームの表示
  */
-$app->get('/question/:id', 'noauthorized', function ($id) use ($app) {
+$app->get('/question/:id', 'authorized', function ($id) use ($app) {
     require_once MODELS_DIR . '/Question.php';
 
     $question = $app->factory->getQuestion();

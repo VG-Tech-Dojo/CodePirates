@@ -1,6 +1,6 @@
 <?php
 
-$app->get('/answer/:a_id',  function ($a_id) use ($app) {
+$app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';
     require_once MODELS_DIR . '/Question.php';
@@ -23,7 +23,7 @@ $app->get('/answer/:a_id',  function ($a_id) use ($app) {
 });
 
 
-$app->get('/answerlist/:id',  function ($q_id) use ($app) {
+$app->get('/answerlist/:id', 'authorized' ,  function ($q_id) use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';
     require_once MODELS_DIR . '/Question.php';
