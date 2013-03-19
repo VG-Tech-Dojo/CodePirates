@@ -82,7 +82,7 @@ class Db_Dao_Answer extends Db_Dao_Abstract
      * @param string $content 内容
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
-    public function insert($U_id, $q_id, $content)
+    public function insert($u_id, $q_id, $content)
     {
         $dbh = $this->getDbHandler();
         $query = 'insert into answer (u_id, q_id, content, created_at) values (:U_ID, :Q_ID, :CONTENT, now())';
