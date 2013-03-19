@@ -1,0 +1,29 @@
+{% extends "base.twig" %}
+{% block title %}問題一覧{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <h1>
+            {{question.id}}.{{question.title}}
+        </h1>
+        <p>出題日：{{question.created_at}}</p>
+        <p>
+            {{question.content}}
+        </p>
+
+
+        <form class="form-horizontal" action="/question/{{question.id}}/confarm" method="post">
+            <div class="control-group">
+                <label class="control-label" for="inputCode">回答</label>
+                <div class="controls">
+                    <textarea id="inputCode" rows="20" class="input-xxlarge"></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn">回答する</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
