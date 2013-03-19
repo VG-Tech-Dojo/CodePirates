@@ -1,2 +1,4 @@
 use demo;
 source ./insertsql/insert_user.sql
+source ./insertsql/insert_question.sql
+source ./insertsql/insert_answer.sql

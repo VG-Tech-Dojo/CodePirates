@@ -1,0 +1,9 @@
+INSERT INTO `answer`(u_id, q_id, content, lang, created_at) VALUES (1, 1,'test','php','2012-08-26');
+INSERT INTO `answer`(u_id, q_id, content, lang, created_at) VALUES (1, 1,'test2','ruby','2012-08-26');
+INSERT INTO `answer`(u_id, q_id, content, lang, created_at) VALUES (1, 1,'test3','php','2012-08-26');
+INSERT INTO `answer`(u_id, q_id, content, lang, created_at) VALUES (1, 2,'test','php','2012-08-26');
+INSERT INTO `answer`(u_id, q_id, content, lang, created_at) VALUES (1, 2,'test2','ruby','2012-08-26');
+INSERT INTO `answer`(u_id, q_id, content, lang, created_at) VALUES (1, 2,'test3','ruby','2012-08-26');
+INSERT INTO `answer`(u_id, q_id, content, lang, created_at) VALUES (1, 3,'test','php','2012-08-26');
+INSERT INTO `answer`(u_id, q_id, content, lang, created_at) VALUES (1, 3,'test2','php','2012-08-26');
+INSERT INTO `answer`(u_id, q_id, content, lang, created_at) VALUES (1, 3,'test3','php','2012-08-26');
