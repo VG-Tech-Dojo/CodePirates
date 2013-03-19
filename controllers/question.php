@@ -4,13 +4,13 @@
  * 質問の一覧表示 
  */
 $app->get('/question/list', 'noauthorized', function () use ($app) {
-    require_once LIB_DIR . '/Question.php';
+    require_once MODELS_DIR . '/Question.php';
 
     $question = $app->factory->getQuestion();
     $errors = array();
     
     try {
-        $questioniList->getALlQuestion();
+        $questionList = $question->getAllQuestion();
     } catch (PDOException $e){
         $app->error('何も質問がありません'); 
     }
