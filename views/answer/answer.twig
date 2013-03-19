@@ -6,17 +6,10 @@
             <div class="span12 row-fluid">
                 <form action="/answer" method="POST" class="form-horizontal well">
                     <div class="control-group">
-                        <label class="control-label" for="user_name">username:さんのquestionid:の回答</label></br></br>
+                        <label class="control-label" for="user_name">{{answer.u_id}}:さんの{{answer.q_id}}の回答</label></br></br>
                           <pre class="brush: php;">
-{{params.source}}
+{{answer.content}}
                           </pre>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="user_name">anscontents</label>
-                        <div class="controls">
-                            <textarea name="source" rows="4" cols="40"></textarea>
-                            <button id="login" type="submit" class="btn btn-primary">test</button>
-                        </div>
                     </div>
                 </form>
             </div>
