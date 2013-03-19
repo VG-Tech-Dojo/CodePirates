@@ -1,0 +1,24 @@
+{% extends "base.twig" %}
+{% block title %}answer.twig{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="span12 row-fluid">
+                <form action="/answer" method="POST" class="form-horizontal well">
+                    <div class="control-group">
+                        <label class="control-label" for="user_name">username:さんのquestionid:の回答</label></br></br>
+                          <pre class="brush: php;">
+{{params.source}}
+                          </pre>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="user_name">anscontents</label>
+                        <div class="controls">
+                            <textarea name="source" rows="4" cols="40"></textarea>
+                            <button id="login" type="submit" class="btn btn-primary">test</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+{% endblock %}
