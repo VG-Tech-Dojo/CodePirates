@@ -43,6 +43,17 @@ class User extends Model
     }
 
     /**
+     * U_IDからユーザー情報を取得する
+     *
+     * @param string $u_id ユーザーID
+     */
+    public function getUserByID($u_id)
+    {
+        $user = $this->getFactory()->getDb_Dao_User();
+        return $user->getuserbyid($u_id);
+    }
+
+    /**
      * ユーザー登録する
      *
      * @param string $name ユーザー名

@@ -53,6 +53,24 @@ class Db_Dao_User extends Db_Dao_Abstract
     }
 
     /**
+     * ユーザーIDを指定してユーザー情報を返す
+     *
+     * @param int $u_id ユーザー名
+     * @return array ユーザー情報
+     * @throws PDOException
+     */
+    public function getuserbyid($u_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select * from user where id = :U_ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':U_ID', $u_id, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+    /**
      * ユーザー名を指定してユーザー数を返す
      *
      * @param string $name ユーザー名
