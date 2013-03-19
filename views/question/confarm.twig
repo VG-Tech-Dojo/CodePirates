@@ -10,6 +10,7 @@
         {% endif %}
         <form class="form-horizontal" action="/question/recieved" method="post">
             <input type="hidden" name="code" value="{{code}}">
+            <input type="hidden" name="question_num" value="{{question_num}}">
             <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn">回答する</button>
