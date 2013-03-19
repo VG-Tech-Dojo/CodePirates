@@ -1,0 +1,13 @@
+{% extends "base.twig" %}
+{% block title %}投稿しました{% endblock %}
+
+{% block content %}
+    <div class="row"> 
+        {% if errors %}
+            {{errors}}
+        {% endif %}
+        <p>登録できたお</p>
+        
+        <a href="">他人の解答一覧</a>
+    </div>
+{% endblock %}
