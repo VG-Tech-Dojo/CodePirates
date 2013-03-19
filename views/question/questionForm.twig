@@ -12,13 +12,14 @@
         </p>
 
 
-        <form class="form-horizontal" action="/question/{{question.id}}/confarm" method="post">
+        <form class="form-horizontal" action="/question/confarm" method="post">
             <div class="control-group">
                 <label class="control-label" for="inputCode">回答</label>
                 <div class="controls">
-                    <textarea id="inputCode" rows="20" class="input-xxlarge"></textarea>
+                    <textarea id="inputCode" rows="20" class="input-xxlarge" name="code"></textarea>
                 </div>
             </div>
+            <input type="hidden" name="question_num" value="{{question.id}}">
             <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn">回答する</button>
