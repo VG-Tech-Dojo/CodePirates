@@ -1,0 +1,20 @@
+{% extends "base.twig" %}
+{% block title %}投稿確認{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <p>入力内容を確認してください</p>
+        {{code}}
+        {% if errors %}
+            {{errors.code}}
+        {% endif %}
+        <form class="form-horizontal" action="/question/recieved" method="post">
+            <input type="hidden" name="code" value="{{code}}">
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn">回答する</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
