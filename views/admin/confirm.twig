@@ -1,0 +1,18 @@
+{% extends "base.twig" %}
+{% block title %}ìäçeämîF{% endblock %}
+{% block content %}
+    <div class="row">
+        <form class="form-horizontal" action="/admin/posted" method="post">
+            <div class="control-group">
+                {{question.title}}<br><br>
+                {{question.content}}
+                <input type="hidden" name="title" value="{{question.title}}">
+                <input type="hidden" name="content" value="{{question.content}}">
+            </div>
+                <div class="controls">
+                    <button type="submit" class="btn">ìäçeÇ∑ÇÈ</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
