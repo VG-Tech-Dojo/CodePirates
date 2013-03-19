@@ -1,0 +1,19 @@
+{% extends "base.twig" %}
+{% block title %}answer.twig{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="span12 row-fluid">
+                <form action="/answer" method="POST" class="form-horizontal well">
+                    <div class="control-group">
+                        {% for answer in answers %}
+                            <label class="control-label" for="user_name">
+                                <a href="/answer/{{answer.id}}">{{answer.content}}:{{answer.u_name}}</a>
+                            </label>
+                            </br></br>
+                        {% endfor %}
+                    </div>
+                </form>
+            </div>
+        </div>
+{% endblock %}
