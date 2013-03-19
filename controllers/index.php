@@ -1,6 +1,6 @@
 <?php
 /**
- * トップ画面
+ * 繝医ャ繝礼判髱｢
  */
 $app->get('/(:page)', function ($page = 1) use ($app) {
     require_once LIB_DIR . '/Session.php';
@@ -20,7 +20,7 @@ $app->get('/(:page)', function ($page = 1) use ($app) {
 })->conditions(array('page' => '\d.*'));
 
 /*
- * エラー画面
+ * 繧ｨ繝ｩ繝ｼ逕ｻ髱｢
  */
 $app->error(function ($msg='') use ($app) {
     $app->render('error.twig', array('message' => $msg), 500);
