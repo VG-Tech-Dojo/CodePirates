@@ -2,7 +2,6 @@ setupdb:
 	cd migration;mysql -udemo -pdemo < ./CREATE_TABLE
 
 deletedb:
-<<<<<<< HEAD
 	cd migration;mysql -uroot  < ./DELETE_TABLE
 	
 insertdb:
@@ -13,7 +12,4 @@ deletemasterdb:
 
 setupmasterdb:
 	cd migration;mysql -uroot -psarumon < ./CREATE_TABLE
-=======
-	cd migration;mysql -udemo -pdemo < ./DELETE_TABLE
->>>>>>> 2_makeQuestionModelAndDao
 
