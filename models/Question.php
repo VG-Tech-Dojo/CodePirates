@@ -5,8 +5,6 @@ require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Question.php';
 class Question extends Model
 {
 
-    private $question_dao = $this->getFactory()->getDb_Dao_Question();
-
     /**
      * 質問IDを指定してDBからデータを取得して返す
      *
@@ -15,6 +13,8 @@ class Question extends Model
      */
     public function getQuestionByID($question_id)
     {
+        
+        $question_dao = $this->getFactory()->getDb_Dao_Question();
         return $question_dao->findByQuestionID($question_id);
     }
 
@@ -25,6 +25,8 @@ class Question extends Model
      */
     public function getAllQuestion()
     {
+        
+        $question_dao = $this->getFactory()->getDb_Dao_Question();
         return $question_dao->questionList();
     }
 
@@ -37,6 +39,8 @@ class Question extends Model
      */
     public function register($title, $content)
     {
+       
+        $question_dao = $this->getFactory()->getDb_Dao_Question();
         return $question_dao->insert($title, $content);
     }
 }
