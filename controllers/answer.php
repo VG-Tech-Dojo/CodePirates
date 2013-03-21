@@ -19,6 +19,15 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     $answerInfo = $answer->getAnswerByAnsId($a_id);
     $questionInfo = $question->getQuestionByID($answerInfo['q_id']);
     $answererInfo = $user->getUserById($answerInfo['u_id']);
+    $answerInfoForUser = $answer->getAnswerByUserId($user_info['id']);
+    $answeredIdForUser = array();
+    for($i = 0; $i < count($answerInfoForUser); $i++){
+        $answeredIdForUser[] = $answerInfoForUser[$i]['q_id'];
+    }
+    $answeredIdForUser = array_unique($answeredIdForUser);
+    if(!in_array($answerInfo['q_id'],$answeredIdForUser)){
+        $app->error("先にこの問題に回答してください");
+    }
     $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo));
 });
 
