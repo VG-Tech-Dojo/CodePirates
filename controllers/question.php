@@ -71,7 +71,35 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
     $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item));
 });
 
+/**
+ * confirmから戻ってくるときの解答フォームの表示
+ */
+$app->put('/question/:id', 'authorized', function ($id) use ($app) {
+    require_once MODELS_DIR . '/Question.php';
+    require_once LIB_DIR . '/Session.php';
 
+    $question = $app->factory->getQuestion();
+    $session = $app->factory->getSession();
+    $errors = array();
+    $old_code = '';
+
+    $params = $app->request()->post();
+    $old_code = $params['code'];
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    try {
+        if (($question_item = $question->getQuestionByID($id)) == null){
+            $app->error('その問題は存在しません');
+        }
+    } catch (PDOException $e){
+        echo $e->getMessage();
+        $app->error('おかしいのでリロードしてください'); 
+    }
+    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'old_code' => $old_code));
+});
 
 /**
  * 問題に回答した後の確認画面
