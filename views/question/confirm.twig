@@ -5,7 +5,7 @@
     <div class="row">
         {% if errors %}
             {{errors.code}}
-            <p>戻る</p>
+            <p><a href="/question/{{question_num}}">戻る</a></p>
         {% else %}
             <p>入力内容を確認してください</p>
             <pre class="brush: php;">{{code}}</pre>
