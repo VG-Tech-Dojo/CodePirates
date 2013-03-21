@@ -10,24 +10,27 @@
             <tr>
                 <th>id</th>
                 <th>title</th>
-                <th>content</th>
                 <th>date</th>
             </tr>
             {% for question in questionList %}
             <tr>
-                {% for questionItem in question %}
                 <td>
-                    {{questionList.content}}
-                    {% if question.content == questionItem %}
-                        <a href="/answerlist/{{question.id}}">{{questionItem}}</a>
-                    {% else %}
-                        {{questionItem}}
-                    {% endif %}
+                    {{question.id}}
                 </td>
-                {% endfor %}
+                <td>
+                    {{question.title}}
+                </td>
+                <td>
+                    {{question.created_at}}
+                </td>
 
                 <td>
                     <a href="/question/{{question.id}}">問題に答える</a>
+                </td>
+                <td>
+                    {% if question.answered %}
+                        <a href="/answerlist/{{question.id}}">回答を見る</a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

@@ -5,9 +5,11 @@
  */
 $app->get('/question', 'authorized', function () use ($app) {
     require_once MODELS_DIR . '/Question.php';
+    require_once MODELS_DIR . '/Answer.php';
     require_once LIB_DIR . '/Session.php';
 
     $question = $app->factory->getQuestion();
+    $answer = $app->factory->getAnswer();
     $session = $app->factory->getSession();
     $errors = array();
 
@@ -24,6 +26,19 @@ $app->get('/question', 'authorized', function () use ($app) {
     } catch (PDOException $e){
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください。'); 
+    }
+    $answerInfo = $answer->getAnswerByUserId($user_info['id']);
+    $answeredIdForUser = array();
+    for($i = 0; $i < count($answerInfo); $i++){
+        $answeredIdForUser[] = $answerInfo[$i]['q_id'];
+    }
+    $answeredIdForUser = array_unique($answeredIdForUser);
+    for($i = 0 ; $i < count($questionList); $i++){
+        if(in_array($questionList[$i]['id'],$answeredIdForUser)){
+            $questionList[$i]['answered'] = true;
+        }else{
+            $questionList[$i]['answered'] = false;
+        }
     }
     $app->render('question/questionList.twig', array('user' => $user_info, 'errors' => $errors, 'questionList' => $questionList));
 });
