@@ -16,7 +16,6 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
-<<<<<<< HEAD
     if (($answerInfo = $answer->getAnswerByAnsId($a_id)) == null) {
         $app->error('その回答は存在しません');
     } else {
