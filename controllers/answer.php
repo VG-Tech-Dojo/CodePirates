@@ -16,9 +16,16 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
-    $answerInfo = $answer->getAnswerByAnsId($a_id);
-    $questionInfo = $question->getQuestionByID($answerInfo['q_id']);
-    $answererInfo = $user->getUserById($answerInfo['u_id']);
+    if (($answerInfo = $answer->getAnswerByAnsId($a_id)) == null) {
+        $app->error('その回答は存在しません');
+    } else {
+        if (($questionInfo = $question->getQuestionByID($answerInfo['q_id'])) == null) {
+            $app->error('問題が存在しません');
+        }
+        if (($answererInfo = $user->getUserById($answerInfo['u_id'])) == null){
+            $app->error('ユーザーが存在しません');
+        }
+    }
     $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo));
 });
 
