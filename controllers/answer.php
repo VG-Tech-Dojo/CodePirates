@@ -35,15 +35,23 @@ $app->get('/answerlist/:id', 'authorized' ,  function ($q_id) use ($app) {
     $question = $app->factory->getQuestion();
     $user = $app->factory->getUser();
     $user_info = array();
+    $answerInfos = array();
+
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
-    $questionInfo = $question->getQuestionByID($q_id);
-    $answerInfos = $answer->getAnswerByQuesId($questionInfo['id']);
-    for($i = 0; $i < count($answerInfos); $i++){
-        $userInfo = $user->getUserById($answerInfos[$i]['u_id']);
-        $answerInfos[$i]['u_name'] = $userInfo['name'];
+    if (($questionInfo = $question->getQuestionByID($q_id)) == null) { 
+        $app->error('問題が存在しません');
+    } else {
+        if (($answerInfos = $answer->getAnswerByQuesId($questionInfo['id'])) == null) {
+           $app->error('回答がありません'); 
+        } else {
+            for($i = 0; $i < count($answerInfos); $i++){
+                $userInfo = $user->getUserById($answerInfos[$i]['u_id']);
+                $answerInfos[$i]['u_name'] = $userInfo['name'];
+            }
+        }
     }
 
     $app->render('answer/answerlist.twig', array('user' => $user_info, 'answers' => $answerInfos ,'question' => $questionInfo));
