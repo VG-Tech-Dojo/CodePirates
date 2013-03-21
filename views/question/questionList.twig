@@ -3,6 +3,9 @@
 
 {% block content %}
     <div class="row">
+        {% if errors %}
+            {{ errors }}
+        {% else %}
         <table>
             <tr>
                 <th>id</th>
@@ -13,20 +16,22 @@
             {% for question in questionList %}
             <tr>
                 {% for questionItem in question %}
-                    <td>
-                        {{questionList.content}}
-                        {% if question.content == questionItem %}
-                            <a href="/answerlist/{{question.id}}">{{questionItem}}</a>
-                        {% else %}
-                            {{questionItem}}
-                        {% endif %}
-                    </td>
+                <td>
+                    {{questionList.content}}
+                    {% if question.content == questionItem %}
+                        <a href="/answerlist/{{question.id}}">{{questionItem}}</a>
+                    {% else %}
+                        {{questionItem}}
+                    {% endif %}
+                </td>
                 {% endfor %}
+
                 <td>
                     <a href="/question/{{question.id}}">問題に答える</a>
                 </td>
             </tr>
             {% endfor %}
         </table>
+        {% endif %}
     </div>
 {% endblock %}

@@ -10,17 +10,20 @@ $app->get('/question', 'authorized', function () use ($app) {
     $question = $app->factory->getQuestion();
     $session = $app->factory->getSession();
     $errors = array();
-    
+
     $user_info = array();
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
+
     try {
-        $questionList = $question->getAllQuestion();
+        if (($questionList = $question->getAllQuestion()) == null) {
+            $errors = '質問がありません';
+        }
     } catch (PDOException $e){
         echo $e->getMessage();
-        $app->error('何も質問がありません'); 
+        $app->error('おかしいのでリロードしてください。'); 
     }
     $app->render('question/questionList.twig', array('user' => $user_info, 'errors' => $errors, 'questionList' => $questionList));
 });
@@ -46,7 +49,7 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
         $question_item = $question->getQuestionByID($id);
     } catch (PDOException $e){
         echo $e->getMessage();
-        $app->error('その問題は存在しません'); 
+        $app->error('おかしいのでリロードしてください'); 
     }
     $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item));
 });
