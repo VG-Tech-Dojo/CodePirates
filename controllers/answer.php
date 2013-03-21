@@ -27,7 +27,7 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
         }
     }
 
-    $answerInfoForUser = $answer->getAnswerByUserId($user_info['id']);
+    $answeredInfoForUser = $answer->getAnswerByUserId($user_info['id']);
     
     $answeredIdForUser = array();
     for($i = 0; $i < count($answeredInfoForUser); $i++){
