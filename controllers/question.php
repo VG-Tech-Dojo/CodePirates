@@ -79,15 +79,15 @@ $app->post('/question/recieved', 'authorized', function () use ($app) {
     }
     $params = $app->request()->post();
     if($user_info!=null){
-    try {
-        $answer->register(
+        try {
+            $answer->register(
             $user_info['id'],
             $params['question_num'],
             $params['code']
-        );
-    } catch (PDOException $e) {
-        $app->error('登録に失敗しました。');
-    }
+            );
+        } catch (PDOException $e) {
+            $app->error('登録に失敗しました。');
+        }
     }
     $app->render('question/register.twig', array('errors' => $errors, 'question_num' => $params['question_num']));
 });
