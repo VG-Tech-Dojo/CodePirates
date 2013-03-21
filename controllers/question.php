@@ -42,7 +42,7 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
 /**
  * 問題に回答した後の確認画面
  */
-$app->post('/question/confarm', 'authorized', function () use ($app) {
+$app->post('/question/confirm', 'authorized', function () use ($app) {
     require_once LIB_DIR . '/FormValidator/CodeFormValidator.php';
     require_once MODELS_DIR . '/Answer.php';
 
@@ -56,7 +56,7 @@ $app->post('/question/confarm', 'authorized', function () use ($app) {
         $confarmcode = '';
         $errors = $form_validator->getErrors();
     }
-    $app->render('question/confarm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num']));
+    $app->render('question/confirm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num']));
 });
 
 
