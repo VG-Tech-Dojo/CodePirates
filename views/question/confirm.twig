@@ -3,20 +3,21 @@
 
 {% block content %}
     <div class="row">
-        <p>入力内容を確認してください</p>
-           <pre class="brush: php;">{{code}}
-           </pre>
         {% if errors %}
             {{errors.code}}
-        {% endif %}
-        <form class="form-horizontal" action="/question/recieved" method="post">
-            <input type="hidden" name="code" value="{{code}}">
-            <input type="hidden" name="question_num" value="{{question_num}}">
-            <div class="control-group">
-                <div class="controls">
-                    <button type="submit" class="btn">回答する</button>
+            <p><a href="/question/{{question_num}}">戻る</a></p>
+        {% else %}
+            <p>入力内容を確認してください</p>
+            <pre class="brush: php;">{{code}}</pre>
+            <form class="form-horizontal" action="/question/recieved" method="post">
+                <input type="hidden" name="code" value="{{code}}">
+                <input type="hidden" name="question_num" value="{{question_num}}">
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn">回答する</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        {% endif %}
     </div>
 {% endblock %}
