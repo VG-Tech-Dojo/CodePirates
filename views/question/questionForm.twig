@@ -16,7 +16,7 @@
             <div class="control-group">
                 <label class="control-label" for="inputCode">回答</label>
                 <div class="controls">
-                    <textarea id="inputCode" rows="20" class="input-xxlarge" name="code"></textarea>
+                    <textarea id="inputCode" rows="20" class="input-xxlarge" name="code">{% if old_code %}{{old_code}}{% endif %}</textarea>
                 </div>
             </div>
             <input type="hidden" name="question_num" value="{{question.id}}">
