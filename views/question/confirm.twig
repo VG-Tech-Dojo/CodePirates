@@ -4,7 +4,8 @@
 {% block content %}
     <div class="row">
         <p>入力内容を確認してください</p>
-        {{code}}
+           <pre class="brush: php;">{{code}}
+           </pre>
         {% if errors %}
             {{errors.code}}
         {% endif %}

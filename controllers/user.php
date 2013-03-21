@@ -82,7 +82,7 @@ $app->post('/user/register', 'noauthorized', function () use ($app) {
                     PasswordUtil::hashPassword($params['password'], $salt),
                     $salt
                 );
-                $app->redirect('/user/login');
+                $app->redirect('/question');
             }
         } catch (PDOException $e) {
             $app->error('登録に失敗しました。');
