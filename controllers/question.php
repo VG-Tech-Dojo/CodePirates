@@ -39,14 +39,16 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
     $question = $app->factory->getQuestion();
     $session = $app->factory->getSession();
     $errors = array();
-    
+
     $user_info = array();
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
     try {
-        $question_item = $question->getQuestionByID($id);
+        if (($question_item = $question->getQuestionByID($id)) == null){
+            $app->error('その問題は存在しません');
+        }
     } catch (PDOException $e){
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください'); 
