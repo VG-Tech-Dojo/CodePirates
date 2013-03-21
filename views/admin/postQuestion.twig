@@ -3,18 +3,38 @@
 {% block content %}
     <div class="row">
         <form class="form-horizontal" action="/admin/confirm" method="post">
+            {% if errors.title %}
+            <div class="control-group error">
+                <label class="control-label" for="title">問題タイトル</label>
+                <div class="controls">
+                    <input id="title" name="title" type="text" class="span3" />
+                    <span class="help-inline">{{ errors.title }}</span>
+                </div>
+            </div>
+            {% else %}
             <div class="control-group">
-                <label class="control-label" for="user_name">問題タイトル</label>
+                <label class="control-label" for="title">問題タイトル</label>
                 <div class="controls">
                     <input id="title" name="title" type="text" class="span3" />
                 </div>
             </div>
+            {% endif %}
+            {% if errors.content %}
+            <div class="control-group error">
+                <label class="control-label" for="title">本文</label>
+                <div class="controls">
+                    <textarea id="inputCode" name="content" rows="20" class="input-xxlarge"></textarea>
+                    <span class="help-inline">{{ errors.content }}</span>
+                </div>
+            </div>
+            {% else %}
             <div class="control-group">
                 <label class="control-label" for="inputCode">本文</label>
                 <div class="controls">
                     <textarea id="inputCode" name="content" rows="20" class="input-xxlarge"></textarea>
                 </div>
             </div>
+            {% endif %}
             <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn">確認</button>
