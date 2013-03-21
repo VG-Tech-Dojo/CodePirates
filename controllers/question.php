@@ -80,7 +80,7 @@ $app->post('/question/confirm', 'authorized', function () use ($app) {
         $confarmcode = '';
         $errors = $form_validator->getErrors();
     }
-    $app->render('question/confarm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num'], 'user' => $user_info));
+    $app->render('question/confirm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num'], 'user' => $user_info));
 });
 
 
