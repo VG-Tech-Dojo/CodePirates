@@ -16,6 +16,7 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
+<<<<<<< HEAD
     if (($answerInfo = $answer->getAnswerByAnsId($a_id)) == null) {
         $app->error('その回答は存在しません');
     } else {
@@ -28,9 +29,10 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     }
 
     $answerInfoForUser = $answer->getAnswerByUserId($user_info['id']);
+    
     $answeredIdForUser = array();
-    for($i = 0; $i < count($answerInfoForUser); $i++){
-        $answeredIdForUser[] = $answerInfoForUser[$i]['q_id'];
+    for($i = 0; $i < count($answeredInfoForUser); $i++){
+        $answeredIdForUser[] = $answeredInfoForUser[$i]['q_id'];
     }
     $answeredIdForUser = array_unique($answeredIdForUser);
     if(!in_array($answerInfo['q_id'],$answeredIdForUser)){
@@ -58,12 +60,22 @@ $app->get('/answerlist/:id', 'authorized' ,  function ($q_id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
+
     if (($questionInfo = $question->getQuestionByID($q_id)) == null) { 
         $app->error('問題が存在しません');
     } else {
         if (($answerInfos = $answer->getAnswerByQuesId($questionInfo['id'])) == null) {
            $app->error('回答がありません'); 
         } else {
+            $answeredInfoForUser = $answer->getAnswerByUserId($user_info['id']);
+            $answeredIdForUser = array();
+            for($i = 0; $i < count($answeredInfoForUser); $i++){
+                $answeredIdForUser[] = $answeredInfoForUser[$i]['q_id'];
+            }
+            $answeredIdForUser = array_unique($answeredIdForUser);
+            if(!in_array($q_id,$answeredIdForUser)){
+                $app->error("先にこの問題に回答してください");
+            }
             for($i = 0; $i < count($answerInfos); $i++){
                 $userInfo = $user->getUserById($answerInfos[$i]['u_id']);
                 $answerInfos[$i]['u_name'] = $userInfo['name'];
