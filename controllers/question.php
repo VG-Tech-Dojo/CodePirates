@@ -5,17 +5,24 @@
  */
 $app->get('/question', 'authorized', function () use ($app) {
     require_once MODELS_DIR . '/Question.php';
+    require_once LIB_DIR . '/Session.php';
 
     $question = $app->factory->getQuestion();
+    $session = $app->factory->getSession();
     $errors = array();
     
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
     try {
         $questionList = $question->getAllQuestion();
     } catch (PDOException $e){
         echo $e->getMessage();
         $app->error('何も質問がありません'); 
     }
-    $app->render('question/questionList.twig', array('errors' => $errors, 'questionList' => $questionList));
+    $app->render('question/questionList.twig', array('user' => $user_info, 'errors' => $errors, 'questionList' => $questionList));
 });
 
 
@@ -24,17 +31,24 @@ $app->get('/question', 'authorized', function () use ($app) {
  */
 $app->get('/question/:id', 'authorized', function ($id) use ($app) {
     require_once MODELS_DIR . '/Question.php';
+    require_once LIB_DIR . '/Session.php';
 
     $question = $app->factory->getQuestion();
+    $session = $app->factory->getSession();
     $errors = array();
     
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
     try {
         $question_item = $question->getQuestionByID($id);
     } catch (PDOException $e){
         echo $e->getMessage();
         $app->error('その問題は存在しません'); 
     }
-    $app->render('question/questionForm.twig', array('errors' => $errors, 'question' => $question_item));
+    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item));
 });
 
 
@@ -45,18 +59,25 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
 $app->post('/question/confarm', 'authorized', function () use ($app) {
     require_once LIB_DIR . '/FormValidator/CodeFormValidator.php';
     require_once MODELS_DIR . '/Answer.php';
+    require_once LIB_DIR . '/Session.php';
 
     $params = $app->request()->post();
+    $session = $app->factory->getSession();
     $errors = array();
     $form_validator = $app->factory->getFormValidator_CodeFormValidator();
 
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
     if ($form_validator->run($params)) {
         $confarmcode = $params['code'];
     } else {
         $confarmcode = '';
         $errors = $form_validator->getErrors();
     }
-    $app->render('question/confarm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num']));
+    $app->render('question/confarm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num'], 'user' => $user_info));
 });
 
 
@@ -89,6 +110,6 @@ $app->post('/question/recieved', 'authorized', function () use ($app) {
             $app->error('登録に失敗しました。');
         }
     }
-    $app->render('question/register.twig', array('errors' => $errors, 'question_num' => $params['question_num']));
+    $app->render('question/register.twig', array('errors' => $errors, 'question_num' => $params['question_num'], 'user' => $user_info));
 });
 
