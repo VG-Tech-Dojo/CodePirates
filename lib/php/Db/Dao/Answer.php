@@ -72,6 +72,28 @@ class Db_Dao_Answer extends Db_Dao_Abstract
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * UserIDとQuestionIDを指定して回答したかを返す
+     *
+     * @param string $user_id ユーザーid
+     * @param string $question_id 問題id
+     * @return boolean 回答したかどうか 
+     * @throws PDOException
+     */
+    public function isAnswered($user_id, $question_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select count(id) cnt from answer where u_id = :USERID and q_id = :QUESTIONID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':USERID', $user_id, PDO::PARAM_INT);
+        $statement->bindValue(':QUESTIONID', $question_id, PDO::PARAM_INT);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return (intval($result['cnt']) > 0);
+    }
+
+
 
 
     /**

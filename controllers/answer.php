@@ -27,14 +27,7 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
         }
     }
 
-    $answeredInfoForUser = $answer->getAnswerByUserId($user_info['id']);
-    
-    $answeredIdForUser = array();
-    for($i = 0; $i < count($answeredInfoForUser); $i++){
-        $answeredIdForUser[] = $answeredInfoForUser[$i]['q_id'];
-    }
-    $answeredIdForUser = array_unique($answeredIdForUser);
-    if(!in_array($answerInfo['q_id'],$answeredIdForUser)){
+    if (!$user->canSee($user_info['id'], $answerInfo['q_id'])){
         $app->error("先にこの問題に回答してください");
     }
     $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo));
