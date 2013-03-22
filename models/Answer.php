@@ -48,9 +48,9 @@ class Answer extends Model
      * @param string $q_id 問題ID
      * @param string $content 内容
      */
-    public function register($u_id, $q_id, $content)
+    public function register($u_id, $q_id, $content, $lang)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->insert($u_id, $q_id, $content);
+        return $answer->insert($u_id, $q_id, $content, $lang);
     }
 }
