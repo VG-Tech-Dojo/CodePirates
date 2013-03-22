@@ -35,6 +35,7 @@ $app->post('/admin/confirm' ,function () use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
+    $session->set('posted',true);
     if($form_validator->run($params)){
         $app->render('admin/confirm.twig', array('user' => $user_info, 'question' => $params));
         exit();
@@ -59,15 +60,18 @@ $app->post('/admin/posted' ,function () use ($app) {
         $user_info['name'] = $session->get('user_name');
     }
 
-    try {
-        $question->register(
-            $params['title'],
-            $params['content']
-        );
-        $app->render('admin/posted.twig', array('user' => $user_info));
-    } catch (PDOException $e){
-        $app->error('登録に失敗しました。');
+    if($session->get('posted')){
+        try {
+            $question->register(
+                $params['title'],
+                $params['content']
+            );
+            $session->remove('posted');
+        } catch (PDOException $e){
+            $app->error('登録に失敗しました。');
+        }
     }
+    $app->render('admin/posted.twig', array('user' => $user_info));
 });
 
 
