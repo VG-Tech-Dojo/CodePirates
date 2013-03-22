@@ -1,6 +1,15 @@
 {% extends "base.twig" %}
 {% block title %}問題投稿{% endblock %}
 {% block content %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#inputCode").cleditor();
+        $("#btn").click(function() {
+          var editor = $("#inputCode").cleditor()[0];
+          editor.updateFrame();
+        });
+    });
+</script>
     <div class="row">
         <form class="form-horizontal" action="/admin/confirm" method="post">
             {% if errors.title %}
@@ -37,7 +46,7 @@
             {% endif %}
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" class="btn">確認</button>
+                    <button id="btn" type="submit" class="btn">確認</button>
                 </div>
             </div>
         </form>
