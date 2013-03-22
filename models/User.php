@@ -1,6 +1,7 @@
 <?php
 require_once dirname(__FILE__) . '/Model.php';
 require_once dirname(__FILE__) . '/../lib/php/Db/Dao/User.php';
+require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Answer.php';
 
 class User extends Model
 {
@@ -65,5 +66,18 @@ class User extends Model
     {
         $user = $this->getFactory()->getDb_Dao_User();
         return $user->insert($user_name, $password, $salt);
+    }
+
+    /**
+     * ユーザーが問題の解答を見れるか見れないかを判定する
+     *
+     * @param string $question_id 他人の解答が見れるか判断したいid
+     * @return boolean 見れる場合はtrue, 見れない場合はfalse 
+     */
+    public function canSee($user_id, $question_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->isAnswered($user_id, $question_id);
+
     }
 }
