@@ -60,6 +60,7 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
+    $sessionid = $session->id();
     try {
         if (($question_item = $question->getQuestionByID($id)) == null){
             $app->error('その問題は存在しません');
@@ -68,7 +69,7 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください'); 
     }
-    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item));
+    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'session' => $sessionid));
 });
 
 /**
@@ -125,7 +126,7 @@ $app->post('/question/confirm', 'authorized', function () use ($app) {
         $confarmcode = '';
         $errors = $form_validator->getErrors();
     }
-    $app->render('question/confirm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num'], 'user' => $user_info, 'langtype' => $params['lang']));
+    $app->render('question/confirm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num'], 'user' => $user_info, 'langtype' => $params['lang'], 'session' => $params['sessionid']));
 });
 
 
@@ -147,7 +148,7 @@ $app->post('/question/save', 'authorized', function () use ($app) {
         $app->error('ろぐいんしてください');
     }
     $params = $app->request()->post();
-    if($user_info!=null){
+    if($user_info!=null && $session->id() === $params['sessionid']){
         try {
             $answer->register(
                 $user_info['id'],
@@ -156,6 +157,7 @@ $app->post('/question/save', 'authorized', function () use ($app) {
                 $params['lang']
             );
             $session->set('question_id', $params['question_num']);
+            $session->remove('sessionid');
             
             $app->redirect('/question_recieved');
         } catch (PDOException $e) {

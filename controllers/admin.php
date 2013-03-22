@@ -16,7 +16,8 @@ $app->get('/admin/postQuestion' ,function () use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
-    $app->render('admin/postQuestion.twig', array('user' => $user_info));
+    $sessionid = $session->id();
+    $app->render('admin/postQuestion.twig', array('user' => $user_info, 'session' => $sessionid));
 });
 
 
@@ -37,7 +38,7 @@ $app->post('/admin/confirm' ,function () use ($app) {
     }
     $session->set('posted',true);
     if($form_validator->run($params)){
-        $app->render('admin/confirm.twig', array('user' => $user_info, 'question' => $params));
+        $app->render('admin/confirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid']));
         exit();
     } else {
         $errors = $form_validator->getErrors();
@@ -60,13 +61,14 @@ $app->post('/admin/posted' ,function () use ($app) {
         $user_info['name'] = $session->get('user_name');
     }
 
-    if($session->get('posted')){
+    if($session->get('posted') && $session->id() === $params['sessionid']){
         try {
             $question->register(
                 $params['title'],
                 $params['content']
             );
             $session->remove('posted');
+            $session->remove('sessionid');
         } catch (PDOException $e){
             $app->error('登録に失敗しました。');
         }
