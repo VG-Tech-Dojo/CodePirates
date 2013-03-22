@@ -3,10 +3,12 @@
 
 {% block content %}
     <div class="row">
-        <h1>
-            {{question.id}}.{{question.title}}
-        </h1>
-        <p>出題日：{{question.created_at}}</p>
+       <div class="page-header">
+            <h1>
+                {{question.id}}.{{question.title}}
+            </h1>
+        </div>
+        <p class="text-right">出題日：{{question.created_at}}</p>
         <p>
             {% autoescape false %}
             {{question.content}}

@@ -1,0 +1,18 @@
+.text-right{
+    text-align: right;
+}
+
+
+/* questionList.twig */
+.question_box{
+    margin-bottom:40px;
+}
+
+/* confirm.twig */
+.answer_button{
+    display: inline;
+}
+.cancel_button{
+    display: inline;
+}
+
