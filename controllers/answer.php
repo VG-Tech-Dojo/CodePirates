@@ -59,15 +59,10 @@ $app->get('/answerlist/:id', 'authorized' ,  function ($q_id) use ($app) {
         if (($answerInfos = $answer->getAnswerByQuesId($questionInfo['id'])) == null) {
            $app->error('回答がありません'); 
         } else {
-            $answeredInfoForUser = $answer->getAnswerByUserId($user_info['id']);
-            $answeredIdForUser = array();
-            for($i = 0; $i < count($answeredInfoForUser); $i++){
-                $answeredIdForUser[] = $answeredInfoForUser[$i]['q_id'];
-            }
-            $answeredIdForUser = array_unique($answeredIdForUser);
-            if(!in_array($q_id,$answeredIdForUser)){
+            if (!$user->canSee($user_info['id'], $q_id)){
                 $app->error("先にこの問題に回答してください");
             }
+
             for($i = 0; $i < count($answerInfos); $i++){
                 $userInfo = $user->getUserById($answerInfos[$i]['u_id']);
                 $answerInfos[$i]['u_name'] = $userInfo['name'];
