@@ -4,7 +4,7 @@
 require_once dirname(__FILE__) . '/Abstract.php';
 
 /**
- * Db_Dao_Userクラス
+ * Db_Dao_Answerクラス
  *
  * @package Db
  * @subpackage Dao

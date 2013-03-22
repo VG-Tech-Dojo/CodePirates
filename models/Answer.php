@@ -44,8 +44,8 @@ class Answer extends Model
     /**
      * 回答をテーブルに格納する
      *
-     * @param string $u_id ユーザーID
-     * @param string $q_id 問題ID
+     * @param int $u_id ユーザーID
+     * @param int $q_id 問題ID
      * @param string $content 内容
      */
     public function register($u_id, $q_id, $content, $lang)
