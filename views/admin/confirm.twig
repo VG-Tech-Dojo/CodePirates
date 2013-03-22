@@ -5,12 +5,14 @@
         <form class="form-horizontal" action="/admin/posted" method="post">
             <div class="control-group">
                 {{question.title}}<br><br>
+                {% autoescape false %}
                 {{question.content}}
+                {% endautoescape %}
                 <input type="hidden" name="title" value="{{question.title}}">
                 <input type="hidden" name="content" value="{{question.content}}">
             </div>
                 <div class="controls">
-                    <button type="submit" class="btn">投稿する</button>
+                    <button type="submit" class="btn">問題投稿</button>
                 </div>
             </div>
         </form>
