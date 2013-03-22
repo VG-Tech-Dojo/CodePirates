@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * 回答のコード表示画面
+ */
 $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';
@@ -34,6 +37,9 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
 });
 
 
+/**
+ * ある問題に対する回答一覧画面
+ */
 $app->get('/answerlist/:id', 'authorized' ,  function ($q_id) use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';

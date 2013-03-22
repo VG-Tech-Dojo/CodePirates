@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * 問題投稿画面
+ */
 $app->get('/admin/postQuestion' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';
@@ -20,8 +23,9 @@ $app->get('/admin/postQuestion' ,function () use ($app) {
     $app->render('admin/postQuestion.twig', array('user' => $user_info, 'session' => $sessionid));
 });
 
-
-
+/**
+ * 問題投稿確認画面
+ */
 $app->post('/admin/confirm' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once LIB_DIR . '/FormValidator/AdminPostQuestionFormValidator.php';
@@ -47,6 +51,9 @@ $app->post('/admin/confirm' ,function () use ($app) {
 });
 
 
+/**
+ * 問題投稿完了画面
+ */
 $app->post('/admin/posted' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Question.php';
