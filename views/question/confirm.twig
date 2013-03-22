@@ -7,8 +7,10 @@
             {{errors.code}}
             <p><a href="/question/{{question_num}}">戻る</a></p>
         {% else %}
-            <p>入力内容を確認してください</p>
-            <br><p><h3>言語：{{langtype}}</h3></p>
+            <div class="page-header">
+                <h1>入力内容を確認してください</h1>
+            </div>
+            <h3>言語：{{langtype}}</h3>
             {% if langtype == 'PHP' %}
             <pre class="brush: php;">{{code}}</pre>
             {% elseif langtype == 'Ruby' %}
@@ -16,18 +18,14 @@
             {% elseif langtype == 'Python' %}
             <pre class="brush: python;">{{code}}</pre>
             {% endif %}
-            <form id="submit" class="form-horizontal" action="/question/save" method="post">
+            <form id="submit" class="answer_button" action="/question/save" method="post">
                 <input type="hidden" name="code" value="{{code}}">
                 <input type="hidden" name="lang" value="{{langtype}}">
                 <input type="hidden" name="question_num" value="{{question_num}}">
                 <input type="hidden" name="sessionid" value="{{session}}">
-                <div class="control-group">
-                    <div class="controls">
-                        <button type="submit" class="btn">回答する</button>
-                    </div>
-                </div>
+                <button type="submit" class="btn btn-primary">回答する</button>
             </form>
-            <form id="cancel" action="/question/{{question_num}}" method="post">
+            <form id="cancel" class="cancel_button" action="/question/{{question_num}}" method="post">
                 <input type="hidden" name="code" value="{{code}}">
                 <input type="hidden" name="_METHOD" value="PUT">
                 <button type="submit" class="btn">キャンセル</button>
