@@ -132,7 +132,7 @@ $app->post('/question/confirm', 'authorized', function () use ($app) {
 /*
  * 問題に回答した後の確認画面（登録処理）
  */
-$app->post('/question/recieved', 'authorized', function () use ($app) {
+$app->post('/question/save', 'authorized', function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';
 
@@ -150,15 +150,42 @@ $app->post('/question/recieved', 'authorized', function () use ($app) {
     if($user_info!=null){
         try {
             $answer->register(
-            $user_info['id'],
-            $params['question_num'],
-            $params['code'],
-            $params['lang']
+                $user_info['id'],
+                $params['question_num'],
+                $params['code'],
+                $params['lang']
             );
+            $session->set('question_id', $params['question_num']);
+            
+            $app->redirect('/question_recieved');
         } catch (PDOException $e) {
             $app->error('登録に失敗しました。');
         }
     }
-    $app->render('question/register.twig', array('errors' => $errors, 'question_num' => $params['question_num'], 'user' => $user_info));
+});
+
+/*
+ * 問題に回答した後の確認画面
+ */
+$app->get('/question_recieved', 'authorized', function () use ($app) {
+    require_once LIB_DIR . '/Session.php';
+
+    $session = $app->factory->getSession();
+    
+    $errors = array();
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+    } else {
+        $app->error('ろぐいんしてください');
+    }
+    if ($session->get('question_id')) {
+        $question_num = $session->get('question_id');
+        $session->remove('question_id');    
+    } else {
+        $app->redirect('/question');
+    }
+    
+    $app->render('question/register.twig', array('question_num' => $question_num, 'user' => $user_info));
 });
 
