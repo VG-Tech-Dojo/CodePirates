@@ -75,21 +75,23 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
 
     /**
-     * ユーザー情報を追加する
+     * 回答情報を追加する
      *
-     * @param string $u_id ユーザーID
-     * @param string $q_id 問題ID
+     * @param int $u_id ユーザーID
+     * @param int $q_id 問題ID
      * @param string $content 内容
+     * @param string $lang 言語
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
-    public function insert($u_id, $q_id, $content)
+    public function insert($u_id, $q_id, $content, $lang)
     {
         $dbh = $this->getDbHandler();
-        $query = 'insert into answer (u_id, q_id, content, created_at) values (:U_ID, :Q_ID, :CONTENT, now())';
+        $query = 'insert into answer (u_id, q_id, content, lang, created_at) values (:U_ID, :Q_ID, :CONTENT, :LANG, now())';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':U_ID', $u_id, PDO::PARAM_INT);
         $statement->bindValue(':Q_ID', $q_id, PDO::PARAM_INT);
         $statement->bindValue(':CONTENT', $content, PDO::PARAM_STR);
+        $statement->bindValue(':LANG', $lang, PDO::PARAM_STR);
         $statement->execute();
 
         return ($statement->rowCount() === 1);

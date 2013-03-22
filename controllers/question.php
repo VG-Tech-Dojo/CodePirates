@@ -125,7 +125,7 @@ $app->post('/question/confirm', 'authorized', function () use ($app) {
         $confarmcode = '';
         $errors = $form_validator->getErrors();
     }
-    $app->render('question/confirm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num'], 'user' => $user_info));
+    $app->render('question/confirm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num'], 'user' => $user_info, 'langtype' => $params['lang']));
 });
 
 
@@ -152,7 +152,8 @@ $app->post('/question/recieved', 'authorized', function () use ($app) {
             $answer->register(
             $user_info['id'],
             $params['question_num'],
-            $params['code']
+            $params['code'],
+            $params['lang']
             );
         } catch (PDOException $e) {
             $app->error('登録に失敗しました。');
