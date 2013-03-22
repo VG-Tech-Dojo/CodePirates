@@ -16,7 +16,7 @@
             {% elseif langtype == 'Python' %}
             <pre class="brush: python;">{{code}}</pre>
             {% endif %}
-            <form id="submit" class="form-horizontal" action="/question/recieved" method="post">
+            <form id="submit" class="form-horizontal" action="/question/save" method="post">
                 <input type="hidden" name="code" value="{{code}}">
                 <input type="hidden" name="lang" value="{{langtype}}">
                 <input type="hidden" name="question_num" value="{{question_num}}">
