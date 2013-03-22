@@ -2,18 +2,11 @@
 {% block title %}answer.twig{% endblock %}
 
 {% block content %}
-        <div class="row">
-            <div class="span6 row-fluid">
-                <form action="/answer" method="POST" class="form-horizontal well">
-                    <div class="control-group">
-                        {% for answer in answers %}
-                            <label class="control-label" for="user_name">
-                                <a href="/answer/{{answer.id}}">{{answer.u_name}}さんの回答</a>
-                            </label>
-                            </br></br>
-                        {% endfor %}
-                    </div>
-                </form>
-            </div>
-        </div>
+<div class="row">
+    <ul>
+    {% for answer in answers %}
+        <li><a href="/answer/{{answer.id}}">{{answer.u_name}}さんの回答</a></li>
+    {% endfor %}
+    </ul>
+</div>
 {% endblock %}
