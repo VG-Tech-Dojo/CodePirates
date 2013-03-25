@@ -15,9 +15,14 @@
     <br>
     <h2>みんなの回答</h2>
     <ul>
-    {% for answer in answers %}
-        <li><a href="/answer/{{answer.id}}">{{answer.u_name}}さんの回答</a></li>
-    {% endfor %}
+    <table>
+        {% for answer in answers %}
+            <tr>
+                <th align="left" ><a href="/answer/{{answer.id}}">{{answer.u_name}}さんの回答</a></th>
+                <td>言語：{{answer.lang}}</td>
+            </tr>
+        {% endfor %}
+    </table>
     </ul>
 </div>
 {% endblock %}
