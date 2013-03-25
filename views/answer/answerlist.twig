@@ -3,7 +3,7 @@
 {% block js %}
 <script type="text/javascript">
     function gotoAnswerSingle(answer_id) {
-        mixpanel.track('gotoAnotherAnswer',{
+        mixpanel.track('gotoAnswer',{
             'user_id':{{user.id}},
             'answer_id': answer_id
         }); 
