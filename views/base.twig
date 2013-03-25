@@ -35,7 +35,7 @@
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-39312556-1']);
         {% if user.id %}
-        _gaq.push(['_setCustomVar',1,'user','{{user.id}}',2]);
+        _gaq.push(['_setCustomVar',1,'user','{{user.id}}',1]);
         {% endif %}
         _gaq.push(['_trackPageview']);
 
