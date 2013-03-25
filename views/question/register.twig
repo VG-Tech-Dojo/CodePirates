@@ -2,18 +2,17 @@
 {% block title %}投稿しました{% endblock %}
 {% block js %}
 <script type="text/javascript">
-    $(".row .gotoAnswer").click(function() {
-        alert("a");
+    function gotoAnswer() {
         mixpanel.track('gotoAnotherAnswer',{
             'user_id':{{user.id}}
         }); 
-    });
+    };
 </script>
 {% endblock %}
 {% block content %}
     <div class="row"> 
         <p>登録できたお</p>
         
-        <a href="../answerlist/{{question_num}}" class="gotoAnswer">他人の解答一覧</a>
+        <a href="../answerlist/{{question_num}}" onclick="gotoAnswer()">他人の解答一覧</a>
     </div>
 {% endblock %}

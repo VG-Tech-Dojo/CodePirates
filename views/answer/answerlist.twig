@@ -2,12 +2,12 @@
 {% block title %}answer.twig{% endblock %}
 {% block js %}
 <script type="text/javascript">
-    $gotoAnswerSingle.click(function(answer_id) {
+    function gotoAnswerSingle(answer_id) {
         mixpanel.track('gotoAnotherAnswer',{
             'user_id':{{user.id}},
             'answer_id': answer_id
         }); 
-    });
+    };
 </script>
 {% endblock %}
 {% block content %}
