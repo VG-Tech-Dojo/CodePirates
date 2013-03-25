@@ -1,6 +1,15 @@
 {% extends "base.twig" %}
 {% block title %}answer.twig{% endblock %}
-
+{% block js %}
+<script type="text/javascript">
+    $gotoAnswerSingle.click(function(answer_id) {
+        mixpanel.track('gotoAnotherAnswer',{
+            'user_id':{{user.id}},
+            'answer_id': answer_id
+        }); 
+    });
+</script>
+{% endblock %}
 {% block content %}
 <div class="row">
     <div class="page-header">
@@ -14,7 +23,7 @@
     <h2>みんなの回答</h2>
     <ul>
     {% for answer in answers %}
-        <li><a href="/answer/{{answer.id}}">{{answer.u_name}}さんの回答</a></li>
+        <li><a href="/answer/{{answer.id}}" onClick="gotoAnswerSingle({{answer.id}})">{{answer.u_name}}さんの回答</a></li>
     {% endfor %}
     </ul>
 </div>
