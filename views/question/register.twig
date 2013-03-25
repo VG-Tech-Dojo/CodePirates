@@ -1,10 +1,18 @@
 {% extends "base.twig" %}
 {% block title %}投稿しました{% endblock %}
-
+{% block js %}
+<script type="text/javascript">
+    $(".gotoAnswer").click(function() {
+        mixpanel.track('gotoAnotherAnswer',{
+            'user_id':{{user.id}}
+        }); 
+    });
+</script>
+{% endblock %}
 {% block content %}
     <div class="row"> 
         <p>登録できたお</p>
         
-        <a href="../answerlist/{{question_num}}">他人の解答一覧</a>
+        <a href="../answerlist/{{question_num}}" clas="gotoAnswer">他人の解答一覧</a>
     </div>
 {% endblock %}
