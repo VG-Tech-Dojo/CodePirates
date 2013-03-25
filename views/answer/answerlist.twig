@@ -27,7 +27,7 @@
     <table>
         {% for answer in answers %}
             <tr>
-                <th align="left" ><a href="/answer/{{answer.id}}" onClick="gotoAnswerSingle({{answer_id}})">{{answer.u_name}}さんの回答</a></th>
+                <th align="left" ><a href="/answer/{{answer.id}}" onClick="gotoAnswerSingle({{answer.id}})">{{answer.u_name}}さんの回答</a></th>
                 <td>言語：{{answer.lang}}</td>
             </tr>
         {% endfor %}
