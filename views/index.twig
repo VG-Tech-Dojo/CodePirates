@@ -6,9 +6,16 @@
 {% block content %}
     <div class="page-header">
         <h1>CodePirates</h1>
+        <h3>ここにサイトの説明</h3>
     </div>
-        <a href="/question">
-            <button class="btn btn-large btn-primary" type="button">問題</button>
-        </a>
-        <p>ログインすると見れます</p>
+        {% if user.id %}
+            <a href="/question">
+                <button class="btn btn-large btn-primary" type="button">問題セット</button>
+            </a>
+        {% else %}
+            <a href="/user/login">
+                <button class="btn btn-large btn-primary" type="button">ログイン</button>
+            </a>
+            <p>登録してない人は<a href="/user/register">新規登録</a>ページへ</p>
+        {% endif %}
 {% endblock %}
