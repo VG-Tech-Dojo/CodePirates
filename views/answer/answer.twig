@@ -3,15 +3,16 @@
 
 {% block content %}
         <div class="row">
-            <div class="span12 row-fluid">
-                <form action="/answer" method="POST" class="form-horizontal well">
-                    <div class="control-group">
-                        <label class="control-label" for="user_name">{{answerer.name}}さんの{{question.title}}の回答</label></br></br>
-                          <pre class="brush: php;">
-{{answer.content}}
-                          </pre>
-                    </div>
-                </form>
+            <div class="page-header">
+                <h1>{{answerer.name}}さんの{{question.title}}の回答</h1>
             </div>
+            <a href="/answerlist/{{question.id}}"><h2>問題{{question.id}}</h2></a>
+            {{question.content}}
+            <br>
+            <br>
+            <h2>回答</h2>
+            <pre class="brush: php;">
+                {{answer.content}}
+            </pre>
         </div>
 {% endblock %}
