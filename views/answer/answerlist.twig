@@ -8,7 +8,9 @@
     </div>
     <h2>問題</h2>
     <div class="box">
+        {% autoescape false %}
         {{question.content}}
+        {% endautoescape %}
     </div>
     <br>
     <h2>みんなの回答</h2>
