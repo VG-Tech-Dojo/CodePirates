@@ -3,6 +3,15 @@
 
 {% block content %}
 <div class="row">
+    <div class="page-header">
+        <h1>問題{{question.id}}のみんなの解答</h1>
+    </div>
+    <h2>問題</h2>
+    <div class="box">
+        {{question.content}}
+    </div>
+    <br>
+    <h2>みんなの回答</h2>
     <ul>
     {% for answer in answers %}
         <li><a href="/answer/{{answer.id}}">{{answer.u_name}}さんの回答</a></li>
