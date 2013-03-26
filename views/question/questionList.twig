@@ -1,6 +1,14 @@
 {% extends "base.twig" %}
 {% block title %}問題一覧{% endblock %}
-
+{% block js %}
+<script type="text/javascript">
+    function getUserID() {
+        mixpanel.track('userID_{{user.id}}',{
+            'user_id':{{user.id}},
+        }); 
+    };
+</script>
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="page-header">
@@ -14,7 +22,7 @@
                     <h2>Q.{{question.id}}:{{question.title}}</h2>
                     <p>作成日:{{question.created_at}}</p>
                     <a href="/question/{{question.id}}">
-                        <button class="btn btn-large" type="button">問題に答える</button>
+                        <button class="btn btn-large" type="button" onclick="getUserID()">問題に答える</button>
                     </a>
                     {% if question.answered %}
                         <a href="/answerlist/{{question.id}}">
