@@ -3,7 +3,10 @@
 {% block content %}
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#inputCode").cleditor();
+        $("#inputCode").cleditor({
+          width: 1000,
+          height: 1000
+          });
         $("#btn").click(function() {
           var editor = $("#inputCode").cleditor()[0];
           editor.updateFrame();
@@ -32,7 +35,7 @@
             <div class="control-group error">
                 <label class="control-label" for="title">本文</label>
                 <div class="controls">
-                    <textarea id="inputCode" name="content" rows="20" class="input-xxlarge"></textarea>
+                    <textarea id="inputCode" name="content" rows="200" class="input-xxlarge"></textarea>
                     <span class="help-inline">{{ errors.content }}</span>
                 </div>
             </div>
@@ -40,7 +43,7 @@
             <div class="control-group">
                 <label class="control-label" for="inputCode">本文</label>
                 <div class="controls">
-                    <textarea id="inputCode" name="content" rows="20" class="input-xxlarge"></textarea>
+                    <textarea id="inputCode" name="content" rows="200" class="input-xxlarge"></textarea>
                 </div>
             </div>
             {% endif %}
