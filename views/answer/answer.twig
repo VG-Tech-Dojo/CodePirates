@@ -14,6 +14,12 @@
             <br>
             <h2>回答</h2>
             <h4>言語:{{answer.lang}}</h4>
+            {% if answer.lang == 'PHP' %}
             <pre class="brush: php;">{{answer.content}}</pre>
+            {% elseif answer.lang == 'Ruby' %}
+            <pre class="brush: ruby;">{{answer.content}}</pre>
+            {% elseif answer.lang == 'Python' %}
+            <pre class="brush: python;">{{answer.content}}</pre>
+            {% endif %}
         </div>
 {% endblock %}
