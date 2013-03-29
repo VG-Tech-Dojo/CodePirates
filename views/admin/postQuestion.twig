@@ -1,6 +1,8 @@
 {% extends "base.twig" %}
 {% block title %}問題投稿{% endblock %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="/CLEditor/jquery.cleditor.css" />
+<script type="text/javascript" src="/CLEditor/jquery.cleditor.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#inputCode").cleditor({
