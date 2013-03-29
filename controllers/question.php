@@ -148,7 +148,7 @@ $app->post('/question/save', 'authorized', function () use ($app) {
         $app->error('ろぐいんしてください');
     }
     $params = $app->request()->post();
-    if($user_info!=null && $session->id() === $params['sessionid']){
+    if($user_info!=null/* && $session->id() === $params['sessionid']*/){
         try {
             $answer->register(
                 $user_info['id'],
