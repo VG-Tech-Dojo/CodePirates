@@ -7,6 +7,9 @@ deletedb:
 insertdb:
 	cd migration;mysql -uroot  < ./INSERT_TABLE
 
+versionupdb101:
+	cd migration;mysql -uroot  < ./VER101
+
 deletemasterdb:
 	cd migration;mysql -uroot -psarumon < ./DELETE_TABLE
 
@@ -15,3 +18,6 @@ setupmasterdb:
 
 insertmasterdb:
 	cd migration;mysql -uroot -psarumon < ./INSERT_TABLE
+
+versionupmasterdb101:
+	cd migration;mysql -uroot -psarumon < ./VER101
