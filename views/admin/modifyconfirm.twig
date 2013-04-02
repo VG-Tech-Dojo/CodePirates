@@ -1,0 +1,22 @@
+{% extends "base.twig" %}
+{% block title %}投稿確認{% endblock %}
+{% block content %}
+    <div class="row">
+        <form class="form-horizontal" action="/admin/modifyQuestion/posted" method="post">
+            <div class="control-group">
+                {{question.title}}<br><br>
+                {% autoescape false %}
+                {{question.content}}
+                {% endautoescape %}
+                <input type="hidden" name="title" value="{{question.title}}">
+                <input type="hidden" name="content" value="{{question.content}}">
+                <input type="hidden" name="questionid" value="{{question.questionid}}">
+                <input type="hidden" name="sessionid" value="{{session}}">
+            </div>
+                <div class="controls">
+                    <button type="submit" class="btn">問題投稿</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

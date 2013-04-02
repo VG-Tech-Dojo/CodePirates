@@ -69,4 +69,27 @@ class Db_Dao_Question extends Db_Dao_Abstract
 
         return ($statement->rowCount() === 1);
     }
+
+
+    /**
+     * 問題を修正する
+     *
+     * @param int $id 問題のid 
+     * @param string $title 問題のタイトル  
+     * @param string $content 問題の内容 
+     * @return boolean 追加が成功して場合true, 失敗した場合false
+     */
+    public function updatequestion($id, $title, $content)
+    { 
+        $dbh = $this->getDbHandler();
+        $query = 'update question set title = :TITLE, content = :CONTENT where id = :ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $id, PDO::PARAM_INT);
+        $statement->bindValue(':TITLE', $title, PDO::PARAM_STR);
+        $statement->bindValue(':CONTENT', $content, PDO::PARAM_STR);
+        $statement->execute();
+
+        return ($statement->rowCount() === 1);
+    }
+
 }
