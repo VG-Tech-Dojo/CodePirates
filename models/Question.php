@@ -43,4 +43,20 @@ class Question extends Model
         $question_dao = $this->getFactory()->getDb_Dao_Question();
         return $question_dao->insert($title, $content);
     }
+
+
+    /**
+     * 問題を修正する
+     *
+     * @param int $id 問題のid 
+     * @param string $title 問題のタイトル 
+     * @param string $contnt 問題の中身 
+     * @return boolean 処理が成功した場合true, 失敗した場合false
+     */
+    public function updateQuestion($id, $title, $content)
+    {
+       
+        $question_dao = $this->getFactory()->getDb_Dao_Question();
+        return $question_dao->updatequestion($id, $title, $content);
+    }
 }
