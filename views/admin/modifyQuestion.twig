@@ -1,0 +1,61 @@
+{% extends "base.twig" %}
+{% block title %}問題投稿{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="/CLEditor/jquery.cleditor.css" />
+<script type="text/javascript" src="/CLEditor/jquery.cleditor.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#inputCode").cleditor({
+          width: 1000,
+          height: 1000
+          });
+        $("#btn").click(function() {
+          var editor = $("#inputCode").cleditor()[0];
+          editor.updateFrame();
+        });
+    });
+</script>
+    <div class="row">
+        <form class="form-horizontal" action="/admin/modifyQuestion/confirm" method="post">
+            {% if errors.title %}
+            <div class="control-group error">
+                <label class="control-label" for="title">問題タイトル</label>
+                <div class="controls">
+                    <input id="title" name="title" type="text" class="span3" value="{{question.title}}"/>
+                    <span class="help-inline">{{ errors.title }}</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="control-group">
+                <label class="control-label" for="title">問題タイトル</label>
+                <div class="controls">
+                    <input id="title" name="title" type="text" class="span3" value="{{question.title}}"/>
+                </div>
+            </div>
+            {% endif %}
+            {% if errors.content %}
+            <div class="control-group error">
+                <label class="control-label" for="title">本文</label>
+                <div class="controls">
+                    <textarea id="inputCode" name="content" rows="200" class="input-xxlarge">{{question.content}}</textarea>
+                    <span class="help-inline">{{ errors.content }}</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="control-group">
+                <label class="control-label" for="inputCode">本文</label>
+                <div class="controls">
+                    <textarea id="inputCode" name="content" rows="200" class="input-xxlarge" >{{question.content}}</textarea>
+                </div>
+            </div>
+            {% endif %}
+            <div class="control-group">
+                <input type="hidden" name="sessionid" value="{{session}}">
+                <input type="hidden" name="questionid" value="{{question.id}}">
+                <div class="controls">
+                    <button id="btn" type="submit" class="btn">確認</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
