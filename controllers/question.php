@@ -22,6 +22,7 @@ $app->get('/question', 'authorized', function () use ($app) {
     try {
         if (($questionList = $question->getAllQuestion()) == null) {
             $errors = '質問がありません';
+        } else {
         }
     } catch (PDOException $e){
         echo $e->getMessage();

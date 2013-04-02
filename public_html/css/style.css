@@ -5,7 +5,22 @@
 
 /* questionList.twig */
 .question_box{
+    border:1px solid #8AC2FF;
+    border-left:300px solid #8AC2FF;
     margin-bottom:40px;
+    width:600px;
+}
+
+.question_box h2{
+    padding: 20px;
+}
+
+.question_box_inner{
+    padding:20px;
+}
+
+.create_date{
+    text-align:right;
 }
 
 /* questionForm.twig */
