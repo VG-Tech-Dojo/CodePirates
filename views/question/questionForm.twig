@@ -2,42 +2,54 @@
 {% block title %}問題一覧{% endblock %}
 
 {% block content %}
-    <div class="row">
-       <div class="page-header">
-            <h1>
-                {{question.id}}.{{question.title}}
-            </h1>
+    <div class="row-fluid">
+        <div class="span8">
+            <div class="page-header">
+                <h1>
+                    {{question.id}}.{{question.title}}
+                </h1>
+            </div>
+            <p class="text-right">出題日：{{question.created_at}}</p>
+            <p>
+                {% autoescape false %}
+                {{question.content}}
+                {% endautoescape %}
+            </p>
+
+
+            <form class="form-horizontal" action="/question/confirm" method="post">
+                <div class="control-group">
+                    <label class="control-label" for="langtype">言語</label>
+                    <div class="controls">
+                        <select name="lang">
+                            <option value="PHP">PHP</option>
+                            <option value="Ruby">Ruby</option>
+                            <option value="Python">Python</option>
+                        </select><br><br>
+                    </div>
+                    <label class="control-label" for="inputCode">回答</label>
+                    <div class="controls">
+                        <textarea id="inputCode" rows="20" class="input-xxlarge" name="code">{% if old_code %}{{old_code}}{% endif %}</textarea>
+                    </div>
+                </div>
+                <input type="hidden" name="question_num" value="{{question.id}}">
+                <input type="hidden" name="sessionid" value="{{session}}">
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn">回答する</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <p class="text-right">出題日：{{question.created_at}}</p>
-        <p>
-            {% autoescape false %}
-            {{question.content}}
-            {% endautoescape %}
-        </p>
-
-
-        <form class="form-horizontal" action="/question/confirm" method="post">
-            <div class="control-group">
-                <label class="control-label" for="langtype">言語</label>
-                <div class="controls">
-                    <select name="lang">
-                        <option value="PHP">PHP</option>
-                        <option value="Ruby">Ruby</option>
-                        <option value="Python">Python</option>
-                    </select><br><br>
-                </div>
-                <label class="control-label" for="inputCode">回答</label>
-                <div class="controls">
-                    <textarea id="inputCode" rows="20" class="input-xxlarge" name="code">{% if old_code %}{{old_code}}{% endif %}</textarea>
-                </div>
+        <div class="span4">
+            <div class="side_box">
+                <p class="box_label">難易度</p>
+                <p class="level_value">エンジニア学生常識レベル</p>
             </div>
-            <input type="hidden" name="question_num" value="{{question.id}}">
-            <input type="hidden" name="sessionid" value="{{session}}">
-            <div class="control-group">
-                <div class="controls">
-                    <button type="submit" class="btn">回答する</button>
-                </div>
+            <div class="side_box">
+                <p class="box_label">挑戦済みの人数</p>
+                <p class="count_answer">10人</p>
             </div>
-        </form>
+        </div>
     </div>
 {% endblock %}

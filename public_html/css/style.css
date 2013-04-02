@@ -8,6 +8,33 @@
     margin-bottom:40px;
 }
 
+/* questionForm.twig */
+.side_box{
+    border:1px solid #bbbbbb;
+    margin-bottom: 30px;
+}
+.box_label{
+    background: #bbbbbb;
+    color: white;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold; 
+}
+
+.level_value{
+    padding:20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: blaok;
+}
+
+.count_answer{
+    padding:80px;
+    font-size:90px;
+    font-weight: bold;
+}
+
+
 /* confirm.twig */
 .answer_button{
     display: inline;
