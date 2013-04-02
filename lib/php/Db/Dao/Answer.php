@@ -54,6 +54,29 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
 
     /**
+     * QuestionIDを指定して回答人数を返す
+     *
+     * @param string $q_id QuestionID
+     * @return int 人数
+     * @throws PDOException
+     */
+    public function getanswerpeoplenumbyquestionid($q_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select count(distinct u_id) cnt from answer where q_id = :ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $q_id, PDO::PARAM_INT);
+        $statement->execute();
+
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $result['cnt'];
+    }
+
+
+
+    /**
      * UserIDを指定して回答情報を返す
      *
      * @param string $u_id 回答ID
