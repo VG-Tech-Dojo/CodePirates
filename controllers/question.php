@@ -49,9 +49,11 @@ $app->get('/question', 'authorized', function () use ($app) {
  */
 $app->get('/question/:id', 'authorized', function ($id) use ($app) {
     require_once MODELS_DIR . '/Question.php';
+    require_once MODELS_DIR . '/Answer.php';
     require_once LIB_DIR . '/Session.php';
 
     $question = $app->factory->getQuestion();
+    $answer = $app->factory->getAnswer();
     $session = $app->factory->getSession();
     $errors = array();
 
@@ -65,12 +67,14 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
     try {
         if (($question_item = $question->getQuestionByID($id)) == null){
             $app->error('その問題は存在しません');
-        }
+        } else {
+            $answer_user_num =$answer->getanswerpeoplenumbyquestionid($question_item['id']);
+        }    
     } catch (PDOException $e){
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください'); 
     }
-    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'session' => $sessionid));
+    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'session' => $sessionid, 'answer_user_num' => $answer_user_num));
 });
 
 /**
