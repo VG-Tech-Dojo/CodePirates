@@ -2,6 +2,14 @@
 {% block title %}投稿確認{% endblock %}
 
 {% block content %}
+	  <script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
+    <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
+	  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPython.js"></script>
+    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushRuby.js"></script>
+	  <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCoreDefault.css"/>
+	  <script type="text/javascript">SyntaxHighlighter.all();</script>
     <div class="row">
         {% if errors %}
             {{errors.code}}

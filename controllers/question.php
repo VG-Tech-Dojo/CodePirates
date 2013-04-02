@@ -61,6 +61,7 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
         $user_info['name'] = $session->get('user_name');
     }
     $sessionid = $session->id();
+    $session->set('sessionidQ', $sessionid);
     try {
         if (($question_item = $question->getQuestionByID($id)) == null){
             $app->error('その問題は存在しません');
@@ -148,7 +149,7 @@ $app->post('/question/save', 'authorized', function () use ($app) {
         $app->error('ろぐいんしてください');
     }
     $params = $app->request()->post();
-    if($user_info!=null/* && $session->id() === $params['sessionid']*/){
+    if($user_info!=null && $session->get('sessionidQ') === $params['sessionid']){
         try {
             $answer->register(
                 $user_info['id'],
@@ -157,7 +158,7 @@ $app->post('/question/save', 'authorized', function () use ($app) {
                 $params['lang']
             );
             $session->set('question_id', $params['question_num']);
-            $session->remove('sessionid');
+            $session->remove('sessionidQ');
             
             $app->redirect('/question_recieved');
         } catch (PDOException $e) {
