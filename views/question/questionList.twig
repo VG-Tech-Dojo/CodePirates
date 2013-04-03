@@ -20,16 +20,21 @@
             {% for question in questionList %}
                 <div class="question_box">
                     <h2>Q.{{question.id}}:{{question.title}}</h2>
-                    <p>作成日:{{question.created_at}}</p>
-                    <a href="/question/{{question.id}}">
-                        <button class="btn btn-large" type="button" onclick="getUserID()">問題に答える</button>
-                    </a>
-                    {% if question.answered %}
-                        <a href="/answerlist/{{question.id}}">
-                            <button class="btn btn-large btn-primary" type="button">回答を見る</button>
+                    <div class="question_box_inner">
+                        <p class="create_date">作成日:{{question.created_at}}</p>
+                        <p class="level">レベル:エンジニア志望学生常識レベル</p> 
+                        <p class="count_people_num">回答人数：１０人</p>
+                        <a href="/question/{{question.id}}">
+                            <button class="btn btn-large" type="button" onclick="getUserID()">問題に答える</button>
                         </a>
-                    {% endif %}
+                        {% if question.answered %}
+                            <a href="/answerlist/{{question.id}}">
+                                <button class="btn btn-large btn-primary" type="button">回答を見る</button>
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         {% endif %}
+    </div>
 {% endblock %}

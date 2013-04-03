@@ -25,7 +25,7 @@ class Db_Dao_Question extends Db_Dao_Abstract
     {
         $dbh = $this->getDbHandler();
 
-        $query  = 'select * from question where id = :Question_ID';
+        $query  = 'select question.id as id, question.title as title, question.content as content, question.inputfile_url as inputfile, question.created_at as created_at, difficulty.content as difficulty  from question, difficulty where question.difficulty = difficulty.id and question.id = :Question_ID';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':Question_ID', $questionId, PDO::PARAM_INT);
         $statement->execute();
