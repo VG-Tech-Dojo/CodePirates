@@ -53,6 +53,18 @@ class Answer extends Model
 
 
     /**
+     * Question_idから回答人数を返す
+     *
+     * @param string $q_id Question_id
+     */
+    public function getAnsweredPeopleByQuestionId($q_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getanswerpeoplenumbyquestionid($q_id);
+    }
+
+
+    /**
      * 回答をテーブルに格納する
      *
      * @param int $u_id ユーザーID

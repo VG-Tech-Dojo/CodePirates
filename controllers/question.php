@@ -6,10 +6,12 @@
 $app->get('/question', 'authorized', function () use ($app) {
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/Difficulty.php';
     require_once LIB_DIR . '/Session.php';
 
     $question = $app->factory->getQuestion();
     $answer = $app->factory->getAnswer();
+    $difficulty = $app->factory->getDifficulty();
     $session = $app->factory->getSession();
     $errors = array();
 
@@ -27,6 +29,15 @@ $app->get('/question', 'authorized', function () use ($app) {
     } catch (PDOException $e){
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください。'); 
+    }
+    $difficulties = $difficulty->getDifficulty();
+    $difficultyLevel = array();
+    for($i = 0; $i < count($difficulties); $i++ ){
+        $difficultyLevel[$difficulties[$i]['id']] = $difficulties[$i]['content'];
+    }
+    for($i = 0; $i < count($questionList); $i++ ){
+        $questionList[$i]['difficulty'] = $difficultyLevel[$questionList[$i]['difficulty']];
+        $questionList[$i]['answernum'] = $answer->getAnsweredPeopleByQuestionId($questionList[$i]['id']);
     }
     $answerInfo = $answer->getAnswerByUserId($user_info['id']);
     $answeredIdForUser = array();
