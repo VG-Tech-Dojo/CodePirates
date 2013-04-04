@@ -28,6 +28,17 @@ class Answer extends Model
         return $answer->getanswerbyquesid($q_id);
     }
 
+    /**
+     * question_idから回答人数を返す
+     *
+     * @param string $q_id Question_id
+     */
+    public function getanswerpeoplenumbyquestionid($q_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getanswerpeoplenumbyquestionid($q_id);
+    }
+
 
     /**
      * User_idからAnswerを返す
@@ -38,6 +49,18 @@ class Answer extends Model
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
         return $answer->getanswerbyuserid($u_id);
+    }
+
+
+    /**
+     * Question_idから回答人数を返す
+     *
+     * @param string $q_id Question_id
+     */
+    public function getAnsweredPeopleByQuestionId($q_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getanswerpeoplenumbyquestionid($q_id);
     }
 
 

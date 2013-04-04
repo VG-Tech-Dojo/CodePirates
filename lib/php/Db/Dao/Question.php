@@ -25,7 +25,18 @@ class Db_Dao_Question extends Db_Dao_Abstract
     {
         $dbh = $this->getDbHandler();
 
-        $query  = 'select * from question where id = :Question_ID';
+        $query  = 'select question.id as id, question.title as title, question.content as content, question.inputfile_url as inputfile, question.created_at as created_at, difficulty.content as difficulty  from question, difficulty where question.difficulty = difficulty.id and question.id = :Question_ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':Question_ID', $questionId, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function getByQuestionId($questionId)
+    {
+        $dbh = $this->getDbHandler();
+        $query = 'select * from question where id = :Question_ID';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':Question_ID', $questionId, PDO::PARAM_INT);
         $statement->execute();
@@ -58,13 +69,15 @@ class Db_Dao_Question extends Db_Dao_Abstract
      * @param string $content 問題の内容 
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
-    public function insert($title, $content)
+    public function insert($title, $content, $inputfile, $difficulty)
     { 
         $dbh = $this->getDbHandler();
-        $query = 'insert into question (title, content, created_at) values (:TITLE, :CONTENT, now())';
+        $query = 'insert into question (title, content,inputfile_url, difficulty, created_at) values (:TITLE, :CONTENT, :INPUTFILE, :DIFFICULTY, now())';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':TITLE', $title, PDO::PARAM_STR);
         $statement->bindValue(':CONTENT', $content, PDO::PARAM_STR);
+        $statement->bindValue(':INPUTFILE', $inputfile, PDO::PARAM_STR);
+        $statement->bindValue(':DIFFICULTY', $difficulty, PDO::PARAM_INT);
         $statement->execute();
 
         return ($statement->rowCount() === 1);
@@ -79,14 +92,16 @@ class Db_Dao_Question extends Db_Dao_Abstract
      * @param string $content 問題の内容 
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
-    public function updatequestion($id, $title, $content)
+    public function updatequestion($id, $title, $content, $inputfile, $difficulty)
     { 
         $dbh = $this->getDbHandler();
-        $query = 'update question set title = :TITLE, content = :CONTENT where id = :ID';
+        $query = 'update question set title = :TITLE, content = :CONTENT, inputfile_url = :INPUTFILE, difficulty = :DIFFICULTY where id = :ID';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':ID', $id, PDO::PARAM_INT);
         $statement->bindValue(':TITLE', $title, PDO::PARAM_STR);
         $statement->bindValue(':CONTENT', $content, PDO::PARAM_STR);
+        $statement->bindValue(':INPUTFILE', $inputfile, PDO::PARAM_STR);
+        $statement->bindValue(':DIFFICULTY', $difficulty, PDO::PARAM_INT);
         $statement->execute();
 
         return ($statement->rowCount() === 1);

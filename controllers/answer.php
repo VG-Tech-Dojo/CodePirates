@@ -76,5 +76,8 @@ $app->get('/answerlist/:id', 'authorized' ,  function ($q_id) use ($app) {
         }
     }
 
+    $flash = $app->view()->getData('flash');
+    $info = $flash['error'];
+    //print_r($_SESSION);
     $app->render('answer/answerlist.twig', array('user' => $user_info, 'answers' => $answerInfos ,'question' => $questionInfo));
 });

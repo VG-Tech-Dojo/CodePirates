@@ -16,7 +16,7 @@
     });
 </script>
     <div class="row">
-        <form class="form-horizontal" action="/admin/modifyQuestion/confirm" method="post">
+        <form class="form-horizontal" action="/admin/modifyQuestion/confirm" method="post" enctype="multipart/form-data">
             {% if errors.title %}
             <div class="control-group error">
                 <label class="control-label" for="title">問題タイトル</label>
@@ -49,9 +49,38 @@
                 </div>
             </div>
             {% endif %}
+            {% if question.inputfile_url != "" %}
+            <div class="control-group">
+                <label class="control-label" for="inputfile">もともとの入力ファイル</label>
+                <div class="controls">
+                    <a href="/inputs/{{question.inputfile_url}}">{{question.inputfile_url}}</a>
+                </div>
+            </div>
+            {% endif %}
+            <div class="control-group">
+                <label class="control-label" for="inputfile">入力ファイル（変更）</label>
+                <div class="controls">
+                    <input type="file" name="inputfile" size="30">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="difficulty">難易度</label>
+                <div class="controls">
+                    <select name="difficulty">
+                        {% for difficulty_item in difficulty %}
+                            {% if question.difficulty == difficulty_item.id %}
+                                <option value="{{difficulty_item.id}}" selected >{{difficulty_item.content}}</option>
+                            {% else %}
+                                <option value="{{difficulty_item.id}}">{{difficulty_item.content}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
             <div class="control-group">
                 <input type="hidden" name="sessionid" value="{{session}}">
                 <input type="hidden" name="questionid" value="{{question.id}}">
+                <input type="hidden" name="inputoldfile" value="{{question.inputfile_url}}">
                 <div class="controls">
                     <button id="btn" type="submit" class="btn">確認</button>
                 </div>
