@@ -56,6 +56,16 @@
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label" for="difficulty">難易度</label>
+                <div class="controls">
+                    <select name="difficulty">
+                        {% for difficulty_item in difficulty %}
+                            <option value="{{difficulty_item.id}}">{{difficulty_item.content}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
                 <input type="hidden" name="sessionid" value="{{session}}">
                 <div class="controls">
                     <button id="btn" type="submit" class="btn">確認</button>

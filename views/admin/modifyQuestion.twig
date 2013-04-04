@@ -64,6 +64,20 @@
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label" for="difficulty">難易度</label>
+                <div class="controls">
+                    <select name="difficulty">
+                        {% for difficulty_item in difficulty %}
+                            {% if question.difficulty == difficulty_item.id %}
+                                <option value="{{difficulty_item.id}}" selected >{{difficulty_item.content}}</option>
+                            {% else %}
+                                <option value="{{difficulty_item.id}}">{{difficulty_item.content}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
                 <input type="hidden" name="sessionid" value="{{session}}">
                 <input type="hidden" name="questionid" value="{{question.id}}">
                 <input type="hidden" name="inputoldfile" value="{{question.inputfile_url}}">

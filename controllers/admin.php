@@ -6,17 +6,20 @@
 $app->get('/admin/postQuestion' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/User.php';
+    require_once MODELS_DIR . '/Difficulty.php';
 
 
     $session = $app->factory->getSession();
     $user = $app->factory->getUser();
+    $difficulty = $app->factory->getDifficulty();
     $user_info = array();
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
     $sessionid = $session->id();
-    $app->render('admin/postQuestion.twig', array('user' => $user_info, 'session' => $sessionid));
+    $difficultyList = $difficulty->getDifficulty();
+    $app->render('admin/postQuestion.twig', array('user' => $user_info, 'session' => $sessionid, 'difficulty' => $difficultyList));
 });
 
 
@@ -49,11 +52,13 @@ $app->get('/admin/modifyQuestion/:id' ,function ($id) use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/User.php';
     require_once MODELS_DIR . '/Question.php';
+    require_once MODELS_DIR . '/Difficulty.php';
 
 
     $session = $app->factory->getSession();
     $user = $app->factory->getUser();
     $question = $app->factory->getQuestion();
+    $difficulty = $app->factory->getDifficulty();
     $user_info = array();
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
@@ -61,8 +66,9 @@ $app->get('/admin/modifyQuestion/:id' ,function ($id) use ($app) {
     }
     $sessionid = $session->id();
     $session->set('sessionidQ', $sessionid);
+    $difficultyList = $difficulty->getDifficulty();
     $question_item = $question->getQuestionwithID($id);
-    $app->render('admin/modifyQuestion.twig', array('user' => $user_info, 'session' => $sessionid, 'question' => $question_item));
+    $app->render('admin/modifyQuestion.twig', array('user' => $user_info, 'session' => $sessionid, 'question' => $question_item, 'difficulty' => $difficultyList));
 });
 
 
@@ -73,27 +79,30 @@ $app->post('/admin/modifyQuestion/confirm' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once LIB_DIR . '/FormValidator/AdminPostQuestionFormValidator.php';
     require_once MODELS_DIR . '/Question.php';
+    require_once MODELS_DIR . '/Difficulty.php';
 
 
     $session = $app->factory->getSession();
     $form_validator = $app->factory->getFormValidator_AdminPostQuestionFormValidator();
     $params = $app->request()->post();
+    $difficulty = $app->factory->getDifficulty();
     $user_info = array();
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
     $session->set('posted',true);
+    $difficultyList = $difficulty->getDifficulty();
     if($form_validator->run($params)){
         if($_FILES['inputfile']['tmp_name'] !== ""){
             $filename = $_FILES['inputfile']['name'];
             $tempname = "temp";
             $updir="./../public_html/inputs/";
             move_uploaded_file($_FILES['inputfile']['tmp_name'],$updir.$tempname);
-            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid']));
+            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficultyList[$params['difficulty'] - 1]));
             exit();
         }else{
-            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid']));
+            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficultyList[$params['difficulty'] - 1]));
             exit();
         }
     } else {
@@ -110,27 +119,30 @@ $app->post('/admin/confirm' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once LIB_DIR . '/FormValidator/AdminPostQuestionFormValidator.php';
     require_once MODELS_DIR . '/Question.php';
+    require_once MODELS_DIR . '/Difficulty.php';
 
 
     $session = $app->factory->getSession();
     $form_validator = $app->factory->getFormValidator_AdminPostQuestionFormValidator();
     $params = $app->request()->post();
+    $difficulty = $app->factory->getDifficulty();
     $user_info = array();
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
     $session->set('posted',true);
+    $difficultyList = $difficulty->getDifficulty();
     if($form_validator->run($params)){
         if($_FILES['inputfile']['tmp_name'] !== ""){
             $filename = $_FILES['inputfile']['name'];
             $tempname = "temp";
             $updir="./../public_html/inputs/";
             move_uploaded_file($_FILES['inputfile']['tmp_name'],$updir.$tempname);
-            $app->render('admin/confirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid']));
+            $app->render('admin/confirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficultyList[$params['difficulty'] - 1]));
             exit();
         }else{
-            $app->render('admin/confirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid']));
+            $app->render('admin/confirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficultyList[$params['difficulty'] - 1]));
             exit();
         }
     } else {
@@ -166,12 +178,14 @@ $app->post('/admin/posted' ,function () use ($app) {
                 $question->register(
                     $params['title'],
                     $params['content'],
+                    $params['difficulty'],
                     $params['inputfile']
                 );
             }else{
                 $question->register(
                     $params['title'],
-                    $params['content']
+                    $params['content'],
+                    $params['difficulty']
                 );
             }
             $session->remove('posted');
@@ -216,6 +230,7 @@ $app->post('/admin/modifyQuestion/posted' ,function () use ($app) {
                     $params['questionid'],
                     $params['title'],
                     $params['content'],
+                    $params['difficulty'],
                     $params['inputfile']
                 );
             }else{
@@ -223,6 +238,7 @@ $app->post('/admin/modifyQuestion/posted' ,function () use ($app) {
                     $params['questionid'],
                     $params['title'],
                     $params['content'],
+                    $params['difficulty'],
                     $params['inputoldfile']
                 );
             }

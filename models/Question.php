@@ -47,11 +47,11 @@ class Question extends Model
      * @param string $contnt 問題の中身 
      * @return boolean 処理が成功した場合true, 失敗した場合false
      */
-    public function register($title, $content, $inputfile = null)
+    public function register($title, $content, $difficulty, $inputfile = null)
     {
        
         $question_dao = $this->getFactory()->getDb_Dao_Question();
-        return $question_dao->insert($title, $content, $inputfile);
+        return $question_dao->insert($title, $content, $inputfile, $difficulty);
     }
 
 
@@ -63,10 +63,10 @@ class Question extends Model
      * @param string $contnt 問題の中身 
      * @return boolean 処理が成功した場合true, 失敗した場合false
      */
-    public function updateQuestion($id, $title, $content, $inputfile)
+    public function updateQuestion($id, $title, $content, $difficulty, $inputfile)
     {
        
         $question_dao = $this->getFactory()->getDb_Dao_Question();
-        return $question_dao->updatequestion($id, $title, $content, $inputfile);
+        return $question_dao->updatequestion($id, $title, $content, $inputfile, $difficulty);
     }
 }

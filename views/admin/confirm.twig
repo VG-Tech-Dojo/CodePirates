@@ -8,11 +8,14 @@
                 {% autoescape false %}
                 {{question.content}}
                 {% endautoescape %}
+                <br><br>
+                難易度：{{difficulty.content}}
                 {% if inputfile %}
                 <br><br>
                 入力ファイル：{{inputfile}}
                 {% endif %}
                 <input type="hidden" name="title" value="{{question.title}}">
+                <input type="hidden" name="difficulty" value="{{question.difficulty}}">
                 <input type="hidden" name="inputfile" value="{{inputfile}}">
                 <input type="hidden" name="content" value="{{question.content}}">
                 <input type="hidden" name="sessionid" value="{{session}}">

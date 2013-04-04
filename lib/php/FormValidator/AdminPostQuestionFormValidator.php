@@ -6,7 +6,8 @@ class FormValidator_AdminPostQuestionFormValidator extends FormValidator_UserFor
     public $labels = array(
         'title' => 'タイトル',
         'content' => '本文',
-        'inputfile' => '入力ファイル'
+        'inputfile' => '入力ファイル',
+        'difficulty' => '難易度'
     );
 
     public function __construct()
