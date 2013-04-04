@@ -61,7 +61,7 @@ $app->get('/admin/modifyQuestion/:id' ,function ($id) use ($app) {
     }
     $sessionid = $session->id();
     $session->set('sessionidQ', $sessionid);
-    $question_item = $question->getQuestionByID($id);
+    $question_item = $question->getQuestionwithID($id);
     $app->render('admin/modifyQuestion.twig', array('user' => $user_info, 'session' => $sessionid, 'question' => $question_item));
 });
 
@@ -85,8 +85,17 @@ $app->post('/admin/modifyQuestion/confirm' ,function () use ($app) {
     }
     $session->set('posted',true);
     if($form_validator->run($params)){
-        $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid']));
-        exit();
+        if($_FILES['inputfile']['tmp_name'] !== ""){
+            $filename = $_FILES['inputfile']['name'];
+            $tempname = "temp";
+            $updir="./../public_html/inputs/";
+            move_uploaded_file($_FILES['inputfile']['tmp_name'],$updir.$tempname);
+            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid']));
+            exit();
+        }else{
+            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid']));
+            exit();
+        }
     } else {
         $errors = $form_validator->getErrors();
     }
@@ -113,8 +122,17 @@ $app->post('/admin/confirm' ,function () use ($app) {
     }
     $session->set('posted',true);
     if($form_validator->run($params)){
-        $app->render('admin/confirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid']));
-        exit();
+        if($_FILES['inputfile']['tmp_name'] !== ""){
+            $filename = $_FILES['inputfile']['name'];
+            $tempname = "temp";
+            $updir="./../public_html/inputs/";
+            move_uploaded_file($_FILES['inputfile']['tmp_name'],$updir.$tempname);
+            $app->render('admin/confirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid']));
+            exit();
+        }else{
+            $app->render('admin/confirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid']));
+            exit();
+        }
     } else {
         $errors = $form_validator->getErrors();
     }
@@ -142,10 +160,20 @@ $app->post('/admin/posted' ,function () use ($app) {
 
     if($session->get('posted') && $session->id() === $params['sessionid']){
         try {
-            $question->register(
-                $params['title'],
-                $params['content']
-            );
+            $updir="./../public_html/inputs/";
+            if(file_exists($updir."temp") && $params['inputfile'] !== ""){
+                rename($updir."temp", $updir.$params['inputfile']);
+                $question->register(
+                    $params['title'],
+                    $params['content'],
+                    $params['inputfile']
+                );
+            }else{
+                $question->register(
+                    $params['title'],
+                    $params['content']
+                );
+            }
             $session->remove('posted');
             $session->remove('sessionid');
         } catch (PDOException $e){
@@ -175,11 +203,30 @@ $app->post('/admin/modifyQuestion/posted' ,function () use ($app) {
 
     if($session->get('posted') && $session->id() === $params['sessionid']){
         try {
-            $question->updateQuestion(
-                $params['questionid'],
-                $params['title'],
-                $params['content']
-            );
+            $updir="./../public_html/inputs/";
+            if($params['inputoldfile'] !== "" && isset($params['inputfile'])){
+                $oldfile = $updir.$params['inputoldfile'];
+                if(file_exists($oldfile)){
+                    unlink($oldfile);
+                }
+            }
+            if(file_exists($updir."temp") && isset($params['inputfile'])){
+                rename($updir."temp", $updir.$params['inputfile']);
+                $question->updateQuestion(
+                    $params['questionid'],
+                    $params['title'],
+                    $params['content'],
+                    $params['inputfile']
+                );
+            }else{
+                $question->updateQuestion(
+                    $params['questionid'],
+                    $params['title'],
+                    $params['content'],
+                    $params['inputoldfile']
+                );
+            }
+
             $session->remove('posted');
             $session->remove('sessionid');
         } catch (PDOException $e){

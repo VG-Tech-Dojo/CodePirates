@@ -17,6 +17,16 @@ class Question extends Model
         $question_dao = $this->getFactory()->getDb_Dao_Question();
         return $question_dao->findByQuestionID($question_id);
     }
+    /**
+     *
+     *緊急避難メソッド
+     **/
+    public function getQuestionwithID($question_id)
+    {
+        
+        $question_dao = $this->getFactory()->getDb_Dao_Question();
+        return $question_dao->getByQuestionID($question_id);
+    }
 
     /**
      * 問題リストをDBからデータを取得して返す
@@ -37,11 +47,11 @@ class Question extends Model
      * @param string $contnt 問題の中身 
      * @return boolean 処理が成功した場合true, 失敗した場合false
      */
-    public function register($title, $content)
+    public function register($title, $content, $inputfile = null)
     {
        
         $question_dao = $this->getFactory()->getDb_Dao_Question();
-        return $question_dao->insert($title, $content);
+        return $question_dao->insert($title, $content, $inputfile);
     }
 
 
@@ -53,10 +63,10 @@ class Question extends Model
      * @param string $contnt 問題の中身 
      * @return boolean 処理が成功した場合true, 失敗した場合false
      */
-    public function updateQuestion($id, $title, $content)
+    public function updateQuestion($id, $title, $content, $inputfile)
     {
        
         $question_dao = $this->getFactory()->getDb_Dao_Question();
-        return $question_dao->updatequestion($id, $title, $content);
+        return $question_dao->updatequestion($id, $title, $content, $inputfile);
     }
 }

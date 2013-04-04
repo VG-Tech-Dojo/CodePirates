@@ -11,6 +11,11 @@
 </script>
 {% endblock %}
 {% block content %}
+        {% autoescape false %}
+        <?php echo $flash['error'] ?>
+        <?php echo "aa" ?>
+        {% endautoescape %}
+{{slim.flash.flash.error}}
 <div class="row">
     <div class="page-header">
         <h1>問題{{question.id}}のみんなの解答</h1>

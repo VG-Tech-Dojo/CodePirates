@@ -77,7 +77,7 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
     $sessionid = $session->id();
     $session->set('sessionidQ', $sessionid);
     try {
-        if (($question_item = $question->getQuestionByID($id)) == null){
+        if (($question_item = $question->getQuestionwithID($id)) == null){
             $app->error('その問題は存在しません');
         } else {
             $answer_user_num =$answer->getanswerpeoplenumbyquestionid($question_item['id']);
@@ -204,7 +204,8 @@ $app->get('/question_recieved', 'authorized', function () use ($app) {
     } else {
         $app->redirect('/question');
     }
-    
-    $app->render('question/register.twig', array('question_num' => $question_num, 'user' => $user_info));
+    $app->flash('error', 'Foo redirect');
+    $app->redirect("/answerlist/$question_num");
+   //$app->render('question/register.twig', array('question_num' => $question_num, 'user' => $user_info));
 });
 

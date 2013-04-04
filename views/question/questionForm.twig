@@ -50,6 +50,12 @@
                 <p class="box_label">挑戦済みの人数</p>
                 <p class="count_answer">{{answer_user_num}}人</p>
             </div>
+            {% if question.inputfile_url != "" %}
+                <div class="side_box">
+                    <p class="box_label">入力ファイル</p>
+                    <a href="/inputs/{{question.inputfile_url}}">{{question.inputfile_url}}</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

@@ -8,7 +8,13 @@
                 {% autoescape false %}
                 {{question.content}}
                 {% endautoescape %}
+                {% if inputfile %}
+                <br><br>
+                入力ファイル：{{inputfile}}
+                <input type="hidden" name="inputfile" value="{{inputfile}}">
+                {% endif %}
                 <input type="hidden" name="title" value="{{question.title}}">
+                <input type="hidden" name="inputoldfile" value="{{question.inputoldfile}}">
                 <input type="hidden" name="content" value="{{question.content}}">
                 <input type="hidden" name="questionid" value="{{question.questionid}}">
                 <input type="hidden" name="sessionid" value="{{session}}">
