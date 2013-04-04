@@ -3,3 +3,4 @@ source ./createsql/create_like.sql;
 source ./createsql/create_difficulty.sql;
 source ./createsql/create_comment.sql;
 source ./altersql/alter101.sql;
+source ./insertsql/insert_difficulty.sql;
