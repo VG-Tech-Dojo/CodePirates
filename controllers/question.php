@@ -204,7 +204,7 @@ $app->get('/question_recieved', 'authorized', function () use ($app) {
     } else {
         $app->redirect('/question');
     }
-    $app->flash('error', 'Foo redirect');
+    //$app->flash('error', 'Foo redirect');
     //$app->redirect("/answerlist/$question_num");
     $app->render('question/register.twig', array('question_num' => $question_num, 'user' => $user_info));
 });
