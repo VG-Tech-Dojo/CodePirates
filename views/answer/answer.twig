@@ -14,7 +14,7 @@
             <div class="page-header">
                 <h1>{{answerer.name}}さんの{{question.title}}の回答</h1>
             </div>
-            <a href="/answerlist/{{question.id}}"><h2>問題{{question.id}}</h2></a>
+            <a href="/answerlist/question/{{question.id}}"><h2>問題{{question.id}}</h2></a>
             {% autoescape false %}
             {{question.content}}
             {% endautoescape %}

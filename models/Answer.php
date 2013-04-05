@@ -65,6 +65,18 @@ class Answer extends Model
 
 
     /**
+     * User_id,Question_idからAnswerを返す
+     *
+     * @param string $u_id User_id
+     * @param string $q_id Question_id
+     */
+    public function getAnswerByUserIdQuestionId($u_id,$q_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getanswerbyuseridquestionid($u_id,$q_id);
+    }
+
+    /**
      * 回答をテーブルに格納する
      *
      * @param int $u_id ユーザーID
