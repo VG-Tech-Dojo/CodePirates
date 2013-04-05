@@ -1,0 +1,18 @@
+{% extends "base.twig" %}
+{% block title %}投稿しました{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    function gotoAnswer() {
+        mixpanel.track('gotoAnotherAnswer',{
+            'user_id':{{user.id}}
+        }); 
+    };
+</script>
+{% endblock %}
+{% block content %}
+    <div class="row"> 
+        <p>回答を修正しました</p>
+        
+        <a href="/answer/{{ansId}}" onclick="gotoAnswer()">修正した回答</a>
+    </div>
+{% endblock %}

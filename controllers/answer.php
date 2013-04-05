@@ -137,3 +137,151 @@ $app->get('/answerlist/user/:u_id/question/:q_id', 'authorized' ,  function ($u_
 });
 
 
+/**
+ * 回答修正時の問題と解答フォームの表示
+ */
+$app->get('/modify/answer/code/:id', 'authorized', function ($a_id) use ($app) {
+    require_once MODELS_DIR . '/Question.php';
+    require_once MODELS_DIR . '/Answer.php';
+    require_once LIB_DIR . '/Session.php';
+
+    $question = $app->factory->getQuestion();
+    $answer = $app->factory->getAnswer();
+    $session = $app->factory->getSession();
+    $errors = array();
+
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $sessionid = $session->id();
+    $session->set('sessionidQ', $sessionid);
+    $answerInfo = $answer->getAnswerByAnsId($a_id);
+    try {
+        if (($question_item = $question->getQuestionByID($answerInfo['q_id'])) == null){
+            $app->error('その問題は存在しません');
+        } else {
+            $answer_user_num =$answer->getanswerpeoplenumbyquestionid($question_item['id']);
+        }    
+    } catch (PDOException $e){
+        echo $e->getMessage();
+        $app->error('おかしいのでリロードしてください'); 
+    }
+    if($answerInfo['u_id'] !== $user_info['id']){
+        $app->redirect('/');
+    }
+    $app->render('answer/modifyAnswerForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'session' => $sessionid, 'answer_user_num' => $answer_user_num, 'answerInfo' => $answerInfo));
+});
+
+/**
+ * confirmから戻ってくるときの解答フォームの表示
+ */
+$app->put('/modify/answer/code/:id', 'authorized', function ($a_id) use ($app) {
+    require_once MODELS_DIR . '/Question.php';
+    require_once LIB_DIR . '/Session.php';
+    require_once MODELS_DIR . '/Answer.php';
+
+    $question = $app->factory->getQuestion();
+    $answer = $app->factory->getAnswer();
+    $session = $app->factory->getSession();
+    $errors = array();
+    $old_code = '';
+
+    $params = $app->request()->post();
+    $old_code = $params['code'];
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $sessionid = $session->id();
+    $session->set('sessionidQ', $sessionid);
+    $answerInfo = $answer->getAnswerByAnsId($a_id);
+    try {
+        if (($question_item = $question->getQuestionByID($answerInfo['q_id'])) == null){
+            $app->error('その問題は存在しません');
+        } else {
+            $answer_user_num =$answer->getanswerpeoplenumbyquestionid($question_item['id']);
+        }
+    } catch (PDOException $e){
+        echo $e->getMessage();
+        $app->error('おかしいのでリロードしてください'); 
+    }
+    if($answerInfo['u_id'] !== $user_info['id']){
+        $app->redirect('/');
+    }
+    $app->render('answer/modifyAnswerForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'old_code' => $old_code, 'answer_user_num' => $answer_user_num, 'session' => $sessionid, 'answerInfo' => $answerInfo));
+});
+
+/**
+ * 回答を修正した後の確認画面
+ */
+$app->post('/modify/answer/confirm', 'authorized', function () use ($app) {
+    require_once LIB_DIR . '/FormValidator/CodeFormValidator.php';
+    require_once MODELS_DIR . '/Answer.php';
+    require_once LIB_DIR . '/Session.php';
+
+    $params = $app->request()->post();
+    $session = $app->factory->getSession();
+    $errors = array();
+    $form_validator = $app->factory->getFormValidator_CodeFormValidator();
+
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $session->set('posted',true);
+    if ($form_validator->run($params)) {
+        $confarmcode = $params['code'];
+    } else {
+        $confarmcode = '';
+        $errors = $form_validator->getErrors();
+    }
+    if($params['answer_uId'] !== $user_info['id']){
+        $app->redirect('/');
+    }
+    $app->render('answer/modifyConfirm.twig', array('errors' => $errors, 'code' => $confarmcode, 'question_num' => $params['question_num'], 'user' => $user_info, 'langtype' => $params['lang'], 'session' => $params['sessionid'], 'ans_num' => $params['answer_num'], 'answer_uId' => $params['answer_uId']));
+});
+
+/**
+ * 回答を修正した後の登録処理
+ */
+$app->post('/modify/answer/result', 'authorized', function () use ($app) {
+    require_once MODELS_DIR . '/Answer.php';
+    require_once LIB_DIR . '/Session.php';
+
+    $params = $app->request()->post();
+    $session = $app->factory->getSession();
+    $answer = $app->factory->getAnswer();
+    $errors = array();
+
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    if($params['answer_uId'] !== $user_info['id']){
+        $app->redirect('/');
+    }
+    if($session->get('posted') && $params['sessionid'] === $session->get('sessionidQ')){
+        try {
+            $answer->update(
+                $params['ans_num'],
+                $user_info['id'],
+                $params['question_num'],
+                $params['code'],
+                $params['lang']
+            );
+            $session->remove('sessionidQ');
+            $session->remove('posted');
+            
+        } catch (PDOException $e) {
+            print($e->getMessage());
+            $app->error('登録に失敗しました。');
+        }
+    }
+    $app->render('answer/modifyResult.twig', array('user' => $user_info, 'ansId' => $params['ans_num']));
+});
+

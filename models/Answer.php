@@ -82,10 +82,26 @@ class Answer extends Model
      * @param int $u_id ユーザーID
      * @param int $q_id 問題ID
      * @param string $content 内容
+     * @param string $lang 言語
      */
     public function register($u_id, $q_id, $content, $lang)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
         return $answer->insert($u_id, $q_id, $content, $lang);
+    }
+
+    /**
+     * 回答を更新する
+     *
+     * @param int $a_id 回答ID
+     * @param int $u_id ユーザーID
+     * @param int $q_id 問題ID
+     * @param string $content 内容
+     * @param string $lang 言語
+     */
+    public function update($a_id, $u_id, $q_id, $content, $lang)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->updateans($a_id, $u_id, $q_id, $content, $lang);
     }
 }

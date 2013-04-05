@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/Abstract.php';
  * @package Db
  * @subpackage Dao
  * @version $Id$
- *
+
  */
 class Db_Dao_Question extends Db_Dao_Abstract
 {

@@ -1,0 +1,67 @@
+{% extends "base.twig" %}
+{% block title %}回答修正{% endblock %}
+
+{% block content %}
+    <div class="row-fluid">
+        <div class="span8">
+            <div class="page-header">
+                <h1>
+                    {{question.id}}.{{question.title}}
+                </h1>
+            </div>
+            <p class="text-right">出題日：{{question.created_at}}</p>
+            <p>
+                {% autoescape false %}
+                {{question.content}}
+                {% endautoescape %}
+            </p>
+
+
+            <form class="form-horizontal" action="/modify/answer/confirm" method="post">
+                <div class="control-group">
+                    <label class="control-label" for="langtype">言語</label>
+                    <div class="controls">
+                        <select name="lang">
+                            <option value="PHP">PHP</option>
+                            <option value="Ruby">Ruby</option>
+                            <option value="Python">Python</option>
+                        </select><br><br>
+                    </div>
+                    <label class="control-label" for="inputCode">回答</label>
+                    <div class="controls">
+                        {% if old_code %}
+                        <textarea id="inputCode" rows="20" class="input-xxlarge" name="code">{{old_code}}</textarea>
+                        {% else %}
+                        <textarea id="inputCode" rows="20" class="input-xxlarge" name="code">{{answerInfo.content}}</textarea>
+                        {% endif %}
+                    </div>
+                </div>
+                <input type="hidden" name="question_num" value="{{question.id}}">
+                <input type="hidden" name="answer_num" value="{{answerInfo.id}}">
+                <input type="hidden" name="answer_uId" value="{{answerInfo.u_id}}">
+                <input type="hidden" name="sessionid" value="{{session}}">
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn">回答する</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="span4">
+            <div class="side_box">
+                <p class="box_label">難易度</p>
+                <p class="level_value">{{question.difficulty}}</p>
+            </div>
+            <div class="side_box">
+                <p class="box_label">挑戦済みの人数</p>
+                <p class="count_answer">{{answer_user_num}}人</p>
+            </div>
+            {% if question.inputfile_url != "" %}
+                <div class="side_box">
+                    <p class="box_label">入力ファイル</p>
+                    <a href="/inputs/{{question.inputfile_url}}">{{question.inputfile_url}}</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
