@@ -77,7 +77,7 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
     $sessionid = $session->id();
     $session->set('sessionidQ', $sessionid);
     try {
-        if (($question_item = $question->getQuestionwithID($id)) == null){
+        if (($question_item = $question->getQuestionByID($id)) == null){
             $app->error('その問題は存在しません');
         } else {
             $answer_user_num =$answer->getanswerpeoplenumbyquestionid($question_item['id']);
@@ -95,8 +95,10 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
 $app->put('/question/:id', 'authorized', function ($id) use ($app) {
     require_once MODELS_DIR . '/Question.php';
     require_once LIB_DIR . '/Session.php';
+    require_once MODELS_DIR . '/Answer.php';
 
     $question = $app->factory->getQuestion();
+    $answer = $app->factory->getAnswer();
     $session = $app->factory->getSession();
     $errors = array();
     $old_code = '';
@@ -108,15 +110,19 @@ $app->put('/question/:id', 'authorized', function ($id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
+    $sessionid = $session->id();
+    $session->set('sessionidQ', $sessionid);
     try {
         if (($question_item = $question->getQuestionByID($id)) == null){
             $app->error('その問題は存在しません');
+        } else {
+            $answer_user_num =$answer->getanswerpeoplenumbyquestionid($question_item['id']);
         }
     } catch (PDOException $e){
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください'); 
     }
-    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'old_code' => $old_code));
+    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'old_code' => $old_code, 'answer_user_num' => $answer_user_num, 'session' => $sessionid));
 });
 
 /**
