@@ -13,7 +13,7 @@
 {% block content %}
 <div class="row">
     <div class="page-header">
-        <h1>問題{{question.id}}のみんなの解答一覧</h1>
+        <h1>問題{{question.id}}の{{answererName}}の解答一覧</h1>
     </div>
     <h2>問題</h2>
     <div class="box">
@@ -22,12 +22,12 @@
         {% endautoescape %}
     </div>
     <br>
-    <h2>みんなの回答一覧</h2>
+    <h2>{{answererName}}の回答一覧</h2>
     <ul>
     <table>
-        {% for answerer_item in answerer %}
+        {% for answer in answers %}
             <tr>
-                <th align="left" ><a href="/answerlist/user/{{answerer_item.id}}/question/{{question.id}}" onClick="gotoAnswerSingle({{answer}})">{{answerer_item.name}}さんの回答一覧</a></th>
+                <th align="left" ><a href="/answer/{{answer.id}}" onClick="gotoAnswerSingle({{answer}})">{{answer.created_at}}に投稿した回答</a></th>
             </tr>
         {% endfor %}
     </table>
