@@ -1,5 +1,5 @@
 {% extends "base.twig" %}
-{% block title %}問題一覧{% endblock %}
+{% block title %}回答修正{% endblock %}
 
 {% block content %}
     <div class="row-fluid">
@@ -17,7 +17,7 @@
             </p>
 
 
-            <form class="form-horizontal" action="/question/confirm" method="post">
+            <form class="form-horizontal" action="/modify/answer/confirm" method="post">
                 <div class="control-group">
                     <label class="control-label" for="langtype">言語</label>
                     <div class="controls">
@@ -29,10 +29,16 @@
                     </div>
                     <label class="control-label" for="inputCode">回答</label>
                     <div class="controls">
-                        <textarea id="inputCode" rows="20" class="input-xxlarge" name="code">{% if old_code %}{{old_code}}{% endif %}</textarea>
+                        {% if old_code %}
+                        <textarea id="inputCode" rows="20" class="input-xxlarge" name="code">{{old_code}}</textarea>
+                        {% else %}
+                        <textarea id="inputCode" rows="20" class="input-xxlarge" name="code">{{answerInfo.content}}</textarea>
+                        {% endif %}
                     </div>
                 </div>
                 <input type="hidden" name="question_num" value="{{question.id}}">
+                <input type="hidden" name="answer_num" value="{{answerInfo.id}}">
+                <input type="hidden" name="answer_uId" value="{{answerInfo.u_id}}">
                 <input type="hidden" name="sessionid" value="{{session}}">
                 <div class="control-group">
                     <div class="controls">

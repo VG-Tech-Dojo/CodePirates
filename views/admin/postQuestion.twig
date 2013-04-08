@@ -16,7 +16,7 @@
     });
 </script>
     <div class="row">
-        <form class="form-horizontal" action="/admin/confirm" method="post">
+        <form class="form-horizontal" action="/admin/confirm" method="post" enctype="multipart/form-data">
             {% if errors.title %}
             <div class="control-group error">
                 <label class="control-label" for="title">問題タイトル</label>
@@ -49,6 +49,22 @@
                 </div>
             </div>
             {% endif %}
+            <div class="control-group">
+                <label class="control-label" for="inputfile">入力ファイル（任意）</label>
+                <div class="controls">
+                    <input type="file" name="inputfile" size="30">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="difficulty">難易度</label>
+                <div class="controls">
+                    <select name="difficulty">
+                        {% for difficulty_item in difficulty %}
+                            <option value="{{difficulty_item.id}}">{{difficulty_item.content}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
             <div class="control-group">
                 <input type="hidden" name="sessionid" value="{{session}}">
                 <div class="controls">

@@ -117,6 +117,27 @@ class Db_Dao_Answer extends Db_Dao_Abstract
     }
 
 
+    /**
+     * UserID,QuestionIdを指定して回答情報を返す
+     *
+     * @param string $u_id 回答ID
+     * @param string $q_id QuestionID
+     * @return array ユーザー情報
+     * @throws PDOException
+     */
+    public function getanswerbyuseridquestionid($u_id,$q_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select * from answer where u_id = :ID and q_id=:Q_ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $u_id, PDO::PARAM_INT);
+        $statement->bindValue(':Q_ID', $q_id, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 
     /**
@@ -133,6 +154,32 @@ class Db_Dao_Answer extends Db_Dao_Abstract
         $dbh = $this->getDbHandler();
         $query = 'insert into answer (u_id, q_id, content, lang, created_at) values (:U_ID, :Q_ID, :CONTENT, :LANG, now())';
         $statement = $dbh->prepare($query);
+        $statement->bindValue(':U_ID', $u_id, PDO::PARAM_INT);
+        $statement->bindValue(':Q_ID', $q_id, PDO::PARAM_INT);
+        $statement->bindValue(':CONTENT', $content, PDO::PARAM_STR);
+        $statement->bindValue(':LANG', $lang, PDO::PARAM_STR);
+        $statement->execute();
+
+        return ($statement->rowCount() === 1);
+    }
+
+
+    /**
+     * 回答情報を更新する
+     *
+     * @param int $a_id 回答ID
+     * @param int $u_id ユーザーID
+     * @param int $q_id 問題ID
+     * @param string $content 内容
+     * @param string $lang 言語
+     * @return boolean 追加が成功して場合true, 失敗した場合false
+     */
+    public function updateans($a_id, $u_id, $q_id, $content, $lang)
+    {
+        $dbh = $this->getDbHandler();
+        $query = 'update answer set u_id = :U_ID, q_id = :Q_ID, content = :CONTENT, lang = :LANG where id = :A_ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':A_ID', $a_id, PDO::PARAM_INT);
         $statement->bindValue(':U_ID', $u_id, PDO::PARAM_INT);
         $statement->bindValue(':Q_ID', $q_id, PDO::PARAM_INT);
         $statement->bindValue(':CONTENT', $content, PDO::PARAM_STR);

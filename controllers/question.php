@@ -6,10 +6,12 @@
 $app->get('/question', 'authorized', function () use ($app) {
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/Difficulty.php';
     require_once LIB_DIR . '/Session.php';
 
     $question = $app->factory->getQuestion();
     $answer = $app->factory->getAnswer();
+    $difficulty = $app->factory->getDifficulty();
     $session = $app->factory->getSession();
     $errors = array();
 
@@ -27,6 +29,15 @@ $app->get('/question', 'authorized', function () use ($app) {
     } catch (PDOException $e){
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください。'); 
+    }
+    $difficulties = $difficulty->getDifficulty();
+    $difficultyLevel = array();
+    for($i = 0; $i < count($difficulties); $i++ ){
+        $difficultyLevel[$difficulties[$i]['id']] = $difficulties[$i]['content'];
+    }
+    for($i = 0; $i < count($questionList); $i++ ){
+        $questionList[$i]['difficulty'] = $difficultyLevel[$questionList[$i]['difficulty']];
+        $questionList[$i]['answernum'] = $answer->getAnsweredPeopleByQuestionId($questionList[$i]['id']);
     }
     $answerInfo = $answer->getAnswerByUserId($user_info['id']);
     $answeredIdForUser = array();
@@ -84,8 +95,10 @@ $app->get('/question/:id', 'authorized', function ($id) use ($app) {
 $app->put('/question/:id', 'authorized', function ($id) use ($app) {
     require_once MODELS_DIR . '/Question.php';
     require_once LIB_DIR . '/Session.php';
+    require_once MODELS_DIR . '/Answer.php';
 
     $question = $app->factory->getQuestion();
+    $answer = $app->factory->getAnswer();
     $session = $app->factory->getSession();
     $errors = array();
     $old_code = '';
@@ -97,15 +110,19 @@ $app->put('/question/:id', 'authorized', function ($id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
+    $sessionid = $session->id();
+    $session->set('sessionidQ', $sessionid);
     try {
         if (($question_item = $question->getQuestionByID($id)) == null){
             $app->error('その問題は存在しません');
+        } else {
+            $answer_user_num =$answer->getanswerpeoplenumbyquestionid($question_item['id']);
         }
     } catch (PDOException $e){
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください'); 
     }
-    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'old_code' => $old_code));
+    $app->render('question/questionForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'old_code' => $old_code, 'answer_user_num' => $answer_user_num, 'session' => $sessionid));
 });
 
 /**
@@ -193,7 +210,8 @@ $app->get('/question_recieved', 'authorized', function () use ($app) {
     } else {
         $app->redirect('/question');
     }
-    
+    //$app->flash('error', 'Foo redirect');
+    //$app->redirect("/answerlist/$question_num");
     $app->render('question/register.twig', array('question_num' => $question_num, 'user' => $user_info));
 });
 

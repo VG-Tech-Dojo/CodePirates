@@ -6,7 +6,7 @@ class Question extends Model
 {
 
     /**
-     * 質問IDを指定してDBからデータを取得して返す
+     * 質問IDを指定してDBからデータを取得して返す(difficultyの中身はdifficultyテーブルのcontentを取得)
      *
      * @param string $question_id 問題ID
      * @return array $question_info そのIDの質問タイトルと内容と生成日時  
@@ -17,6 +17,18 @@ class Question extends Model
         $question_dao = $this->getFactory()->getDb_Dao_Question();
         return $question_dao->findByQuestionID($question_id);
     }
+    /**
+     *
+     * 質問IDを指定してDBからデータを整形せずに取得して返す
+     *
+     * @param string $question_id 問題ID
+     **/
+    public function getQuestionwithID($question_id)
+    {
+        
+        $question_dao = $this->getFactory()->getDb_Dao_Question();
+        return $question_dao->getByQuestionID($question_id);
+    }
 
     /**
      * 問題リストをDBからデータを取得して返す
@@ -25,7 +37,6 @@ class Question extends Model
      */
     public function getAllQuestion()
     {
-        
         $question_dao = $this->getFactory()->getDb_Dao_Question();
         return $question_dao->questionList();
     }
@@ -37,11 +48,11 @@ class Question extends Model
      * @param string $contnt 問題の中身 
      * @return boolean 処理が成功した場合true, 失敗した場合false
      */
-    public function register($title, $content)
+    public function register($title, $content, $difficulty, $inputfile = null)
     {
        
         $question_dao = $this->getFactory()->getDb_Dao_Question();
-        return $question_dao->insert($title, $content);
+        return $question_dao->insert($title, $content, $inputfile, $difficulty);
     }
 
 
@@ -53,10 +64,10 @@ class Question extends Model
      * @param string $contnt 問題の中身 
      * @return boolean 処理が成功した場合true, 失敗した場合false
      */
-    public function updateQuestion($id, $title, $content)
+    public function updateQuestion($id, $title, $content, $difficulty, $inputfile)
     {
        
         $question_dao = $this->getFactory()->getDb_Dao_Question();
-        return $question_dao->updatequestion($id, $title, $content);
+        return $question_dao->updatequestion($id, $title, $content, $inputfile, $difficulty);
     }
 }

@@ -1,0 +1,45 @@
+{% extends "base.twig" %}
+{% block title %}回答修正投稿確認{% endblock %}
+
+{% block content %}
+	  <script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
+    <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
+	  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPython.js"></script>
+    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushRuby.js"></script>
+	  <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCoreDefault.css"/>
+	  <script type="text/javascript">SyntaxHighlighter.all();</script>
+    <div class="row">
+        {% if errors %}
+            {{errors.code}}
+            <p><a href="/modify/answer/code/{{ans_num}}">戻る</a></p>
+        {% else %}
+            <div class="page-header">
+                <h1>入力内容を確認してください</h1>
+            </div>
+            <h3>言語：{{langtype}}</h3>
+            {% if langtype == 'PHP' %}
+            <pre class="brush: php;">{{code}}</pre>
+            {% elseif langtype == 'Ruby' %}
+            <pre class="brush: ruby;">{{code}}</pre>
+            {% elseif langtype == 'Python' %}
+            <pre class="brush: python;">{{code}}</pre>
+            {% endif %}
+            <form id="submit" class="answer_button" action="/modify/answer/result" method="post">
+                <input type="hidden" name="code" value="{{code}}">
+                <input type="hidden" name="lang" value="{{langtype}}">
+                <input type="hidden" name="question_num" value="{{question_num}}">
+                <input type="hidden" name="ans_num" value="{{ans_num}}">
+                <input type="hidden" name="answer_uId" value="{{answer_uId}}">
+                <input type="hidden" name="sessionid" value="{{session}}">
+                <button type="submit" class="btn btn-primary">回答する</button>
+            </form>
+            <form id="cancel" class="cancel_button" action="/modify/answer/code/{{ans_num}}" method="post">
+                <input type="hidden" name="code" value="{{code}}">
+                <input type="hidden" name="_METHOD" value="PUT">
+                <button type="submit" class="btn">キャンセル</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
