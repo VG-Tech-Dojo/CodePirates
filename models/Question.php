@@ -6,7 +6,7 @@ class Question extends Model
 {
 
     /**
-     * 質問IDを指定してDBからデータを取得して返す
+     * 質問IDを指定してDBからデータを取得して返す(difficultyの中身はdifficultyテーブルのcontentを取得)
      *
      * @param string $question_id 問題ID
      * @return array $question_info そのIDの質問タイトルと内容と生成日時  
@@ -19,7 +19,9 @@ class Question extends Model
     }
     /**
      *
-     *緊急避難メソッド
+     * 質問IDを指定してDBからデータを整形せずに取得して返す
+     *
+     * @param string $question_id 問題ID
      **/
     public function getQuestionwithID($question_id)
     {
@@ -35,7 +37,6 @@ class Question extends Model
      */
     public function getAllQuestion()
     {
-        
         $question_dao = $this->getFactory()->getDb_Dao_Question();
         return $question_dao->questionList();
     }
