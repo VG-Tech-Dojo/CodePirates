@@ -8,13 +8,17 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     require_once MODELS_DIR . '/Answer.php';
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/User.php';
+    require_once MODELS_DIR . '/Comment.php';
 
 
     $session = $app->factory->getSession();
     $answer = $app->factory->getAnswer();
     $question = $app->factory->getQuestion();
     $user = $app->factory->getUser();
+    $comment = $app->factory->getComment();
+
     $user_info = array();
+
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
@@ -33,7 +37,12 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     if (!$user->canSee($user_info['id'], $answerInfo['q_id'])){
         $app->error("先にこの問題に回答してください");
     }
-    $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo));
+    
+    if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
+        $answer_comment = "";    
+    }
+
+    $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment));
 });
 
 
