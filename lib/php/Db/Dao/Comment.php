@@ -63,21 +63,20 @@ class Db_Dao_Comment extends Db_Dao_Abstract
      * @param string $content 内容
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
-    /*
-    public function insert($u_id, $a_id, $lang)
+    
+    public function insert($u_id, $a_id, $content)
     {
         $dbh = $this->getDbHandler();
-        $query = 'insert into answer (u_id, q_id, content, lang, created_at) values (:U_ID, :Q_ID, :CONTENT, :LANG, now())';
+        $query = 'insert into comment (u_id, a_id, content, created_at) values (:U_ID, :A_ID, :CONTENT, now())';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':U_ID', $u_id, PDO::PARAM_INT);
-        $statement->bindValue(':Q_ID', $q_id, PDO::PARAM_INT);
+        $statement->bindValue(':A_ID', $a_id, PDO::PARAM_INT);
         $statement->bindValue(':CONTENT', $content, PDO::PARAM_STR);
-        $statement->bindValue(':LANG', $lang, PDO::PARAM_STR);
         $statement->execute();
 
         return ($statement->rowCount() === 1);
     }
-     */
+
 
 
 }
