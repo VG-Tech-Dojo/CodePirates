@@ -23,15 +23,17 @@
     </div>
     <br>
     <h2>みんなの回答一覧</h2>
-    <ul>
-    <table>
-        {% for answerer_item in answerer %}
-            <tr>
-                <th align="left" ><a href="/answerlist/user/{{answerer_item.id}}/question/{{question.id}}" onClick="gotoAnswerSingle({{answer}})">{{answerer_item.name}}さんの回答一覧</a></th>
-            </tr>
+  
+        {% for answerer_item in answer_data %}
+            <p>{{answerer_item.name}}さんの回答</p>
+            
+            {% for item in answerer_item.answer %}
+            <p>
+                |-<a href="/answer/{{item.id}}">{{item.created_at}}に投稿した内容</a>
+            </p>
+            {% endfor %}
+            <br>
         {% endfor %}
-    </table>
-    </ul>
     <a href="/question"><button class="btn" type="button">問題リストに戻る</button></a>
 </div>
 {% endblock %}
