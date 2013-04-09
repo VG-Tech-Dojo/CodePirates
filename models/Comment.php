@@ -6,6 +6,16 @@ class Comment extends Model
 {
 
     /**
+     * すべてのコメントを取得する
+     */
+    public function getAllComments()
+    {
+        $comment = $this->getFactory()->getDb_Dao_Comment();
+        return $comment->getallcomments();
+    }
+
+
+    /**
      * answer_idからCommentを返す
      *
      * @param string $a_id Answer_id

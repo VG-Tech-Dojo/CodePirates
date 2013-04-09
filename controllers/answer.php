@@ -100,11 +100,13 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
     require_once MODELS_DIR . '/Answer.php';
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/User.php';
+    require_once MODELS_DIR . '/Comment.php';
 
 
     $session = $app->factory->getSession();
     $answer = $app->factory->getAnswer();
     $question = $app->factory->getQuestion();
+    $comment = $app->factory->getComment();
     $user = $app->factory->getUser();
     $user_info = array();
     $answerInfos = array();
@@ -127,6 +129,12 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
             $answererId = array();
             $answererName = array();
             $answererInfo = array();
+            $commentsinfo = $comment->getAllComments();
+            $countForComment = array();
+            for($i = 0; $i < count($commentsinfo); $i++){
+                $countForComment[] = $commentsinfo[$i]['a_id'];    
+            }
+            $countForComment = array_count_values($countForComment);
 
             foreach($answerInfos as $answerInfo){
                 $user_data[] = $answerInfo['u_id'];
@@ -135,6 +143,13 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
                 $user_info = $user->getUserById($answerd_user);
                 $answerdata[$answerd_user]['name'] = $user_info['name'];
                 $answerdata[$answerd_user]['answer'] = $answer->getAnswerByUserIdQuestionId($answerd_user,$q_id);
+                for($i = 0; $i < count($answerdata[$answerd_user]['answer']); $i++){
+                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForComment)){
+                        $answerdata[$answerd_user]['answer'][$i]['comment'] = $countForComment[$answerdata[$answerd_user]['answer'][$i]['id']];
+                    }else{
+                        $answerdata[$answerd_user]['answer'][$i]['comment'] = 0;
+                    }
+                }
             }
         }
     }
