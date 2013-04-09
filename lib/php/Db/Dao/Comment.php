@@ -25,7 +25,7 @@ class Db_Dao_Comment extends Db_Dao_Abstract
     {
         $dbh = $this->getDbHandler();
 
-        $query = 'select * from comment where a_id = :ID';
+        $query = 'select comment.id, comment.a_id, comment.content, comment.created_at, user.name from comment, user where a_id = :ID';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':ID', $a_id, PDO::PARAM_INT);
         $statement->execute();
