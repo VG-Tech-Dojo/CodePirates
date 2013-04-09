@@ -14,6 +14,24 @@ require_once dirname(__FILE__) . '/Abstract.php';
 class Db_Dao_Comment extends Db_Dao_Abstract
 {
     /**
+     * すべてのコメントを返す
+     *
+     * @return array ついたコメント
+     * @throws PDOException
+     */
+   
+    public function getallcomments()
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select * from comment';
+        $statement = $dbh->prepare($query);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    /**
      * AnswerIDを指定してコメントを返す
      *
      * @param string $a_id 回答ID
