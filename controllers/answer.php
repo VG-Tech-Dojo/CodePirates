@@ -6,6 +6,7 @@
 $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/Good.php';
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/User.php';
     require_once MODELS_DIR . '/Comment.php';
@@ -13,6 +14,7 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
 
     $session = $app->factory->getSession();
     $answer = $app->factory->getAnswer();
+    $like = $app->factory->getGood();
     $question = $app->factory->getQuestion();
     $user = $app->factory->getUser();
     $comment = $app->factory->getComment();
@@ -37,6 +39,13 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
         }
     }
 
+    $Canseelike = $like->getLikeFromAandUID($user_info['id'], $a_id);
+    if(isset($Canseelike[0])){
+        $like = false;
+    }else{
+        $like = true;
+    }
+
     if (!$user->canSee($user_info['id'], $answerInfo['q_id'])){
         $app->error("先にこの問題に回答してください");
     }
@@ -44,9 +53,42 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
         $answer_comment = "";    
     }
-    $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment, 'session' => $sessionid));
+    $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment, 'session' => $sessionid, 'like' => $like));
 });
 
+
+/**
+ * いいね投稿
+ */
+$app->get('/answerlike/:a_id', 'authorized' ,function ($a_id) use ($app) {
+    require_once MODELS_DIR . '/Good.php';
+    require_once LIB_DIR . '/Session.php';
+    require_once MODELS_DIR . '/Answer.php';
+
+    $session = $app->factory->getSession();
+    $answer = $app->factory->getAnswer();
+    $like = $app->factory->getGood();
+
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $answerinfo = $answer->getAnswerByAnsId($a_id);
+    if($answerinfo['u_id'] == $user_info['id']){
+        $app->error('不正な処理です');
+    }
+    try{
+        $like->registLike(
+            $user_info['id'],
+            $a_id
+            );
+    }catch (PDOException $e){
+        $app->error('不正な処理です');
+    }
+
+
+    $app->redirect("/answer/$a_id");
+});
 
 /**
  * ある問題に対する回答一覧画面

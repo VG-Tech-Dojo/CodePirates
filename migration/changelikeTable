@@ -1,0 +1,3 @@
+use demo;
+source ./deletesql/delete_like_table.sql
+source ./createsql/create_good.sql

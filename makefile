@@ -10,6 +10,9 @@ insertdb:
 versionupdb101:
 	cd migration;mysql -uroot  < ./VER101
 
+changelikeTable:
+	cd migration;mysql -uroot  < ./changelikeTable
+
 deletemasterdb:
 	cd migration;mysql -uroot -psarumon < ./DELETE_TABLE
 
@@ -21,3 +24,6 @@ insertmasterdb:
 
 versionupmasterdb101:
 	cd migration;mysql -uroot -psarumon < ./VER101
+
+changemasterlikeTable:
+	cd migration;mysql -uroot -psarumon < ./changelikeTable
