@@ -39,9 +39,8 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     }
     
     if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
-        $answer_comment = "";    
+        $answer_comment = "hogehoge";    
     }
-
     $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment));
 });
 

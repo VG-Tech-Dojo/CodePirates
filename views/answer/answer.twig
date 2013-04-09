@@ -2,14 +2,14 @@
 {% block title %}answer.twig{% endblock %}
 
 {% block content %}
-	  <script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
     <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
-	  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPhp.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPython.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushRuby.js"></script>
-	  <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCoreDefault.css"/>
-	  <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
         <div class="row">
             <div class="page-header">
                 <h1>{{answerer.name}}さんの{{question.title}}の回答</h1>
@@ -32,7 +32,16 @@
             {% if answer.u_id == user.id%}
                 <a href="/modify/answer/code/{{answer.id}}" class="btn btn-primary">修正する</a>
             {% endif %}
-            
+    
+            {% if comment %}
+                {% for comment_item in comment %}
+                    {{comment_item.u_id}}
+                    {{comment_item.content}}
+                    {{comment_item.created_at}}
+                    <br>
+                {% endfor %}
+            {% endif%}
+
             <a href="/answerlist/user/{{answerer.id}}/question/{{question.id}}"><button class="btn" type="button">問題{{question.id}}の{{answerer.name}}さん回答一覧に戻る</button></a>
             <a href="/answerlist/question/{{question.id}}"><button class="btn" type="button">問題{{question.id}}のみんなの回答一覧に戻る</button></a>
             <a href="/question"><button class="btn" type="button">問題リストに戻る</button></a>
