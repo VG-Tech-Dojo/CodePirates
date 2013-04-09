@@ -42,6 +42,23 @@
                 {% endfor %}
             {% endif%}
 
+            <form class="form-horizontal" action="/comment/register" method="post">
+                <div class="control-group">
+                    <label class="control-label" for="inputCode">コメント</label>
+                    <div class="controls">
+                        <textarea id="inputCode" rows="5" class="input-xxlarge" name="comment">{% if old_code %}{{old_code}}{% endif %}</textarea>
+                    </div>
+                </div>
+                <input type="hidden" name="answer_num" value="{{answer.id}}">
+                <input type="hidden" name="comment_uId" value="{{user.id}}">
+                <input type="hidden" name="sessionid" value="{{session}}">
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-primary">コメントする</button>
+                    </div>
+                </div>
+            </form>
+
             <a href="/answerlist/user/{{answerer.id}}/question/{{question.id}}"><button class="btn" type="button">問題{{question.id}}の{{answerer.name}}さん回答一覧に戻る</button></a>
             <a href="/answerlist/question/{{question.id}}"><button class="btn" type="button">問題{{question.id}}のみんなの回答一覧に戻る</button></a>
             <a href="/question"><button class="btn" type="button">問題リストに戻る</button></a>
