@@ -34,15 +34,14 @@ class Comment extends Model
      * 回答をテーブルに格納する
      *
      * @param int $u_id ユーザーID
-     * @param int $q_id 問題ID
+     * @param int $a_id 回答ID
      * @param string $content 内容
-     * @param string $lang 言語
      */
-    /*
-    public function register($u_id, $q_id, $content, $lang)
+    
+    public function register($u_id, $a_id, $content)
     {
-        $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->insert($u_id, $q_id, $content, $lang);
+        $answer = $this->getFactory()->getDb_Dao_Comment();
+        return $answer->insert($u_id, $a_id, $content);
     }
-    */
+   
 }
