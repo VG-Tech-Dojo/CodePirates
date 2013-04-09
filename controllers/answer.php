@@ -53,7 +53,9 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
         $answer_comment = "";    
     }
-    $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment, 'session' => $sessionid, 'like' => $like));
+    
+    $error_msg = $_SESSION['slim.flash'];
+    $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment, 'sessionid' => $sessionid, 'like' => $like, 'error_msg' => $error_msg ));
 });
 
 
@@ -311,13 +313,16 @@ $app->post('/modify/answer/result', 'authorized', function () use ($app) {
 $app->post('/comment/register', 'authorized', function () use ($app) {
     require_once MODELS_DIR . '/Comment.php';
     require_once LIB_DIR . '/Session.php';
+    require_once LIB_DIR . '/FormValidator/CommentFormValidator.php';
 
     $params  = $app->request()->post();
     $session = $app->factory->getSession();
     $comment = $app->factory->getComment();
     $errors  = array();
-
+    $form_validator = $app->factory->getFormValidator_CommentFormValidator();
     $user_info = array();
+
+    $session->remove('error_msg');
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
@@ -326,18 +331,28 @@ $app->post('/comment/register', 'authorized', function () use ($app) {
         $app->redirect('/');
     }
     if($user_info != null && $params['sessionid'] === $session->get('sessionidA')){
-        try {
-            $comment->register(
-                $user_info['id'],
-                $params['answer_num'],
-                $params['comment']
-            );
-            $session->remove('sessionidA');
-            
-        } catch (PDOException $e) {
-            print($e->getMessage());
-            $app->error('登録に失敗しました。');
+        
+        if ($form_validator->run($params)) {
+            $confarmcomment = $params['comment'];
+            try {
+                $comment->register(
+                    $user_info['id'],
+                    $params['answer_num'],
+                    $confarmcomment
+                );
+                $session->remove('sessionidA');
+
+            } catch (PDOException $e) {
+                print($e->getMessage());
+                $app->error('登録に失敗しました。');
+            }
+      
+        } else {
+            $confarmcomment = '';
+            $errors = $form_validator->getErrors();
+            $app->flash('error', $errors['comment']);
         }
+
     }
 
     $app->redirect('/answer/'.$params['answer_num']);
