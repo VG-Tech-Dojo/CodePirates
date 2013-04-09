@@ -18,7 +18,10 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     $comment = $app->factory->getComment();
 
     $user_info = array();
-
+    
+    $sessionid = $session->id();
+    $session->set('sessionidA', $sessionid);
+    
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
@@ -39,9 +42,9 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     }
     
     if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
-        $answer_comment = "hogehoge";    
+        $answer_comment = "";    
     }
-    $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment));
+    $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment, 'session' => $sessionid));
 });
 
 
@@ -293,3 +296,41 @@ $app->post('/modify/answer/result', 'authorized', function () use ($app) {
     $app->render('answer/modifyResult.twig', array('user' => $user_info, 'ansId' => $params['ans_num']));
 });
 
+/**
+ * コメントの登録処理
+ */
+$app->post('/comment/register', 'authorized', function () use ($app) {
+    require_once MODELS_DIR . '/Comment.php';
+    require_once LIB_DIR . '/Session.php';
+
+    $params  = $app->request()->post();
+    $session = $app->factory->getSession();
+    $comment = $app->factory->getComment();
+    $errors  = array();
+
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    if($params['comment_uId'] !== $user_info['id']){
+        $app->redirect('/');
+    }
+    if($user_info != null && $params['sessionid'] === $session->get('sessionidA')){
+        try {
+            $comment->register(
+                $user_info['id'],
+                $params['answer_num'],
+                $params['comment']
+            );
+            $session->remove('sessionidA');
+            
+        } catch (PDOException $e) {
+            print($e->getMessage());
+            $app->error('登録に失敗しました。');
+        }
+    }
+
+    $app->redirect('/answer/'.$params['answer_num']);
+
+});
