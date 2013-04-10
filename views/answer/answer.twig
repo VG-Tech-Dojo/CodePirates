@@ -26,14 +26,7 @@
             {% endautoescape %}
             <br>
             <br>
-            <h2>回答</h2>
-            <button class="btn disabled {{answer.lang}}">{{answer.lang}}</button>
-             {% if like and user.id != answer.u_id %}
-                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button">この回答いいね！</button></a>
-            {% elseif like == false %}
-                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button" disabled="true">この回答にいいね！しました</button></a>
-            {% endif %}
-            </h4>
+            <h2>回答<button class="btn disabled {{answer.lang}}">{{answer.lang}}</button></h2>
             {% if answer.lang == 'PHP' %}
             <pre class="brush: php;">{{answer.content}}</pre>
             {% elseif answer.lang == 'Ruby' %}
@@ -43,6 +36,11 @@
             {% endif %}
             {% if answer.u_id == user.id%}
                 <a href="/modify/answer/code/{{answer.id}}" class="btn btn-primary">修正する</a><br><br>
+            {% endif %}
+             {% if like and user.id != answer.u_id %}
+                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button">この回答いいね！</button></a>
+            {% elseif like == false %}
+                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button" disabled="true">この回答にいいね！しました</button></a>
             {% endif %}
             <h4>コメント</h4> 
             {% if comment %}
