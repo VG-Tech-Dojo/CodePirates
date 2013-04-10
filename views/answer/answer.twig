@@ -4,6 +4,7 @@
 {% block content %}
   {% if slimFlash.like %}
       <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">×</button>
         {{slimFlash.like}}
       </div>
   {% endif %}
@@ -52,8 +53,11 @@
                     <label class="control-label" for="inputCode">コメント</label>
                     <div class="controls">
                         <textarea id="inputCode" rows="5" class="input-xxlarge" name="comment">{% if old_code %}{{old_code}}{% endif %}</textarea>
-                        {% if slimFlash %}
-                            {{slimFlash.error}}
+                        {% if slimFlash.error %}
+                            <div class="alert alert-error">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                {{slimFlash.error}}
+                            </div>
                         {% endif %}
                     </div>
                 </div>
