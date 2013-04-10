@@ -12,10 +12,16 @@
 {% endblock %}
 {% block content %}
 <div class="row">
+    {% if flash_msg%}
+    <div class="alert alert-success">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+       {{flash_msg.confarm_msg}} 
+    </div>
+    {% endif %}
     <div class="page-header">
         <h1>問題{{question.id}}のみんなの解答一覧</h1>
     </div>
-    <h2>問題</h2>
+    <a href="/question/{{question.id}}"><h2>問題</h2></a>
     <div class="box">
         {% autoescape false %}
         {{question.content}}
@@ -23,15 +29,19 @@
     </div>
     <br>
     <h2>みんなの回答一覧</h2>
-    <ul>
-    <table>
-        {% for answerer_item in answerer %}
-            <tr>
-                <th align="left" ><a href="/answerlist/user/{{answerer_item.id}}/question/{{question.id}}" onClick="gotoAnswerSingle({{answer}})">{{answerer_item.name}}さんの回答一覧</a></th>
-            </tr>
+  
+        {% for answerer_item in answer_data %}
+            <p><strong>{{answerer_item.name}}さんの回答</strong></p>
+            
+            {% for item in answerer_item.answer %}
+            <p>
+                |-<a href="/answer/{{item.id}}">{{item.created_at}}に投稿した内容</a>
+                <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
+                <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
+            </p>
+            {% endfor %}
+            <br>
         {% endfor %}
-    </table>
-    </ul>
     <a href="/question"><button class="btn" type="button">問題リストに戻る</button></a>
 </div>
 {% endblock %}

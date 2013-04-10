@@ -6,15 +6,24 @@
 $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/Good.php';
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/User.php';
+    require_once MODELS_DIR . '/Comment.php';
 
 
     $session = $app->factory->getSession();
     $answer = $app->factory->getAnswer();
+    $like = $app->factory->getGood();
     $question = $app->factory->getQuestion();
     $user = $app->factory->getUser();
+    $comment = $app->factory->getComment();
+
     $user_info = array();
+    
+    $sessionid = $session->id();
+    $session->set('sessionidA', $sessionid);
+    
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
@@ -30,12 +39,56 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
         }
     }
 
+    $Canseelike = $like->getLikeFromAandUID($user_info['id'], $a_id);
+    if(isset($Canseelike[0])){
+        $like = false;
+    }else{
+        $like = true;
+    }
+
     if (!$user->canSee($user_info['id'], $answerInfo['q_id'])){
         $app->error("先にこの問題に回答してください");
     }
-    $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo));
+    
+    if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
+        $answer_comment = "";    
+    }
+    $app->render('answer/answer.twig', array('user' => $user_info,'slimFlash' => $_SESSION['slim.flash'], 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment, 'sessionid' => $sessionid, 'like' => $like));
 });
 
+
+/**
+ * いいね投稿
+ */
+$app->get('/answerlike/:a_id', 'authorized' ,function ($a_id) use ($app) {
+    require_once MODELS_DIR . '/Good.php';
+    require_once LIB_DIR . '/Session.php';
+    require_once MODELS_DIR . '/Answer.php';
+
+    $session = $app->factory->getSession();
+    $answer = $app->factory->getAnswer();
+    $like = $app->factory->getGood();
+
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $answerinfo = $answer->getAnswerByAnsId($a_id);
+    if($answerinfo['u_id'] == $user_info['id']){
+        $app->error('不正な処理です');
+    }
+    try{
+        $like->registLike(
+            $user_info['id'],
+            $a_id
+            );
+        $app->flash('like','いいねは投稿されました');
+    }catch (PDOException $e){
+        $app->error('不正な処理です');
+    }
+     
+    $app->redirect("/answer/$a_id");
+});
 
 /**
  * ある問題に対する回答一覧画面
@@ -45,11 +98,15 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
     require_once MODELS_DIR . '/Answer.php';
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/User.php';
+    require_once MODELS_DIR . '/Comment.php';
+    require_once MODELS_DIR . '/Good.php';
 
 
     $session = $app->factory->getSession();
     $answer = $app->factory->getAnswer();
     $question = $app->factory->getQuestion();
+    $comment = $app->factory->getComment();
+    $like = $app->factory->getGood();
     $user = $app->factory->getUser();
     $user_info = array();
     $answerInfos = array();
@@ -72,69 +129,45 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
             $answererId = array();
             $answererName = array();
             $answererInfo = array();
-            for($i = 0; $i < count($answerInfos); $i++){
-                $userInfo = $user->getUserById($answerInfos[$i]['u_id']);
-                $answererId[] = $answerInfos[$i]['u_id'];
-                $answererName[] = $userInfo['name'];
+            $commentsinfo = $comment->getAllComments();
+            $countForComment = array();
+            $likeInfo = $like->getAllLike();
+            $countForLike = array();
+            for($i = 0; $i < count($commentsinfo); $i++){
+                $countForComment[] = $commentsinfo[$i]['a_id'];    
             }
-            $answererId = array_merge(array_unique($answererId));
-            $answererName = array_merge(array_unique($answererName));
-            for($i = 0; $i < count($answererId); $i++){
-                $answererInfo[$i]['name'] = $answererName[$i];
-                $answererInfo[$i]['id'] = $answererId[$i];
+            $countForComment = array_count_values($countForComment);
+            for($i = 0; $i < count($likeInfo); $i++){
+                $countForLike[] = $likeInfo[$i]['a_id'];    
             }
-        }
-    }
+            $countForLike = array_count_values($countForLike);
 
-    //$flash = $app->view()->getData('flash');
-    //$info = $flash['error'];
-    //print_r($_SESSION);
-    //print_r($flash);
-    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answerer' => $answererInfo, 'question' => $questionInfo));
-});
-
-
-/**
- * ある問題に対する回答一覧画面
- */
-$app->get('/answerlist/user/:u_id/question/:q_id', 'authorized' ,  function ($u_id,$q_id) use ($app) {
-    require_once LIB_DIR . '/Session.php';
-    require_once MODELS_DIR . '/Answer.php';
-    require_once MODELS_DIR . '/Question.php';
-    require_once MODELS_DIR . '/User.php';
-
-
-    $session = $app->factory->getSession();
-    $answer = $app->factory->getAnswer();
-    $question = $app->factory->getQuestion();
-    $user = $app->factory->getUser();
-    $user_info = array();
-    $answerInfos = array();
-
-    if ($session->get('user_id')) {
-        $user_info['id'] = $session->get('user_id');
-        $user_info['name'] = $session->get('user_name');
-    }
-
-    if (($questionInfo = $question->getQuestionByID($q_id)) == null) { 
-        $app->error('問題が存在しません');
-    } else {
-        if (($answerInfos = $answer->getAnswerByUserIdQuestionId($u_id,$q_id)) == null) {
-           $app->error('回答がありません'); 
-        } else {
-            if (!$user->canSee($user_info['id'], $q_id)){
-                $app->error("先にこの問題に回答してください");
+            foreach($answerInfos as $answerInfo){
+                $user_data[] = $answerInfo['u_id'];
             }
-
-            for($i = 0; $i < 1; $i++){
-                $userInfo = $user->getUserById($answerInfos[$i]['u_id']);
-                $answerInfos[$i]['u_name'] = $userInfo['name'];
+            foreach(array_unique($user_data) as $answerd_user){
+                $user_info = $user->getUserById($answerd_user);
+                $answerdata[$answerd_user]['name'] = $user_info['name'];
+                $answerdata[$answerd_user]['answer'] = $answer->getAnswerByUserIdQuestionId($answerd_user,$q_id);
+                for($i = 0; $i < count($answerdata[$answerd_user]['answer']); $i++){
+                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForComment)){
+                        $answerdata[$answerd_user]['answer'][$i]['comment'] = $countForComment[$answerdata[$answerd_user]['answer'][$i]['id']];
+                    }else{
+                        $answerdata[$answerd_user]['answer'][$i]['comment'] = 0;
+                    }
+                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForLike)){
+                        $answerdata[$answerd_user]['answer'][$i]['like'] = $countForLike[$answerdata[$answerd_user]['answer'][$i]['id']];
+                    }else{
+                        $answerdata[$answerd_user]['answer'][$i]['like'] = 0;
+                    }
+                }
             }
         }
     }
-
-    $app->render('answer/answerlistForUser.twig', array('user' => $user_info, 'answers' => $answerInfos ,'question' => $questionInfo, 'answererName' => $answerInfos[0]['u_name']));
+    $flash_msg = $_SESSION['slim.flash'];
+    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $questionInfo, 'flash_msg' => $flash_msg));
 });
+
 
 
 /**
@@ -285,3 +318,52 @@ $app->post('/modify/answer/result', 'authorized', function () use ($app) {
     $app->render('answer/modifyResult.twig', array('user' => $user_info, 'ansId' => $params['ans_num']));
 });
 
+/**
+ * コメントの登録処理
+ */
+$app->post('/comment/register', 'authorized', function () use ($app) {
+    require_once MODELS_DIR . '/Comment.php';
+    require_once LIB_DIR . '/Session.php';
+    require_once LIB_DIR . '/FormValidator/CommentFormValidator.php';
+
+    $params  = $app->request()->post();
+    $session = $app->factory->getSession();
+    $comment = $app->factory->getComment();
+    $errors  = array();
+
+    $form_validator = $app->factory->getFormValidator_CommentFormValidator();
+    $user_info = array();
+    $session->remove('error_msg');
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    if($params['comment_uId'] !== $user_info['id']){
+        $app->redirect('/');
+    }
+    if($user_info != null && $params['sessionid'] === $session->get('sessionidA')){
+        if ($form_validator->run($params)) {
+            $confarmcomment = $params['comment'];
+            try {
+                $comment->register(
+                    $user_info['id'],
+                    $params['answer_num'],
+                    $confarmcomment
+                );
+                $session->remove('sessionidA');
+
+            } catch (PDOException $e) {
+                print($e->getMessage());
+                $app->error('登録に失敗しました。');
+            }
+      
+        } else {
+            $confarmcomment = '';
+            $errors = $form_validator->getErrors();
+            $app->flash('error', $errors['comment']);
+         }
+    }
+
+    $app->redirect('/answer/'.$params['answer_num']);
+
+});

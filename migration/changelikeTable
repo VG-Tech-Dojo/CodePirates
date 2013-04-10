@@ -1,0 +1,2 @@
+use demo;
+source ./createsql/create_good.sql

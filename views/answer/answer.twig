@@ -2,26 +2,31 @@
 {% block title %}answer.twig{% endblock %}
 
 {% block content %}
-	  <script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
+  {% if slimFlash.like %}
+      <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+        {{slimFlash.like}}
+      </div>
+  {% endif %}
+	<script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
     <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
-	  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPhp.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPython.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushRuby.js"></script>
-	  <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCoreDefault.css"/>
-	  <script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
         <div class="row">
             <div class="page-header">
                 <h1>{{answerer.name}}さんの{{question.title}}の回答</h1>
             </div>
-            <a href="/answerlist/question/{{question.id}}"><h2>問題{{question.id}}</h2></a>
+            <a href="/question/{{question.id}}"><h2>問題{{question.id}}</h2></a>
             {% autoescape false %}
             {{question.content}}
             {% endautoescape %}
             <br>
             <br>
-            <h2>回答</h2>
-            <h4>言語:{{answer.lang}}</h4>
+            <h2>回答<button class="btn disabled {{answer.lang}}">{{answer.lang}}</button></h2>
             {% if answer.lang == 'PHP' %}
             <pre class="brush: php;">{{answer.content}}</pre>
             {% elseif answer.lang == 'Ruby' %}
@@ -30,10 +35,46 @@
             <pre class="brush: python;">{{answer.content}}</pre>
             {% endif %}
             {% if answer.u_id == user.id%}
-                <a href="/modify/answer/code/{{answer.id}}" class="btn btn-primary">修正する</a>
+                <a href="/modify/answer/code/{{answer.id}}" class="btn btn-primary">修正する</a><br><br>
             {% endif %}
-            
-            <a href="/answerlist/user/{{answerer.id}}/question/{{question.id}}"><button class="btn" type="button">問題{{question.id}}の{{answerer.name}}さん回答一覧に戻る</button></a>
+             {% if like and user.id != answer.u_id %}
+                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button">この回答いいね！</button></a>
+            {% elseif like == false %}
+                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button" disabled="true">この回答にいいね！しました</button></a>
+            {% endif %}
+            <h4>コメント</h4> 
+            {% if comment %}
+                {% for comment_item in comment %}
+                    {{comment_item.name}}：
+                    {{comment_item.content}}
+                    {{comment_item.created_at}}
+                    <br>
+                {% endfor %}
+            {% endif%}
+
+            <form class="form" action="/comment/register" method="post">
+                <div class="control-group">
+                    <label class="control-label" for="inputCode">コメントする</label>
+                    <div class="controls">
+                        <textarea id="inputCode" rows="5" class="input-xxlarge" name="comment">{% if old_code %}{{old_code}}{% endif %}</textarea>
+                        {% if slimFlash.error %}
+                            <div class="alert alert-error">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                {{slimFlash.error}}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <input type="hidden" name="answer_num" value="{{answer.id}}">
+                <input type="hidden" name="comment_uId" value="{{user.id}}">
+                <input type="hidden" name="sessionid" value="{{sessionid}}">
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-primary">コメントする</button>
+                    </div>
+                </div>
+            </form>
             <a href="/answerlist/question/{{question.id}}"><button class="btn" type="button">問題{{question.id}}のみんなの回答一覧に戻る</button></a>
             <a href="/question"><button class="btn" type="button">問題リストに戻る</button></a>
         </div>

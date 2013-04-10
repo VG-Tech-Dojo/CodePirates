@@ -64,6 +64,7 @@ $app->get('/user/register', 'noauthorized', function () use ($app) {
 $app->post('/user/register', 'noauthorized', function () use ($app) {
     require_once LIB_DIR . '/FormValidator/RegisterMemberFormValidator.php';
     require_once LIB_DIR . '/PasswordUtil.php';
+    require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/User.php';
 
     $params = $app->request()->post();
@@ -82,6 +83,12 @@ $app->post('/user/register', 'noauthorized', function () use ($app) {
                     PasswordUtil::hashPassword($params['password'], $salt),
                     $salt
                 );
+
+                $user->loadByName($params['user_name']);
+                $session = $app->factory->getSession();
+                $session->regenerate();
+                $session->set('user_id', $user->id);
+                $session->set('user_name', $user->name);
                 $app->redirect('/question');
             }
         } catch (PDOException $e) {

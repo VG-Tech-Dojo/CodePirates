@@ -8,7 +8,6 @@
     border:1px solid #8AC2FF;
     border-left:300px solid #8AC2FF;
     margin-bottom:40px;
-    width:800px;
 }
 
 .question_box h2{
@@ -38,15 +37,16 @@
 
 .level_value{
     padding:20px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     color: blaok;
 }
 
 .count_answer{
-    padding:80px;
+    padding:40px;
     font-size:90px;
     font-weight: bold;
+    text-align: center;
 }
 
 
@@ -58,3 +58,19 @@
     display: inline;
 }
 
+/* language button */
+.Ruby, .Ruby:hover, .Ruby:focus, .Ruby:active, .Ruby.active, .Ruby.disabled, .Ruby[disabled]{
+   color: white;
+   background: #bd362f; 
+   width: 70px;
+}
+.PHP, .PHP:hover, .PHP:focus, .PHP:active, .PHP.active, .PHP.disabled, .PHP[disabled]{
+   color: white;
+   background: #0044cc; 
+   width: 70px;
+}
+.Python, .Python:hover, .Python:focus, .Python:active, .Python.active, .Python.disabled, .Python[disabled]{
+   color: white;
+   background: #f89406; 
+   width: 70px;
+}

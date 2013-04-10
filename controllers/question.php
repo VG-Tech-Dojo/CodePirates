@@ -154,7 +154,7 @@ $app->post('/question/confirm', 'authorized', function () use ($app) {
 
 
 /*
- * 問題に回答した後の確認画面（登録処理）
+ * 問題に回答した後の確認画面（登録処理＆リダイレクト）
  */
 $app->post('/question/save', 'authorized', function () use ($app) {
     require_once LIB_DIR . '/Session.php';
@@ -181,37 +181,14 @@ $app->post('/question/save', 'authorized', function () use ($app) {
             );
             $session->set('question_id', $params['question_num']);
             $session->remove('sessionidQ');
+
+            $app->flash('confarm_msg', '登録完了しました。みんなの回答を見てみましょう！');
             
-            $app->redirect('/question_recieved');
+            $app->redirect('/answerlist/question/'.$params['question_num']);
         } catch (PDOException $e) {
             $app->error('登録に失敗しました。');
         }
+    } else {
+        $app->redirect('/question/'.$params['question_num']);
     }
 });
-
-/*
- * 問題に回答した後の確認画面
- */
-$app->get('/question_recieved', 'authorized', function () use ($app) {
-    require_once LIB_DIR . '/Session.php';
-
-    $session = $app->factory->getSession();
-    
-    $errors = array();
-    $user_info = array();
-    if ($session->get('user_id')) {
-        $user_info['id'] = $session->get('user_id');
-    } else {
-        $app->error('ろぐいんしてください');
-    }
-    if ($session->get('question_id')) {
-        $question_num = $session->get('question_id');
-        $session->remove('question_id');    
-    } else {
-        $app->redirect('/question');
-    }
-    //$app->flash('error', 'Foo redirect');
-    //$app->redirect("/answerlist/$question_num");
-    $app->render('question/register.twig', array('question_num' => $question_num, 'user' => $user_info));
-});
-
