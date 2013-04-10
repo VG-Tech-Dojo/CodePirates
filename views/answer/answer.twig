@@ -52,8 +52,8 @@
                     <label class="control-label" for="inputCode">コメント</label>
                     <div class="controls">
                         <textarea id="inputCode" rows="5" class="input-xxlarge" name="comment">{% if old_code %}{{old_code}}{% endif %}</textarea>
-                        {% if error_msg %}
-                            {{error_msg.error}}
+                        {% if slimFlash %}
+                            {{slimFlash.error}}
                         {% endif %}
                     </div>
                 </div>
