@@ -12,6 +12,11 @@
 {% endblock %}
 {% block content %}
 <div class="row">
+    {% if flash_msg%}
+    <div class="alert alert-success">
+       {{flash_msg.confarm_msg}} 
+    </div>
+    {% endif %}
     <div class="page-header">
         <h1>問題{{question.id}}のみんなの解答一覧</h1>
     </div>
