@@ -164,8 +164,8 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
             }
         }
     }
-
-    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $questionInfo));
+    $flash_msg = $_SESSION['slim.flash'];
+    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $questionInfo, 'flash_msg' => $flash_msg));
 });
 
 
