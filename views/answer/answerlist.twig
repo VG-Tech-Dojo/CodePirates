@@ -29,7 +29,7 @@
             
             {% for item in answerer_item.answer %}
             <p>
-                |-<a href="/answer/{{item.id}}">{{item.created_at}}に投稿した内容 : コメント数{{item.comment}}</a>
+                |-<a href="/answer/{{item.id}}">{{item.created_at}}に投稿した内容 , コメント数：{{item.comment}},Like：{{item.like}}</a>
             </p>
             {% endfor %}
             <br>

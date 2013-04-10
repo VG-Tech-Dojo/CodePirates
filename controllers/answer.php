@@ -53,6 +53,7 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
         $answer_comment = "";    
     }
+    print_r($_SESSION);
     $app->render('answer/answer.twig', array('user' => $user_info, 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment, 'session' => $sessionid, 'like' => $like));
 });
 
@@ -73,7 +74,7 @@ $app->get('/answerlike/:a_id', 'authorized' ,function ($a_id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
-    $answerinfo = $answer->getAnswerByAnsId($a_id);
+    /*$answerinfo = $answer->getAnswerByAnsId($a_id);
     if($answerinfo['u_id'] == $user_info['id']){
         $app->error('不正な処理です');
     }
@@ -86,7 +87,8 @@ $app->get('/answerlike/:a_id', 'authorized' ,function ($a_id) use ($app) {
         $app->error('不正な処理です');
     }
 
-
+     */
+    $app->flash('like','いいねは投稿されました');
     $app->redirect("/answer/$a_id");
 });
 

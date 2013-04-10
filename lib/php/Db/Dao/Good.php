@@ -13,6 +13,25 @@ require_once dirname(__FILE__) . '/Abstract.php';
  */
 class Db_Dao_Good extends Db_Dao_Abstract
 {
+
+
+    /**
+     * すべてのLike情報を返す
+     *
+     * @throws PDOException
+     */
+    public function getalllike()
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select * from good';
+        $statement = $dbh->prepare($query);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     /**
      * UserIDを指定しLike情報を返す
      *
