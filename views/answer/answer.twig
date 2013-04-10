@@ -2,10 +2,11 @@
 {% block title %}answer.twig{% endblock %}
 
 {% block content %}
-{{app.session.slim.flash('like')}}
-{{app.session.flash('like')}}
-{{app.session.get('slim.flash').like}}
-{{app.session.get('flash').like}}
+  {% if slimFlash.like %}
+      <div class="alert alert-success">
+        {{slimFlash.like}}
+      </div>
+  {% endif %}
 	<script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
     <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
 	<script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
