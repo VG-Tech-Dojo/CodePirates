@@ -20,7 +20,7 @@
     <div class="page-header">
         <h1>問題{{question.id}}のみんなの解答一覧</h1>
     </div>
-    <h2>問題</h2>
+    <a href="/question/{{question.id}}"><h2>問題</h2></a>
     <div class="box">
         {% autoescape false %}
         {{question.content}}
@@ -30,11 +30,13 @@
     <h2>みんなの回答一覧</h2>
   
         {% for answerer_item in answer_data %}
-            <p>{{answerer_item.name}}さんの回答</p>
+            <p><strong>{{answerer_item.name}}さんの回答</strong></p>
             
             {% for item in answerer_item.answer %}
             <p>
-                |-<a href="/answer/{{item.id}}">{{item.created_at}}に投稿した内容 , コメント数：{{item.comment}},Like：{{item.like}}</a>
+                |-<a href="/answer/{{item.id}}">{{item.created_at}}に投稿した内容</a>
+                <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
+                <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
             </p>
             {% endfor %}
             <br>

@@ -19,14 +19,20 @@
             <div class="page-header">
                 <h1>{{answerer.name}}さんの{{question.title}}の回答</h1>
             </div>
-            <a href="/answerlist/question/{{question.id}}"><h2>問題{{question.id}}</h2></a>
+            <a href="/question/{{question.id}}"><h2>問題{{question.id}}</h2></a>
             {% autoescape false %}
             {{question.content}}
             {% endautoescape %}
             <br>
             <br>
             <h2>回答</h2>
-            <h4>言語:{{answer.lang}}</h4>
+            <button class="btn disabled {{answer.lang}}">{{answer.lang}}</button>
+             {% if like and user.id != answer.u_id %}
+                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button">この回答いいね！</button></a>
+            {% elseif like == false %}
+                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button" disabled="true">この回答にいいね！しました</button></a>
+            {% endif %}
+            </h4>
             {% if answer.lang == 'PHP' %}
             <pre class="brush: php;">{{answer.content}}</pre>
             {% elseif answer.lang == 'Ruby' %}
@@ -37,19 +43,19 @@
             {% if answer.u_id == user.id%}
                 <a href="/modify/answer/code/{{answer.id}}" class="btn btn-primary">修正する</a><br><br>
             {% endif %}
-    
+            <h4>コメント</h4> 
             {% if comment %}
                 {% for comment_item in comment %}
-                    {{comment_item.name}}
+                    {{comment_item.name}}：
                     {{comment_item.content}}
                     {{comment_item.created_at}}
                     <br>
                 {% endfor %}
             {% endif%}
 
-            <form class="form-horizontal" action="/comment/register" method="post">
+            <form class="form" action="/comment/register" method="post">
                 <div class="control-group">
-                    <label class="control-label" for="inputCode">コメント</label>
+                    <label class="control-label" for="inputCode">コメントする</label>
                     <div class="controls">
                         <textarea id="inputCode" rows="5" class="input-xxlarge" name="comment">{% if old_code %}{{old_code}}{% endif %}</textarea>
                         {% if error_msg %}
@@ -69,11 +75,5 @@
             </form>
             <a href="/answerlist/question/{{question.id}}"><button class="btn" type="button">問題{{question.id}}のみんなの回答一覧に戻る</button></a>
             <a href="/question"><button class="btn" type="button">問題リストに戻る</button></a>
-            <br><br>
-            {% if like and user.id != answer.u_id %}
-                <a href="/answerlike/{{answer.id}}"><button class="btn" type="button">いいね！</button></a>
-            {% elseif like == false %}
-                <a href="/answerlike/{{answer.id}}"><button class="btn" type="button" disabled="true">いいね！は投稿されました</button></a>
-            {% endif %}
         </div>
 {% endblock %}
