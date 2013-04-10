@@ -6,6 +6,16 @@ class Good extends Model
 {
 
     /**
+     * すべてのLikeを返す
+     *
+     */
+    public function getAllLike()
+    {
+        $good = $this->getFactory()->getDb_Dao_Good();
+        return $good->getalllike();
+    }
+
+    /**
      * user_idからLikeを返す
      *
      */
