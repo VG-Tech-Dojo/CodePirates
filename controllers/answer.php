@@ -342,7 +342,6 @@ $app->post('/comment/register', 'authorized', function () use ($app) {
         $app->redirect('/');
     }
     if($user_info != null && $params['sessionid'] === $session->get('sessionidA')){
-
         if ($form_validator->run($params)) {
             $confarmcomment = $params['comment'];
             try {
