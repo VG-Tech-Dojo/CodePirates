@@ -63,6 +63,24 @@ class Db_Dao_Question extends Db_Dao_Abstract
     }
 
     /**
+     * 問題の一覧を難易度順に返す
+     *
+     * @return array
+     * @throws PDOExeption
+     *
+     */
+    public function questionListorderbyDiff()
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select * from question order by difficulty';
+        $statement = $dbh->prepare($query);
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * 問題を追加する
      *
      * @param string $title 問題のタイトル  

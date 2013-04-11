@@ -22,7 +22,7 @@ $app->get('/question', 'authorized', function () use ($app) {
     }
 
     try {
-        if (($questionList = $question->getAllQuestion()) == null) {
+        if (($questionList = $question->getAllQuestionOrderByDiff()) == null) {
             $errors = '質問がありません';
         } else {
         }
@@ -36,6 +36,7 @@ $app->get('/question', 'authorized', function () use ($app) {
         $difficultyLevel[$difficulties[$i]['id']] = $difficulties[$i]['content'];
     }
     for($i = 0; $i < count($questionList); $i++ ){
+        $questionList[$i]['difficultyNum'] = $questionList[$i]['difficulty'];
         $questionList[$i]['difficulty'] = $difficultyLevel[$questionList[$i]['difficulty']];
         $questionList[$i]['answernum'] = $answer->getAnsweredPeopleByQuestionId($questionList[$i]['id']);
     }
