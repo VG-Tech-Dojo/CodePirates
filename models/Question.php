@@ -42,6 +42,16 @@ class Question extends Model
     }
 
     /**
+     * 問題リストをDBからデータ難易度順に取得して返す
+     *
+     * @return array $question_list 全質問のリスト
+     */
+    public function getAllQuestionOrderByDiff()
+    {
+        $question_dao = $this->getFactory()->getDb_Dao_Question();
+        return $question_dao->questionListorderbydiff();
+    }
+    /**
      * 問題を登録する
      *
      * @param string $title 問題のタイトル 
