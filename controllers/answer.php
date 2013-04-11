@@ -129,6 +129,7 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
             $answererId = array();
             $answererName = array();
             $answererInfo = array();
+            $userInfo = array();
             $commentsinfo = $comment->getAllComments();
             $countForComment = array();
             $likeInfo = $like->getAllLike();
@@ -146,8 +147,8 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
                 $user_data[] = $answerInfo['u_id'];
             }
             foreach(array_unique($user_data) as $answerd_user){
-                $user_info = $user->getUserById($answerd_user);
-                $answerdata[$answerd_user]['name'] = $user_info['name'];
+                $userInfo = $user->getUserById($answerd_user);
+                $answerdata[$answerd_user]['name'] = $userInfo['name'];
                 $answerdata[$answerd_user]['answer'] = $answer->getAnswerByUserIdQuestionId($answerd_user,$q_id);
                 for($i = 0; $i < count($answerdata[$answerd_user]['answer']); $i++){
                     if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForComment)){
