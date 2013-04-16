@@ -8,6 +8,12 @@
         {{slimFlash.like}}
       </div>
   {% endif %}
+  {% if slimFlash.ans_modify %}
+      <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+        {{slimFlash.ans_modify}}
+      </div>
+  {% endif %}
 	<script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
     <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
 	<script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
