@@ -1,6 +1,16 @@
 {% extends "base.twig" %}
 {% block title %}回答修正投稿確認{% endblock %}
-
+{% block js %}
+<script type="text/javascript">
+    function modifyAnswer() {
+        mixpanel.track('modifyAnswer',{
+            'user_id':{{user.id}},
+            'question_id': {{question_num}},
+            'answer_id': {{ans_num}}
+        }); 
+    }
+</script>
+{% endblock %}
 {% block content %}
 	  <script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
     <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
@@ -33,7 +43,7 @@
                 <input type="hidden" name="ans_num" value="{{ans_num}}">
                 <input type="hidden" name="answer_uId" value="{{answer_uId}}">
                 <input type="hidden" name="sessionid" value="{{session}}">
-                <button type="submit" class="btn btn-primary">回答する</button>
+                <button type="submit" class="btn btn-primary" onClick="modifyAnswer()" >回答する</button>
             </form>
             <form id="cancel" class="cancel_button" action="/modify/answer/code/{{ans_num}}" method="post">
                 <input type="hidden" name="code" value="{{code}}">
