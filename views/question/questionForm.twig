@@ -1,12 +1,22 @@
 {% extends "base.twig" %}
 {% block title %}問題一覧{% endblock %}
-
+{% block js %}
+<script type="text/javascript">
+    function jumpQuestion() {
+        mixpanel.track('jumpQuestion',{
+            'user_id':{{user.id}},
+            'question_id': {{question.id}}
+        }); 
+    }
+    window.onload = jumpQuestion;
+</script>
+{% endblock %}
 {% block content %}
     <div class="row-fluid">
         <div class="span8">
             <div class="page-header">
                 <h1>
-                    {{question.id}}.{{question.title}}
+                    Q.{{question.title}}
                 </h1>
             </div>
             <p class="text-right">出題日：{{question.created_at}}</p>
