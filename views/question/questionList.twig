@@ -24,7 +24,7 @@
         {% else %}
             {% for question in questionList %}
                 <div class="question_box">
-                    <h2>Q.{{question.id}}:{{question.title}}</h2>
+                    <h2>Q.{{question.title}}</h2>
                     <div class="question_box_inner">
                         <p class="create_date">作成日:{{question.created_at}}</p>
                         <p class="level">{{question.difficulty}}</p> 

@@ -1,11 +1,47 @@
 {% extends "base.twig" %}
 {% block title %}answer.twig{% endblock %}
-
+{% block js %}
+<script type="text/javascript">
+    function postComment(answer_id,lang,answerer_id) {
+        mixpanel.track('postComment',{
+            'user_id':{{user.id}},
+            'answer_id': answer_id,
+            'answerer_id': answerer_id,
+            'question_id': {{question.id}},
+            'language': lang
+        }); 
+    }
+    function postLike(answer_id,lang,answerer_id) {
+        mixpanel.track('postLike',{
+            'user_id':{{user.id}},
+            'answer_id': answer_id,
+            'answerer_id': answerer_id,
+            'question_id': {{question.id}},
+            'language': lang
+        }); 
+    }
+    function seeAnswer() {
+        mixpanel.track('seeAnswer',{
+            'user_id':{{user.id}},
+            'answer_id': {{answer.id}},
+            'question_id': {{question.id}},
+            'language': '{{answer.lang}}'
+        }); 
+    }
+    window.onload = seeAnswer;
+</script>
+{% endblock %}
 {% block content %}
   {% if slimFlash.like %}
       <div class="alert alert-success">
       <button type="button" class="close" data-dismiss="alert">×</button>
         {{slimFlash.like}}
+      </div>
+  {% endif %}
+  {% if slimFlash.ans_modify %}
+      <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+        {{slimFlash.ans_modify}}
       </div>
   {% endif %}
 	<script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
@@ -20,7 +56,7 @@
             <div class="page-header">
                 <h1>{{answerer.name}}さんの{{question.title}}の回答</h1>
             </div>
-            <a href="/question/{{question.id}}"><h2>問題{{question.id}}</h2></a>
+            <a href="/question/{{question.id}}"><h2>問題</h2></a>
             {% autoescape false %}
             {{question.content}}
             {% endautoescape %}
@@ -38,7 +74,7 @@
                 <a href="/modify/answer/code/{{answer.id}}" class="btn btn-primary">修正する</a><br><br>
             {% endif %}
              {% if like and user.id != answer.u_id %}
-                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button">この回答いいね！</button></a>
+                <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button" onClick="postLike({{answer.id}},'{{answer.lang}}',{{answer.u_id}})">この回答いいね！</button></a>
             {% elseif like == false %}
                 <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button" disabled="true">この回答にいいね！しました</button></a>
             {% endif %}
@@ -52,7 +88,7 @@
                 {% endfor %}
             {% endif%}
 
-            <form class="form" action="/comment/register" method="post">
+            <form class="form" action="/comment/register" method="post" >
                 <div class="control-group">
                     <label class="control-label" for="inputCode">コメントする</label>
                     <div class="controls">
@@ -71,7 +107,7 @@
                 <input type="hidden" name="sessionid" value="{{sessionid}}">
                 <div class="control-group">
                     <div class="controls">
-                        <button type="submit" class="btn btn-primary">コメントする</button>
+                        <button type="submit" class="btn btn-primary" onClick="postComment({{answer.id}},'{{answer.lang}}',{{answer.u_id}})">コメントする</button>
                     </div>
                 </div>
             </form>
