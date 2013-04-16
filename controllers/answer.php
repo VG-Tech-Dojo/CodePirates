@@ -310,13 +310,14 @@ $app->post('/modify/answer/result', 'authorized', function () use ($app) {
             );
             $session->remove('sessionidQ');
             $session->remove('posted');
+            $app->flash('ans_modify', '回答の修正が完了しました。');
+            $app->redirect('/answer/'.$params['ans_num']);
             
         } catch (PDOException $e) {
             print($e->getMessage());
             $app->error('登録に失敗しました。');
         }
     }
-    $app->render('answer/modifyResult.twig', array('user' => $user_info, 'ansId' => $params['ans_num']));
 });
 
 /**
