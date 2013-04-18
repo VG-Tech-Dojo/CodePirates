@@ -80,12 +80,15 @@
             {% endif %}
             <h4>コメント</h4> 
             {% if comment %}
+                <table class="table">
                 {% for comment_item in comment %}
-                    {{comment_item.name}}：
-                    {{comment_item.content}}
-                    {{comment_item.created_at}}
-                    <br>
+                    <tr>
+                    <td>{{comment_item.name}}</td>
+                    <td>{{comment_item.content|nl2br}}</td>
+                    <td>{{comment_item.created_at}}</td>
+                    </tr>
                 {% endfor %}
+                </table>
             {% endif%}
 
             <form class="form" action="/comment/register" method="post" >
