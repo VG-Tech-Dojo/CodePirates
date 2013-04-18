@@ -160,9 +160,11 @@ $app->post('/question/confirm', 'authorized', function () use ($app) {
 $app->post('/question/save', 'authorized', function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/Question.php';
 
     $session = $app->factory->getSession();
     $answer = $app->factory->getAnswer();
+    $question = $app->factory->getQuestion();
     
     $errors = array();
     $user_info = array();
@@ -174,6 +176,9 @@ $app->post('/question/save', 'authorized', function () use ($app) {
     $params = $app->request()->post();
     if($user_info!=null && $session->get('sessionidQ') === $params['sessionid']){
         try {
+            if($question->getQuestionByID($params['question_num']) == null){
+                $app->error("そのような問題は存在しません");
+            }
             $answer->register(
                 $user_info['id'],
                 $params['question_num'],
