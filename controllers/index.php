@@ -23,5 +23,12 @@ $app->get('/(:page)', function ($page = 1) use ($app) {
  * 繧ｨ繝ｩ繝ｼ逕ｻ髱｢
  */
 $app->error(function ($msg='') use ($app) {
-    $app->render('error.twig', array('message' => $msg), 500);
+    require_once LIB_DIR . '/Session.php';
+    $session = $app->factory->getSession();
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $app->render('error.twig', array('user' => $user_info, 'message' => $msg), 500);
 });
