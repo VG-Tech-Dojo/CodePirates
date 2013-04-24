@@ -90,6 +90,47 @@ $app->get('/answerlike/:a_id', 'authorized' ,function ($a_id) use ($app) {
     $app->redirect("/answer/$a_id");
 });
 
+
+/**
+ * 回答削除
+ */
+$app->post('/answerdelete/:a_id', 'authorized' ,function ($a_id) use ($app) {
+    require_once MODELS_DIR . '/Good.php';
+    require_once LIB_DIR . '/Session.php';
+    require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/Comment.php';
+
+    $session = $app->factory->getSession();
+    $answer = $app->factory->getAnswer();
+    $like = $app->factory->getGood();
+    $comment = $app->factory->getComment();
+    $params  = $app->request()->post();
+
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $answerinfo = $answer->getAnswerByAnsId($a_id);
+    if($answerinfo['u_id'] !== $user_info['id']){
+        $app->error('不正な処理です');
+    }
+    if($params['session'] === $session->get('sessionidA')){
+        try{
+            $answer->deleteAnswerByID($a_id);
+            $like->deleteLikeFromAID($a_id);
+            $comment->deleteCommentFromAID($a_id);
+            $session->remove('sessionidA');
+            $app->flash('del_ans','回答は削除されました');
+        }catch (PDOException $e){
+            $e->getMessage();
+            $app->error('不正な処理です');
+        }
+    }
+     
+    $app->redirect("/answerlist/question/$answerinfo[q_id]");
+});
+
+
 /**
  * ある問題に対する回答一覧画面
  */

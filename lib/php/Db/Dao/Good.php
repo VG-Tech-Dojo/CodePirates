@@ -71,6 +71,25 @@ class Db_Dao_Good extends Db_Dao_Abstract
 
 
     /**
+     * AnswerIDを指定してLike情報を削除する
+     *
+     * @param  int $a_id 回答ID
+     * @throws PDOException
+     */
+    public function deletelikefromaid($a_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'delete from good where a_id = :ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $a_id, PDO::PARAM_INT);
+        $statement->execute();
+
+    }
+
+
+
+    /**
      * AnswerID, UserIDを指定してLike情報を返す
      *
      * @param  int $a_id 回答ID

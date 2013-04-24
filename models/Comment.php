@@ -28,6 +28,18 @@ class Comment extends Model
 
 
     /**
+     * answer_idからCommentを削除する
+     *
+     * @param string $a_id Answer_id
+     */
+    public function deleteCommentFromAId($a_id)
+    {
+        $comment = $this->getFactory()->getDb_Dao_Comment();
+        return $comment->deletecommentfromaid($a_id);
+    }
+
+
+    /**
      * answer_idから回答人数を返す
      *
      * @param string $a_id Answer_id
