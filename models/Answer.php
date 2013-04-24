@@ -18,6 +18,17 @@ class Answer extends Model
 
 
     /**
+     * answer_idからAnswerを削除する
+     *
+     * @param string $a_id Answer_id
+     */
+    public function deleteAnswerById($a_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->deleteanswerbyid($a_id);
+    }
+
+    /**
      * question_idからAnswerを返す
      *
      * @param string $q_id Question_id

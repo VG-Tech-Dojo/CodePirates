@@ -31,6 +31,25 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
+     
+
+    /**
+     * AnswerIDを指定してカラムを削除する
+     *
+     * @param string $a_id 回答ID
+     * @throws PDOException
+     */
+    public function deleteanswerbyid($a_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'delete from answer where id = :ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $a_id, PDO::PARAM_INT);
+        $statement->execute();
+
+    }
+
 
 
     /**
@@ -51,6 +70,7 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+
 
 
     /**
