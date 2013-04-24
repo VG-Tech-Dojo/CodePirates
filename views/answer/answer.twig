@@ -2,6 +2,13 @@
 {% block title %}answer.twig{% endblock %}
 {% block js %}
 <script type="text/javascript">
+    function delConfirm(){
+      if(window.confirm("本当に削除しますか？")){
+        return true;
+      }else{
+        return false;
+      }
+    }
     function postComment(answer_id,lang,answerer_id) {
         mixpanel.track('postComment',{
             'user_id':{{user.id}},
@@ -45,11 +52,11 @@
       </div>
   {% endif %}
 	<script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
-    <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
+  <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
 	<script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
-    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPhp.js"></script>
-    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPython.js"></script>
-    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushRuby.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPython.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushRuby.js"></script>
 	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCoreDefault.css"/>
 	<script type="text/javascript">SyntaxHighlighter.all();</script>
         <div class="row">
@@ -72,6 +79,10 @@
             {% endif %}
             {% if answer.u_id == user.id%}
                 <a href="/modify/answer/code/{{answer.id}}" class="btn btn-primary">修正する</a><br><br>
+                <form action="/answerdelete/{{answer.id}}" method="post" name="delpost" onSubmit="return delConfirm()">
+                    <input type="hidden" name="session" value="{{sessionid}}">
+                    <input type="submit" class="btn btn-danger" value="回答を削除する">
+                </form>
             {% endif %}
              {% if like and user.id != answer.u_id %}
                 <a href="/answerlike/{{answer.id}}"><button class="btn btn-success" type="button" onClick="postLike({{answer.id}},'{{answer.lang}}',{{answer.u_id}})">この回答いいね！</button></a>

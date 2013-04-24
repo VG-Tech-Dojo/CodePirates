@@ -12,10 +12,16 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-    {% if flash_msg%}
+    {% if flash_msg.confarm_msg %}
     <div class="alert alert-success">
     <button type="button" class="close" data-dismiss="alert">×</button>
        {{flash_msg.confarm_msg}} 
+    </div>
+    {% endif %}
+    {% if flash_msg.del_ans %}
+    <div class="alert alert-success">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+       {{flash_msg.del_ans}} 
     </div>
     {% endif %}
     <div class="page-header">
