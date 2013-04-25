@@ -35,18 +35,40 @@
     </div>
     <br>
     <h2>みんなの回答一覧</h2>
+        <form method="post" action="/answerlist/question/{{question.id}}">
+            <select name="lang_narrow">
+              <option value="All">すべての言語</option>
+              <option value="Ruby">Ruby</option>
+              <option value="PHP">PHP</option>
+              <option value="Python">Python</option>
+            </select>
+            <input type="submit" value="絞り込む">
+        </form>
   
         {% for answerer_item in answer_data %}
             <p><strong>{{answerer_item.name}}さんの回答</strong></p>
             
-            {% for item in answerer_item.answer %}
-            <p>
-                |-<a href="/answer/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
-                <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
-                <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
-            </p>
-            {% endfor %}
-            <br>
+            {% if lang_narrow %}
+                {% for item in answerer_item.answer %}
+                    {% if lang_narrow == "All" or item.lang == lang_narrow %}
+                        <p>
+                            |-<a href="/answer/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
+                            <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
+                            <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+                <br>
+            {% else %}
+                {% for item in answerer_item.answer %}
+                    <p>
+                        |-<a href="/answer/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
+                        <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
+                        <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
+                    </p>
+                {% endfor %}
+                <br>
+            {% endif %}
         {% endfor %}
     <a href="/question"><button class="btn" type="button">問題リストに戻る</button></a>
 </div>
