@@ -95,10 +95,10 @@ class Answer extends Model
      * @param string $content 内容
      * @param string $lang 言語
      */
-    public function register($u_id, $q_id, $content, $lang)
+    public function register($u_id, $q_id, $content, $lang, $linecount)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->insert($u_id, $q_id, $content, $lang);
+        return $answer->insert($u_id, $q_id, $content, $lang, $linecount);
     }
 
     /**
