@@ -183,7 +183,8 @@ $app->post('/question/save', 'authorized', function () use ($app) {
                 $user_info['id'],
                 $params['question_num'],
                 $params['code'],
-                $params['lang']
+                $params['lang'],
+                substr_count($params['code'], "\n")
             );
             $session->set('question_id', $params['question_num']);
             $session->remove('sessionidQ');
