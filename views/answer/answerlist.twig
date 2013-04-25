@@ -42,32 +42,46 @@
               <option value="PHP">PHP</option>
               <option value="Python">Python</option>
             </select>
+            <select name="sort">
+              <option value="All">すべてを表示</option>
+              <option value="like">いいね順</option>
+            </select>
             <input type="submit" value="絞り込む">
         </form>
   
         {% for answerer_item in answer_data %}
-            <p><strong>{{answerer_item.name}}さんの回答</strong></p>
+            {% if sort != "All" %}
+                {% if lang_narrow == "All" or answerer_item.lang == lang_narrow %}
+                    <strong>{{answerer_item.name}}さんの回答</strong>
+                    <a href="/answer/{{answerer_item.id}}" >{{answerer_item.created_at}}に投稿した内容</a>
+                    <button class="btn disabled {{answerer_item.lang}}">{{answerer_item.lang}}</button>
+                    <i class="icon-comment"></i>:{{answerer_item.comment}}件  <i class="icon-thumbs-up"></i>：{{answerer_item.like}}
+                    <br>
+                {% endif %}
+            {% else %}
+                <p><strong>{{answerer_item.name}}さんの回答</strong></p>
             
-            {% if lang_narrow %}
-                {% for item in answerer_item.answer %}
-                    {% if lang_narrow == "All" or item.lang == lang_narrow %}
+                {% if lang_narrow %}
+                    {% for item in answerer_item.answer %}
+                        {% if lang_narrow == "All" or item.lang == lang_narrow %}
+                            <p>
+                                |-<a href="/answer/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
+                                <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
+                                <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                    <br>
+                {% else %}
+                    {% for item in answerer_item.answer %}
                         <p>
                             |-<a href="/answer/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
                             <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
                             <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
                         </p>
-                    {% endif %}
-                {% endfor %}
-                <br>
-            {% else %}
-                {% for item in answerer_item.answer %}
-                    <p>
-                        |-<a href="/answer/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
-                        <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
-                        <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
-                    </p>
-                {% endfor %}
-                <br>
+                    {% endfor %}
+                    <br>
+                {% endif %}
             {% endif %}
         {% endfor %}
     <a href="/question"><button class="btn" type="button">問題リストに戻る</button></a>
