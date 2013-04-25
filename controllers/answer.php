@@ -299,7 +299,7 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
                         $arraytemp[] = $answerdata_item;
                     }
                 }
-                if($params['sort'] === "like"){
+                if($params['sort'] === "like"){//同じ処理をしているので後にまとめる
                     $likeRank = array();
                     for($i = 0; $i < count($arraytemp); $i++){
                         $likeRank[$i] = $arraytemp[$i]['like'];
@@ -307,6 +307,16 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
                     arsort($likeRank);
                     $answerdata = array();
                     foreach($likeRank as $key => $value){
+                        $answerdata[] = $arraytemp[$key];
+                    }   
+                }else if($params['sort'] === "comment"){
+                    $commentRank = array();
+                    for($i = 0; $i < count($arraytemp); $i++){
+                        $commentRank[$i] = $arraytemp[$i]['comment'];
+                    }
+                    arsort($commentRank);
+                    $answerdata = array();
+                    foreach($commentRank as $key => $value){
                         $answerdata[] = $arraytemp[$key];
                     }   
                 }
