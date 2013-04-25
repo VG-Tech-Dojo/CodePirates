@@ -10,6 +10,7 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/User.php';
     require_once MODELS_DIR . '/Comment.php';
+    require_once MODELS_DIR . '/Footmark.php';
 
 
     $session = $app->factory->getSession();
@@ -18,6 +19,7 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     $question = $app->factory->getQuestion();
     $user = $app->factory->getUser();
     $comment = $app->factory->getComment();
+    $footmark = $app->factory->getFootmark();
 
     $user_info = array();
     
@@ -53,6 +55,10 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
         $answer_comment = "";    
     }
+    $footmark->register(
+        $user_info['id'],
+        $a_id
+    );
     $app->render('answer/answer.twig', array('user' => $user_info,'slimFlash' => $_SESSION['slim.flash'], 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment, 'sessionid' => $sessionid, 'like' => $like));
 });
 
