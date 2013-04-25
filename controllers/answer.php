@@ -138,7 +138,7 @@ $app->post('/answerdelete/:a_id', 'authorized' ,function ($a_id) use ($app) {
 
 
 /**
- * ある問題に対する回答一覧画面
+ * ある問題に対する回答一覧画面(GET)
  */
 $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app) {
     require_once LIB_DIR . '/Session.php';
@@ -214,6 +214,87 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
     }
     $flash_msg = $_SESSION['slim.flash'];
     $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $questionInfo, 'flash_msg' => $flash_msg));
+});
+
+
+/**
+ * ある問題に対する回答一覧画面(POST)
+ */
+$app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app) {
+    require_once LIB_DIR . '/Session.php';
+    require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/Question.php';
+    require_once MODELS_DIR . '/User.php';
+    require_once MODELS_DIR . '/Comment.php';
+    require_once MODELS_DIR . '/Good.php';
+
+
+    $session = $app->factory->getSession();
+    $answer = $app->factory->getAnswer();
+    $question = $app->factory->getQuestion();
+    $comment = $app->factory->getComment();
+    $like = $app->factory->getGood();
+    $user = $app->factory->getUser();
+    $params  = $app->request()->post();
+    $user_info = array();
+    $answerInfos = array();
+
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+
+    if (($questionInfo = $question->getQuestionByID($q_id)) == null) { 
+        $app->error('問題が存在しません');
+    } else {
+        if (($answerInfos = $answer->getAnswerByQuesId($questionInfo['id'])) == null) {
+           $app->error('回答がありません'); 
+        } else {
+            if (!$user->canSee($user_info['id'], $q_id)){
+                $app->error("先にこの問題に回答してください");
+            }
+
+            $answererId = array();
+            $answererName = array();
+            $answererInfo = array();
+            $userInfo = array();
+            $commentsinfo = $comment->getAllComments();
+            $countForComment = array();
+            $likeInfo = $like->getAllLike();
+            $countForLike = array();
+            for($i = 0; $i < count($commentsinfo); $i++){
+                $countForComment[] = $commentsinfo[$i]['a_id'];    
+            }
+            $countForComment = array_count_values($countForComment);
+            for($i = 0; $i < count($likeInfo); $i++){
+                $countForLike[] = $likeInfo[$i]['a_id'];    
+            }
+            $countForLike = array_count_values($countForLike);
+
+            foreach($answerInfos as $answerInfo){
+                $user_data[] = $answerInfo['u_id'];
+            }
+            foreach(array_unique($user_data) as $answerd_user){
+                $userInfo = $user->getUserById($answerd_user);
+                $answerdata[$answerd_user]['name'] = $userInfo['name'];
+                $answerdata[$answerd_user]['answer'] = $answer->getAnswerByUserIdQuestionId($answerd_user,$q_id);
+                for($i = 0; $i < count($answerdata[$answerd_user]['answer']); $i++){
+                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForComment)){
+                        $answerdata[$answerd_user]['answer'][$i]['comment'] = $countForComment[$answerdata[$answerd_user]['answer'][$i]['id']];
+                    }else{
+                        $answerdata[$answerd_user]['answer'][$i]['comment'] = 0;
+                    }
+                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForLike)){
+                        $answerdata[$answerd_user]['answer'][$i]['like'] = $countForLike[$answerdata[$answerd_user]['answer'][$i]['id']];
+                    }else{
+                        $answerdata[$answerd_user]['answer'][$i]['like'] = 0;
+                    }
+                }
+            }
+        }
+    }
+    $flash_msg = $_SESSION['slim.flash'];
+    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $questionInfo, 'flash_msg' => $flash_msg, 'lang_narrow' => $params['lang_narrow']));
 });
 
 
