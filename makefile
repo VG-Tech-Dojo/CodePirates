@@ -13,6 +13,9 @@ versionupdb101:
 changelikeTable:
 	cd migration;mysql -uroot  < ./changelikeTable
 
+versionupdb201:
+	cd migration;mysql -uroot  < ./VER201
+
 deletemasterdb:
 	cd migration;mysql -uroot -psarumon < ./DELETE_TABLE
 
@@ -27,3 +30,6 @@ versionupmasterdb101:
 
 changemasterlikeTable:
 	cd migration;mysql -uroot -psarumon < ./changelikeTable
+
+versionupdb201:
+	cd migration;mysql -uroot -psarumon < ./VER201
