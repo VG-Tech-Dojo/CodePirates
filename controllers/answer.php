@@ -291,10 +291,30 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
                     }
                 }
             }
+            if($params['sort']){
+                $arraytemp = array();
+                foreach($answerdata as $answerdata_items){
+                    foreach($answerdata_items['answer'] as $answerdata_item){
+                        $answerdata_item['name'] = $answerdata_items['name'];
+                        $arraytemp[] = $answerdata_item;
+                    }
+                }
+                if($params['sort'] === "like"){
+                    $likeRank = array();
+                    for($i = 0; $i < count($arraytemp); $i++){
+                        $likeRank[$i] = $arraytemp[$i]['like'];
+                    }
+                    arsort($likeRank);
+                    $answerdata = array();
+                    foreach($likeRank as $key => $value){
+                        $answerdata[] = $arraytemp[$key];
+                    }   
+                }
+            }
         }
     }
     $flash_msg = $_SESSION['slim.flash'];
-    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $questionInfo, 'flash_msg' => $flash_msg, 'lang_narrow' => $params['lang_narrow']));
+    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $questionInfo, 'flash_msg' => $flash_msg, 'lang_narrow' => $params['lang_narrow'], 'sort' => $params['sort']));
 });
 
 
