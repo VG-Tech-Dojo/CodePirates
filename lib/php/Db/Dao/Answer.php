@@ -194,18 +194,20 @@ class Db_Dao_Answer extends Db_Dao_Abstract
      * @param int $q_id 問題ID
      * @param string $content 内容
      * @param string $lang 言語
+     * @param int $linecount コード行数
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
-    public function updateans($a_id, $u_id, $q_id, $content, $lang)
+    public function updateans($a_id, $u_id, $q_id, $content, $lang, $linecount)
     {
         $dbh = $this->getDbHandler();
-        $query = 'update answer set u_id = :U_ID, q_id = :Q_ID, content = :CONTENT, lang = :LANG where id = :A_ID';
+        $query = 'update answer set u_id = :U_ID, q_id = :Q_ID, content = :CONTENT, lang = :LANG, line_count = :LINECOUNT where id = :A_ID';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':A_ID', $a_id, PDO::PARAM_INT);
         $statement->bindValue(':U_ID', $u_id, PDO::PARAM_INT);
         $statement->bindValue(':Q_ID', $q_id, PDO::PARAM_INT);
         $statement->bindValue(':CONTENT', $content, PDO::PARAM_STR);
         $statement->bindValue(':LANG', $lang, PDO::PARAM_STR);
+        $statement->bindValue(':LINECOUNT', $linecount, PDO::PARAM_INT);
         $statement->execute();
 
         return ($statement->rowCount() === 1);

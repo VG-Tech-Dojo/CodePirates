@@ -110,9 +110,9 @@ class Answer extends Model
      * @param string $content 内容
      * @param string $lang 言語
      */
-    public function update($a_id, $u_id, $q_id, $content, $lang)
+    public function update($a_id, $u_id, $q_id, $content, $lang, $linecount)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->updateans($a_id, $u_id, $q_id, $content, $lang);
+        return $answer->updateans($a_id, $u_id, $q_id, $content, $lang, $linecount);
     }
 }
