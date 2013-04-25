@@ -353,7 +353,8 @@ $app->post('/modify/answer/result', 'authorized', function () use ($app) {
                 $user_info['id'],
                 $params['question_num'],
                 $params['code'],
-                $params['lang']
+                $params['lang'],
+                substr_count($params['code'], "\n")
             );
             $session->remove('sessionidQ');
             $session->remove('posted');
