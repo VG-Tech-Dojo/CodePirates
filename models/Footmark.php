@@ -16,14 +16,14 @@ class Footmark extends Model
     }
 
     /**
-     * a_idで指定したFootmarkを返す
+     * q_idで指定したFootmarkを返す
      *
-     * @param int $a_id 回答id
+     * @param int $q_id 回答id
      */
-    public function getFootmarkByAID($a_id)
+    public function getFootmarkByQID($q_id)
     {
         $footmark = $this->getFactory()->getDb_Dao_Footmark();
-        return $footmark->getfootmarkbyaid($a_id);
+        return $footmark->getfootmarkbyqid($q_id);
     }
 
 

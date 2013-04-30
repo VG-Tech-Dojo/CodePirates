@@ -46,17 +46,23 @@
               <option value="All">すべてを表示</option>
               <option value="like">いいね順</option>
               <option value="comment">コメント順</option>
+              <option value="PV">閲覧数順</option>
             </select>
             <input type="submit" value="絞り込む">
         </form>
   
         {% for answerer_item in answer_data %}
-            {% if sort != "All" %}
+            {% if sort != "All" and sort %}
                 {% if lang_narrow == "All" or answerer_item.lang == lang_narrow %}
                     <strong>{{answerer_item.name}}さんの回答</strong>
                     <a href="/answer/{{answerer_item.id}}" >{{answerer_item.created_at}}に投稿した内容</a>
                     <button class="btn disabled {{answerer_item.lang}}">{{answerer_item.lang}}</button>
                     <i class="icon-comment"></i>:{{answerer_item.comment}}件  <i class="icon-thumbs-up"></i>：{{answerer_item.like}}
+                    {% if sort == 'PV' and answerer_item.PV != 0 %}
+                        <i class="icon-user"></i>:{{answerer_item.PV}}回
+                    {% elseif sort == 'PV' %}
+                        <i class="icon-user"></i>:0回
+                    {% endif %}
                     <br>
                 {% endif %}
             {% else %}
