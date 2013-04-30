@@ -47,6 +47,7 @@ class Db_Dao_Answer extends Db_Dao_Abstract
         $statement = $dbh->prepare($query);
         $statement->bindValue(':ID', $a_id, PDO::PARAM_INT);
         $statement->execute();
+        print("dbh");
 
     }
 
