@@ -293,7 +293,7 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
                     }
                 }
             }
-            if($params['sort']){
+            if($params['sort'] && $params['sort'] !== 'userABCsort'){
                 $arraytemp = array();
                 foreach($answerdata as $answerdata_items){
                     foreach($answerdata_items['answer'] as $answerdata_item){
@@ -352,6 +352,17 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
                         unset($arraytemp[$answerdata_key[$key]]);
                     }
                     $answerdata = array_merge($answerdata,$arraytemp);
+                }
+            }else if($params['sort'] === 'userABCsort'){
+                $userABCrank = array();
+                foreach($answerdata as $key => $answerdata_item){
+                    $userABCrank[$key] = $answerdata_item['name'];
+                }
+                asort($userABCrank);
+                $arraytemp = $answerdata;
+                $answerdata = array();
+                foreach($userABCrank as $key => $userABCrank_item){
+                    $answerdata[] = $arraytemp[$key];
                 }
             }
         }
