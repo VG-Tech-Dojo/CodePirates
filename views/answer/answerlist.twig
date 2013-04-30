@@ -43,7 +43,8 @@
               <option value="Python">Python</option>
             </select>
             <select name="sort">
-              <option value="All">すべてを表示</option>
+              <option value="All">ユーザー投稿順</option>
+              <option value="userABCsort">ユーザー五十音順</option>
               <option value="like">いいね順</option>
               <option value="comment">コメント順</option>
               <option value="PV">閲覧数順</option>
@@ -53,7 +54,7 @@
         </form>
   
         {% for answerer_item in answer_data %}
-            {% if sort != "All" and sort %}
+            {% if sort and sort != "All" and sort != 'userABCsort' %}
                 {% if lang_narrow == "All" or answerer_item.lang == lang_narrow %}
                     <strong>{{answerer_item.name}}さんの回答</strong>
                     <a href="/answer/{{answerer_item.id}}" >{{answerer_item.created_at}}に投稿した内容</a>
