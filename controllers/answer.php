@@ -123,7 +123,6 @@ $app->post('/answerdelete/:a_id', 'authorized' ,function ($a_id) use ($app) {
     if($params['session'] === $session->get('sessionidA')){
         try{
             $answer->deleteAnswerByID($a_id);
-            print($user_info);
             $like->deleteLikeFromAID($a_id);
             $comment->deleteCommentFromAID($a_id);
             $session->remove('sessionidA');
