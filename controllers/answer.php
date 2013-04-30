@@ -321,6 +321,16 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
                     foreach($commentRank as $key => $value){
                         $answerdata[] = $arraytemp[$key];
                     }   
+                }else if($params['sort'] === "line"){
+                    $lineRank = array();
+                    foreach($arraytemp as $key => $arraytemp_item){
+                        $lineRank[$key] = $arraytemp_item['line_count'];
+                    }
+                    asort($lineRank);
+                    $answerdata = array();
+                    foreach($lineRank as $key => $value){
+                        $answerdata[] = $arraytemp[$key];
+                    }
                 }else if($params['sort'] === "PV"){
                     $footmarksInfo = $footmark->getFootmarkByQID($q_id);
                     $footmarkRank = array();
