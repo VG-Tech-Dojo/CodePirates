@@ -227,6 +227,7 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
     require_once MODELS_DIR . '/User.php';
     require_once MODELS_DIR . '/Comment.php';
     require_once MODELS_DIR . '/Good.php';
+    require_once MODELS_DIR . '/Footmark.php';
 
 
     $session = $app->factory->getSession();
@@ -235,6 +236,7 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
     $comment = $app->factory->getComment();
     $like = $app->factory->getGood();
     $user = $app->factory->getUser();
+    $footmark = $app->factory->getFootmark();
     $params  = $app->request()->post();
     $user_info = array();
     $answerInfos = array();
@@ -319,6 +321,27 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
                     foreach($commentRank as $key => $value){
                         $answerdata[] = $arraytemp[$key];
                     }   
+                }else if($params['sort'] === "PV"){
+                    $footmarksInfo = $footmark->getFootmarkByQID($q_id);
+                    $footmarkRank = array();
+                    foreach($footmarksInfo as $footmark_item){
+                        if(!isset($footmarkRank[$footmark_item['a_id']])){
+                            $footmarkRank[$footmark_item['a_id']] = 0;
+                        }
+                        $footmarkRank[$footmark_item['a_id']]++;
+                    }
+                    arsort($footmarkRank);
+                    $answerdata = array();
+                    $answerdata_key = array();
+                    foreach($arraytemp as $key => $arraytemp_item){
+                        $answerdata_key[$arraytemp_item['id']] = $key; 
+                    }
+                    foreach($footmarkRank as $key => $footmarkRank_item){
+                        $arraytemp[$answerdata_key[$key]]['PV'] = $footmarkRank_item;
+                        $answerdata[] = $arraytemp[$answerdata_key[$key]];
+                        unset($arraytemp[$answerdata_key[$key]]);
+                    }
+                    $answerdata = array_merge($answerdata,$arraytemp);
                 }
             }
         }
