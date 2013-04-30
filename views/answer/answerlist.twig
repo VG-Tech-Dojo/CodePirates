@@ -47,6 +47,7 @@
               <option value="like">いいね順</option>
               <option value="comment">コメント順</option>
               <option value="PV">閲覧数順</option>
+              <option value="line">コード行数順</option>
             </select>
             <input type="submit" value="絞り込む">
         </form>
@@ -62,6 +63,11 @@
                         <i class="icon-user"></i>:{{answerer_item.PV}}回
                     {% elseif sort == 'PV' %}
                         <i class="icon-user"></i>:0回
+                    {% endif %}
+                    {% if sort == 'line' and answerer_item.line_count != 0 %}
+                        <i class="icon-align-justify"></i>:{{answerer_item.line_count}}行
+                    {% elseif sort == 'line' %}
+                        <i class="icon-align-justify"></i>:0行
                     {% endif %}
                     <br>
                 {% endif %}
