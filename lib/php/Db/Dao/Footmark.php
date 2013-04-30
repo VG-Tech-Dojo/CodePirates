@@ -32,19 +32,19 @@ class Db_Dao_Footmark extends Db_Dao_Abstract
     }
 
     /**
-     * a_idで指定されたFootmark情報を返す
+     * q_idで指定されたFootmark情報を返す
      *
-     * @param int $a_id 回答id
+     * @param int $q_id 回答id
      *
      * @throws PDOException
      */
-    public function getfootmarkbyaid($a_id)
+    public function getfootmarkbyqid($q_id)
     {
         $dbh = $this->getDbHandler();
 
-        $query = 'select * from footmark where a_id = :AID';
-        $statement->bindValue(':A_ID', $a_id, PDO::PARAM_INT);
+        $query = 'select footmark.id as id, footmark.u_id as u_id,footmark.a_id as a_id, footmark.created_at as created_at, answer.q_id as q_id from footmark,answer  where answer.q_id = :QID and answer.id = footmark.a_id';
         $statement = $dbh->prepare($query);
+        $statement->bindValue(':QID', $q_id, PDO::PARAM_INT);
         $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -53,7 +53,7 @@ class Db_Dao_Footmark extends Db_Dao_Abstract
 
 
     /**
-     * いいねを投稿する
+     * 足跡を保存する
      *
      * @param int $u_id ユーザーID
      * @param int $a_id 回答ID
