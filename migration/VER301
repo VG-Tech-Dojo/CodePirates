@@ -1,0 +1,2 @@
+use demo;
+source ./altersql/alter301.sql;
