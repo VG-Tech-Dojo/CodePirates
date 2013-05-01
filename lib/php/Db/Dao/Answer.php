@@ -13,6 +13,24 @@ require_once dirname(__FILE__) . '/Abstract.php';
  */
 class Db_Dao_Answer extends Db_Dao_Abstract
 {
+
+    /**
+     * すべての回答情報を返す
+     *
+     * @throws PDOException
+     */
+    public function getallanswer()
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select * from answer';
+        $statement = $dbh->prepare($query);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     /**
      * AnswerIDを指定して回答情報を返す
      *

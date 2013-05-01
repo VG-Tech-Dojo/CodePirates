@@ -1,6 +1,34 @@
 <?php
 
 /**
+ * コードの行数カウント 
+ */
+$app->get('/countLine', function () use ($app) {
+    require_once MODELS_DIR . '/Answer.php';
+    $answer = $app->factory->getAnswer();
+    $answer = $app->factory->getAnswer();
+    print("コードの行数をカウントします");
+    echo"<br>";
+    echo"<br>";
+    $answer_info = $answer->getAllAnswer();
+    foreach($answer_info as $answer_item){
+        print($answer_item['content']);
+        echo"<br>";
+        print(substr_count($answer_item['content'], "\n"));
+        echo"<br>";
+        $answer->update(
+            $answer_item['id'],
+            $answer_item['u_id'],
+            $answer_item['q_id'],
+            $answer_item['content'],
+            $answer_item['lang'],
+            substr_count($answer_item['content'], "\n")
+        );
+    }
+});
+
+
+/**
  * 質問の一覧表示 
  */
 $app->get('/question', 'authorized', function () use ($app) {
