@@ -1,0 +1,3 @@
+use demo;
+source ./createsql/create_footmark.sql;
+source ./altersql/alter201.sql;

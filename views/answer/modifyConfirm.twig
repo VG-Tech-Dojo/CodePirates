@@ -2,13 +2,13 @@
 {% block title %}回答修正投稿確認{% endblock %}
 {% block js %}
 <script type="text/javascript">
-    function modifyAnswer() {
+    $(window).load(function() {
         mixpanel.track('modifyAnswer',{
             'user_id':{{user.id}},
             'question_id': {{question_num}},
             'answer_id': {{ans_num}}
         }); 
-    }
+    });
 </script>
 {% endblock %}
 {% block content %}

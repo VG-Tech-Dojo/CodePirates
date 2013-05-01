@@ -50,6 +50,26 @@ class Db_Dao_Comment extends Db_Dao_Abstract
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+       
+
+    /**
+     * AnswerIDを指定してコメントを削除する
+     *
+     * @param string $a_id 回答ID
+     * @throws PDOException
+     */
+   
+    public function deletecommentfromaid($a_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'delete from comment where a_id = :ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $a_id, PDO::PARAM_INT);
+        $statement->execute();
+
+    }
+    
     
     /**
      * AnswerIDを指定してコメント数を返す
