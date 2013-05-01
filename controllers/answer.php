@@ -49,7 +49,7 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
     }
 
     if (!$user->canSee($user_info['id'], $answerInfo['q_id'])){
-        $app->error("先にこの問題に回答してください");
+        $app->error("この問題の回答を閲覧するには、問題への回答が必須です");
     }
     
     if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
@@ -170,7 +170,7 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
            $app->error('回答がありません'); 
         } else {
             if (!$user->canSee($user_info['id'], $q_id)){
-                $app->error("先にこの問題に回答してください");
+                $app->error("回答一覧を見るには該当問題へ回答が必須です");
             }
 
             $answererId = array();
@@ -253,7 +253,7 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
            $app->error('回答がありません'); 
         } else {
             if (!$user->canSee($user_info['id'], $q_id)){
-                $app->error("先にこの問題に回答してください");
+                $app->error("回答一覧を見るには該当問題へ回答が必須です");
             }
 
             $answererId = array();
