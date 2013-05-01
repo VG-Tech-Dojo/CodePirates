@@ -98,7 +98,6 @@
                             </p>
                         {% endif %}
                     {% endfor %}
-                    <br>
                 {% else %}
                     {% if nameFlag == 1%}
                         <p><strong>{{answerer_item.name}}さんの回答</strong></p>
@@ -111,7 +110,6 @@
                             <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
                         </p>
                     {% endfor %}
-                    <br>
                 {% endif %}
             {% endif %}
         {% endfor %}
