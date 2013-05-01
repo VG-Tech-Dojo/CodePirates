@@ -2,13 +2,12 @@
 {% block title %}問題一覧{% endblock %}
 {% block js %}
 <script type="text/javascript">
-    function jumpQuestion() {
+    $(window).load(function(){
         mixpanel.track('jumpQuestion',{
             'user_id':{{user.id}},
             'question_id': {{question.id}}
         }); 
-    }
-    window.onload = jumpQuestion;
+    });
 </script>
 {% endblock %}
 {% block content %}

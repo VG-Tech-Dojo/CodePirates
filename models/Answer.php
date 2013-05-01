@@ -5,6 +5,18 @@ require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Answer.php';
 class Answer extends Model
 {
 
+
+    /**
+     * すべてのAnswerを返す
+     *
+     */
+    public function getAllAnswer()
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getallanswer();
+    }
+
+
     /**
      * answer_idからAnswerを返す
      *
@@ -16,6 +28,17 @@ class Answer extends Model
         return $answer->getanswerbyansid($a_id);
     }
 
+
+    /**
+     * answer_idからAnswerを削除する
+     *
+     * @param string $a_id Answer_id
+     */
+    public function deleteAnswerById($a_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->deleteanswerbyid($a_id);
+    }
 
     /**
      * question_idからAnswerを返す
@@ -84,10 +107,10 @@ class Answer extends Model
      * @param string $content 内容
      * @param string $lang 言語
      */
-    public function register($u_id, $q_id, $content, $lang)
+    public function register($u_id, $q_id, $content, $lang, $linecount)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->insert($u_id, $q_id, $content, $lang);
+        return $answer->insert($u_id, $q_id, $content, $lang, $linecount);
     }
 
     /**
@@ -98,10 +121,11 @@ class Answer extends Model
      * @param int $q_id 問題ID
      * @param string $content 内容
      * @param string $lang 言語
+     * @param string $linecount 行数
      */
-    public function update($a_id, $u_id, $q_id, $content, $lang)
+    public function update($a_id, $u_id, $q_id, $content, $lang, $linecount)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->updateans($a_id, $u_id, $q_id, $content, $lang);
+        return $answer->updateans($a_id, $u_id, $q_id, $content, $lang, $linecount);
     }
 }

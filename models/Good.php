@@ -36,6 +36,16 @@ class Good extends Model
     }
 
     /**
+     * answer_idからLikeを返す
+     *
+     */
+    public function deleteLikeFromAID($a_id)
+    {
+        $good = $this->getFactory()->getDb_Dao_Good();
+        return $good->deletelikefromaid($a_id);
+    }
+
+    /**
      * answer_id,user_idからLikeを返す
      *
      */
