@@ -2,8 +2,17 @@
 {% block title %}answer.twig{% endblock %}
 {% block js %}
 <script type="text/javascript">
-    function seeAnswerList() {
+    $(window).load(function() {
         mixpanel.track('seeAnswerList',{
+            'user_id':{{user.id}},
+            'question_id': {{question.id}}
+        }); 
+    });
+
+    function sorting(){
+        var lang = document.sort.lang_narrow.value;
+        var sortType = document.sort.sort.value;
+        mixpanel.track(lang + sortType + "sort",{
             'user_id':{{user.id}},
             'question_id': {{question.id}}
         }); 
@@ -35,7 +44,7 @@
     </div>
     <br>
     <h2>みんなの回答一覧</h2>
-        <form method="post" action="/answerlist/question/{{question.id}}">
+        <form method="post" action="/answerlist/question/{{question.id}}" name="sort">
             <select name="lang_narrow">
               <option value="All">すべての言語</option>
               <option value="Ruby">Ruby</option>
@@ -50,7 +59,7 @@
               <option value="PV">閲覧数順</option>
               <option value="line">コード行数順</option>
             </select>
-            <input type="submit" value="絞り込む">
+            <input type="submit" value="絞り込む" onclick="sorting()">
         </form>
         <table>
         {% for answerer_item in answer_data %}

@@ -27,15 +27,14 @@
             'language': lang
         }); 
     }
-    function seeAnswer() {
+    $(window).load(function(){
         mixpanel.track('seeAnswer',{
             'user_id':{{user.id}},
             'answer_id': {{answer.id}},
             'question_id': {{question.id}},
             'language': '{{answer.lang}}'
         }); 
-    }
-    window.onload = seeAnswer;
+    });
 </script>
 {% endblock %}
 {% block content %}
