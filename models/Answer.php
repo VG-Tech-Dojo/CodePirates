@@ -5,6 +5,18 @@ require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Answer.php';
 class Answer extends Model
 {
 
+
+    /**
+     * すべてのAnswerを返す
+     *
+     */
+    public function getAllAnswer()
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getallanswer();
+    }
+
+
     /**
      * answer_idからAnswerを返す
      *
@@ -109,6 +121,7 @@ class Answer extends Model
      * @param int $q_id 問題ID
      * @param string $content 内容
      * @param string $lang 言語
+     * @param string $linecount 行数
      */
     public function update($a_id, $u_id, $q_id, $content, $lang, $linecount)
     {
