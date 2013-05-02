@@ -107,12 +107,15 @@ $app->get('/user/:id', 'authorized', function ($id) use ($app) {
     require_once MODELS_DIR . '/Answer.php';
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/User.php';
+    require_once MODELS_DIR . '/Good.php';
     require_once LIB_DIR . '/Session.php';
 
     $session = $app->factory->getSession();
     $user = $app->factory->getUser();
     $answer = $app->factory->getAnswer();
+    $like = $app->factory->getGood();
     $question = $app->factory->getQuestion();
+    $user = $app->factory->getUser();
 
     $user_info = array();
     if ($session->get('user_id')) {
@@ -122,19 +125,27 @@ $app->get('/user/:id', 'authorized', function ($id) use ($app) {
     $mypage_user = $user->getUserById($id);
     $answerList = $answer->getAnswerByUserIdOfQuestionNum($mypage_user['id']);
     $questionList = $question->getAllQuestion();
+    $likeList = $like->getLikeFromUID($mypage_user['id']);
     $user_answer = array();
-    end($user_answer);
-    $ans_end = each($user_answer);
     foreach($answerList as $key => $answer_item){
         $user_answer[$questionList[$answer_item['q_id']]['title']][] = $answer_item;
-        if($key === $ans_end['key']){
-            $user_answer[$questionList[$answer_item['q_id']]['title']]['key'] = $questionList[$answer_item['q_id']];
-        }
     }
     foreach($user_answer as $key => $user_answer_item){
         $user_answer_item['key'] = $key;
         $user_answer[$key] = $user_answer_item;
     }
-    $app->render('user/mypqge.twig', array('user' => $user_info, 'mypage_user' => $mypage_user, 'answer' => $user_answer));
+    $likeAnswers = array();
+    foreach($likeList as $like_item){
+        $likeAnswer[] = $answer->getAnswerByAnsIDWithUName($like_item['a_id']);
+    }
+    $titledLikeAnswer = array();
+    foreach($likeAnswer as $key => $likeAnswer_item){
+        $titledLikeAnswer[$questionList[$likeAnswer_item['q_id']]['title']][] = $likeAnswer_item;
+    }
+    foreach($titledLikeAnswer as $key => $titledLikeAnswer_item){
+        $titledLikeAnswer_item['key'] = $key;
+        $titledLikeAnswer[$key] = $titledLikeAnswer_item;
+    }
+    $app->render('user/mypqge.twig', array('user' => $user_info, 'mypage_user' => $mypage_user, 'answer' => $user_answer, 'likeAnswer' => $titledLikeAnswer));
 });
 
