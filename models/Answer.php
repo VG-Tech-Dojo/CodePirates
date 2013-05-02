@@ -28,6 +28,16 @@ class Answer extends Model
         return $answer->getanswerbyansid($a_id);
     }
 
+    /**
+     * answer_idからユーザーの名前を結合してAnswerを返す
+     *
+     * @param string $a_id Answer_id
+     */
+    public function getAnswerByAnsIdWithUName($a_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getanswerbyansidwithuname($a_id);
+    }
 
     /**
      * answer_idからAnswerを削除する
