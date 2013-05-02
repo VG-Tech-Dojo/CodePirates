@@ -134,6 +134,26 @@ class Db_Dao_Answer extends Db_Dao_Abstract
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+    /**
+     * UserIDを指定して問題順に回答情報を返す
+     *
+     * @param string $u_id 回答ID
+     * @return array ユーザー情報
+     * @throws PDOException
+     */
+    public function getanswerbyuseridofqnum($u_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select * from answer where u_id = :ID order by q_id';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $u_id, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * UserIDとQuestionIDを指定して回答したかを返す
      *

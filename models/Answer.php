@@ -74,6 +74,16 @@ class Answer extends Model
         return $answer->getanswerbyuserid($u_id);
     }
 
+    /**
+     * User_idから問題番号順にAnswerを返す
+     *
+     * @param string $u_id User_id
+     */
+    public function getAnswerByUserIdOfQuestionNum($u_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getanswerbyuseridofqnum($u_id);
+    }
 
     /**
      * Question_idから回答人数を返す

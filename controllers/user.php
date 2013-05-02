@@ -100,3 +100,41 @@ $app->post('/user/register', 'noauthorized', function () use ($app) {
     $app->render('user/register.twig', array('errors' => $errors, 'params' => $params));
 });
 
+/**
+ * マイページ
+ */
+$app->get('/user/:id', 'authorized', function ($id) use ($app) {
+    require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/Question.php';
+    require_once MODELS_DIR . '/User.php';
+    require_once LIB_DIR . '/Session.php';
+
+    $session = $app->factory->getSession();
+    $user = $app->factory->getUser();
+    $answer = $app->factory->getAnswer();
+    $question = $app->factory->getQuestion();
+
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $mypage_user = $user->getUserById($id);
+    $answerList = $answer->getAnswerByUserIdOfQuestionNum($mypage_user['id']);
+    $questionList = $question->getAllQuestion();
+    $user_answer = array();
+    end($user_answer);
+    $ans_end = each($user_answer);
+    foreach($answerList as $key => $answer_item){
+        $user_answer[$questionList[$answer_item['q_id']]['title']][] = $answer_item;
+        if($key === $ans_end['key']){
+            $user_answer[$questionList[$answer_item['q_id']]['title']]['key'] = $questionList[$answer_item['q_id']];
+        }
+    }
+    foreach($user_answer as $key => $user_answer_item){
+        $user_answer_item['key'] = $key;
+        $user_answer[$key] = $user_answer_item;
+    }
+    $app->render('user/mypqge.twig', array('user' => $user_info, 'mypage_user' => $mypage_user, 'answer' => $user_answer));
+});
+

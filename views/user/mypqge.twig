@@ -1,0 +1,25 @@
+{% extends "base.twig" %}
+{% block title %}{{mypqge_user.name}}さんのマイページ{% endblock %}
+        
+{% block content %}
+    <div class="row">
+        <div class="page-header">
+            <h1>{{mypage_user.name}}さんのマイページ</h1>
+        </div>
+        <h2>{{mypage_user.name}}さんの投稿した回答一覧</h2>
+    </div>
+    <table>
+        {% for answersForQuestion_item in answer %}
+            <tr>
+                <th align="left" >問題：{{answersForQuestion_item.key}}<th>
+            </tr>
+            {% for answer_item in answersForQuestion_item %}
+                <tr>
+                {% if answer_item.created_at %}
+                    <td><a href="/answer/{{answer_item.id}}" >{{answer_item.created_at}}に投稿した内容</a></td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+{% endblock %}
