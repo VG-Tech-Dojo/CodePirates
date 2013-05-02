@@ -1,5 +1,5 @@
 {% extends "base.twig" %}
-{% block title %}{{mypqge_user.name}}さんのマイページ{% endblock %}
+{% block title %}マイページ{% endblock %}
         
 {% block content %}
     <div class="row">
@@ -22,4 +22,23 @@
             {% endfor %}
         {% endfor %}
     </table>
+    <div class="row">
+        <h2>{{mypage_user.name}}さんのいいね！した回答一覧</h2>
+    </div>
+    <table>
+        {% for likeAnswersForQuestion_item in likeAnswer %}
+            <tr>
+                <th align="left" >問題：{{likeAnswersForQuestion_item.key}}<th>
+            </tr>
+            {% for likeAnswer_item in likeAnswersForQuestion_item %}
+                <tr>
+                {% if likeAnswer_item.created_at %}
+                    <th align="left"><strong>&nbsp;&nbsp;|-{{likeAnswer_item.u_name}}さんの回答</strong></th>
+                    <td><a href="/answer/{{likeAnswer_item.id}}" >{{likeAnswer_item.created_at}}に投稿した内容</a></td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+ 
 {% endblock %}
