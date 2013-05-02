@@ -31,5 +31,5 @@ versionupmasterdb101:
 changemasterlikeTable:
 	cd migration;mysql -uroot -psarumon < ./changelikeTable
 
-versionupdb201:
+versionupmasterdb201:
 	cd migration;mysql -uroot -psarumon < ./VER201
