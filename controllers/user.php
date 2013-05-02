@@ -100,3 +100,23 @@ $app->post('/user/register', 'noauthorized', function () use ($app) {
     $app->render('user/register.twig', array('errors' => $errors, 'params' => $params));
 });
 
+/**
+ * マイページ
+ */
+$app->get('/user/:id', 'authorized', function ($id) use ($app) {
+    require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/User.php';
+    require_once LIB_DIR . '/Session.php';
+
+    $session = $app->factory->getSession();
+    $user = $app->factory->getUser();
+
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $mypage_user = $user->getUserById($id);
+    $app->render('user/mypqge.twig', array('user' => $user_info, 'mypage_user' => $mypage_user));
+});
+
