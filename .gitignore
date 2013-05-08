@@ -1,2 +1,3 @@
 config/database.php
 public_html/inputs/
+*.swp
