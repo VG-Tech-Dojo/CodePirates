@@ -122,11 +122,17 @@ $app->get('/user/:id', 'authorized', function ($id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
-    $mypage_user = $user->getUserById($id);
+    if(!$mypage_user = $user->getUserById($id)){
+        $app->error("ユーザーが存在しません");
+    }
     $answerList = $answer->getAnswerByUserIdOfQuestionNum($mypage_user['id']);
-    $questionList = $question->getAllQuestion();
+    $questionList_notsorted = $question->getAllQuestion();
     $likeList = $like->getLikeFromUID($mypage_user['id']);
     $user_answer = array();
+    $questionList = array();
+    foreach($questionList_notsorted as  $question_item){
+        $questionList[$question_item['id']] = $question_item;
+    }
     foreach($answerList as $key => $answer_item){
         $user_answer[$questionList[$answer_item['q_id']]['title']][] = $answer_item;
     }
@@ -134,7 +140,7 @@ $app->get('/user/:id', 'authorized', function ($id) use ($app) {
         $user_answer_item['key'] = $key;
         $user_answer[$key] = $user_answer_item;
     }
-    $likeAnswers = array();
+    $likeAnswer = array();
     foreach($likeList as $like_item){
         $likeAnswer[] = $answer->getAnswerByAnsIDWithUName($like_item['a_id']);
     }
