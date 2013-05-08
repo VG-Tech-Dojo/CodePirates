@@ -50,7 +50,7 @@ $app->get('/question', 'authorized', function () use ($app) {
     }
 
     try {
-        if (($questionList = $question->getAllQuestionOrderByDiff()) == null) {
+        if (($question_list = $question->getAllQuestionOrderByDiff()) == null) {
             $errors = '質問がありません';
         } else {
         }
@@ -59,29 +59,29 @@ $app->get('/question', 'authorized', function () use ($app) {
         $app->error('おかしいのでリロードしてください。'); 
     }
     $difficulties = $difficulty->getDifficulty();
-    $difficultyLevel = array();
+    $difficulty_level = array();
     for($i = 0; $i < count($difficulties); $i++ ){
-        $difficultyLevel[$difficulties[$i]['id']] = $difficulties[$i]['content'];
+        $difficulty_level[$difficulties[$i]['id']] = $difficulties[$i]['content'];
     }
-    for($i = 0; $i < count($questionList); $i++ ){
-        $questionList[$i]['difficultyNum'] = $questionList[$i]['difficulty'];
-        $questionList[$i]['difficulty'] = $difficultyLevel[$questionList[$i]['difficulty']];
-        $questionList[$i]['answernum'] = $answer->getAnsweredPeopleByQuestionId($questionList[$i]['id']);
+    for($i = 0; $i < count($question_list); $i++ ){
+        $question_list[$i]['difficultyNum'] = $question_list[$i]['difficulty'];
+        $question_list[$i]['difficulty'] = $difficulty_level[$question_list[$i]['difficulty']];
+        $question_list[$i]['answernum'] = $answer->getAnsweredPeopleByQuestionId($question_list[$i]['id']);
     }
-    $answerInfo = $answer->getAnswerByUserId($user_info['id']);
-    $answeredIdForUser = array();
-    for($i = 0; $i < count($answerInfo); $i++){
-        $answeredIdForUser[] = $answerInfo[$i]['q_id'];
+    $answer_info = $answer->getAnswerByUserId($user_info['id']);
+    $answered_id_for_user = array();
+    for($i = 0; $i < count($answer_info); $i++){
+        $answered_id_for_user[] = $answer_info[$i]['q_id'];
     }
-    $answeredIdForUser = array_unique($answeredIdForUser);
-    for($i = 0 ; $i < count($questionList); $i++){
-        if(in_array($questionList[$i]['id'],$answeredIdForUser)){
-            $questionList[$i]['answered'] = true;
+    $answered_id_for_user = array_unique($answered_id_for_user);
+    for($i = 0 ; $i < count($question_list); $i++){
+        if(in_array($question_list[$i]['id'],$answered_id_for_user)){
+            $question_list[$i]['answered'] = true;
         }else{
-            $questionList[$i]['answered'] = false;
+            $question_list[$i]['answered'] = false;
         }
     }
-    $app->render('question/questionList.twig', array('user' => $user_info, 'errors' => $errors, 'questionList' => $questionList));
+    $app->render('question/questionList.twig', array('user' => $user_info, 'errors' => $errors, 'questionList' => $question_list));
 });
 
 

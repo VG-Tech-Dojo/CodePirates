@@ -18,8 +18,8 @@ $app->get('/admin/postQuestion' ,function () use ($app) {
         $user_info['name'] = $session->get('user_name');
     }
     $sessionid = $session->id();
-    $difficultyList = $difficulty->getDifficulty();
-    $app->render('admin/postQuestion.twig', array('user' => $user_info, 'session' => $sessionid, 'difficulty' => $difficultyList));
+    $difficulty_list = $difficulty->getDifficulty();
+    $app->render('admin/postQuestion.twig', array('user' => $user_info, 'session' => $sessionid, 'difficulty' => $difficulty_list));
 });
 
 
@@ -40,8 +40,8 @@ $app->get('/admin/modifyQuestion' ,function () use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
-    $questionList = $question->getAllQuestion();
-    $app->render('admin/questionList.twig', array('user' => $user_info, 'questionList' => $questionList));
+    $question_list = $question->getAllQuestion();
+    $app->render('admin/questionList.twig', array('user' => $user_info, 'questionList' => $question_list));
 });
 
 
@@ -66,9 +66,9 @@ $app->get('/admin/modifyQuestion/:id' ,function ($id) use ($app) {
     }
     $sessionid = $session->id();
     $session->set('sessionidQ', $sessionid);
-    $difficultyList = $difficulty->getDifficulty();
+    $difficulty_list = $difficulty->getDifficulty();
     $question_item = $question->getQuestionwithID($id);
-    $app->render('admin/modifyQuestion.twig', array('user' => $user_info, 'session' => $sessionid, 'question' => $question_item, 'difficulty' => $difficultyList));
+    $app->render('admin/modifyQuestion.twig', array('user' => $user_info, 'session' => $sessionid, 'question' => $question_item, 'difficulty' => $difficulty_list));
 });
 
 
@@ -92,17 +92,17 @@ $app->post('/admin/modifyQuestion/confirm' ,function () use ($app) {
         $user_info['name'] = $session->get('user_name');
     }
     $session->set('posted',true);
-    $difficultyList = $difficulty->getDifficulty();
+    $difficulty_list = $difficulty->getDifficulty();
     if($form_validator->run($params)){
         if($_FILES['inputfile']['tmp_name'] !== ""){
             $filename = $_FILES['inputfile']['name'];
             $tempname = "temp";
             $updir="./../public_html/inputs/";
             move_uploaded_file($_FILES['inputfile']['tmp_name'],$updir.$tempname);
-            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficultyList[$params['difficulty'] - 1]));
+            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficulty_list[$params['difficulty'] - 1]));
             exit();
         }else{
-            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficultyList[$params['difficulty'] - 1]));
+            $app->render('admin/modifyconfirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficulty_list[$params['difficulty'] - 1]));
             exit();
         }
     } else {
@@ -132,17 +132,17 @@ $app->post('/admin/confirm' ,function () use ($app) {
         $user_info['name'] = $session->get('user_name');
     }
     $session->set('posted',true);
-    $difficultyList = $difficulty->getDifficulty();
+    $difficulty_list = $difficulty->getDifficulty();
     if($form_validator->run($params)){
         if($_FILES['inputfile']['tmp_name'] !== ""){
             $filename = $_FILES['inputfile']['name'];
             $tempname = "temp";
             $updir="./../public_html/inputs/";
             move_uploaded_file($_FILES['inputfile']['tmp_name'],$updir.$tempname);
-            $app->render('admin/confirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficultyList[$params['difficulty'] - 1]));
+            $app->render('admin/confirm.twig', array('user' => $user_info, 'inputfile' =>$filename, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficulty_list[$params['difficulty'] - 1]));
             exit();
         }else{
-            $app->render('admin/confirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficultyList[$params['difficulty'] - 1]));
+            $app->render('admin/confirm.twig', array('user' => $user_info, 'question' => $params, 'session' =>$params['sessionid'], 'difficulty' => $difficulty_list[$params['difficulty'] - 1]));
             exit();
         }
     } else {

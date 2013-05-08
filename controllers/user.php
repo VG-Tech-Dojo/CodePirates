@@ -126,32 +126,32 @@ $app->get('/user/:id', 'authorized', function ($id) use ($app) {
         $app->error("ユーザーが存在しません");
     }
     $answerList = $answer->getAnswerByUserIdOfQuestionNum($mypage_user['id']);
-    $questionList_notsorted = $question->getAllQuestion();
+    $question_list_notsorted = $question->getAllQuestion();
     $likeList = $like->getLikeFromUID($mypage_user['id']);
     $user_answer = array();
-    $questionList = array();
-    foreach($questionList_notsorted as  $question_item){
-        $questionList[$question_item['id']] = $question_item;
+    $question_list = array();
+    foreach($question_list_notsorted as  $question_item){
+        $question_list[$question_item['id']] = $question_item;
     }
     foreach($answerList as $key => $answer_item){
-        $user_answer[$questionList[$answer_item['q_id']]['title']][] = $answer_item;
+        $user_answer[$question_list[$answer_item['q_id']]['title']][] = $answer_item;
     }
     foreach($user_answer as $key => $user_answer_item){
         $user_answer_item['key'] = $key;
         $user_answer[$key] = $user_answer_item;
     }
-    $likeAnswer = array();
+    $like_answer = array();
     foreach($likeList as $like_item){
-        $likeAnswer[] = $answer->getAnswerByAnsIDWithUName($like_item['a_id']);
+        $like_answer[] = $answer->getAnswerByAnsIDWithUName($like_item['a_id']);
     }
-    $titledLikeAnswer = array();
-    foreach($likeAnswer as $key => $likeAnswer_item){
-        $titledLikeAnswer[$questionList[$likeAnswer_item['q_id']]['title']][] = $likeAnswer_item;
+    $titled_like_answer = array();
+    foreach($like_answer as $key => $like_answer_item){
+        $titled_like_answer[$question_list[$like_answer_item['q_id']]['title']][] = $like_answer_item;
     }
-    foreach($titledLikeAnswer as $key => $titledLikeAnswer_item){
-        $titledLikeAnswer_item['key'] = $key;
-        $titledLikeAnswer[$key] = $titledLikeAnswer_item;
+    foreach($titled_like_answer as $key => $titled_like_answer_item){
+        $titled_like_answer_item['key'] = $key;
+        $titled_like_answer[$key] = $titled_like_answer_item;
     }
-    $app->render('user/mypqge.twig', array('user' => $user_info, 'mypage_user' => $mypage_user, 'answer' => $user_answer, 'likeAnswer' => $titledLikeAnswer));
+    $app->render('user/mypqge.twig', array('user' => $user_info, 'mypage_user' => $mypage_user, 'answer' => $user_answer, 'likeAnswer' => $titled_like_answer));
 });
 

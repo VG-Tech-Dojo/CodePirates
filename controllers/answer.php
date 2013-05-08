@@ -30,25 +30,25 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
-    if (($answerInfo = $answer->getAnswerByAnsId($a_id)) == null) {
+    if (($answer_info = $answer->getAnswerByAnsId($a_id)) == null) {
         $app->error('その回答は存在しません');
     } else {
-        if (($questionInfo = $question->getQuestionByID($answerInfo['q_id'])) == null) {
+        if (($question_info = $question->getQuestionByID($answer_info['q_id'])) == null) {
             $app->error('問題が存在しません');
         }
-        if (($answererInfo = $user->getUserById($answerInfo['u_id'])) == null){
+        if (($answerer_info = $user->getUserById($answer_info['u_id'])) == null){
             $app->error('ユーザーが存在しません');
         }
     }
 
-    $Canseelike = $like->getLikeFromAandUID($user_info['id'], $a_id);
-    if(isset($Canseelike[0])){
+    $can_see_like = $like->getLikeFromAandUID($user_info['id'], $a_id);
+    if(isset($can_see_like[0])){
         $like = false;
     }else{
         $like = true;
     }
 
-    if (!$user->canSee($user_info['id'], $answerInfo['q_id'])){
+    if (!$user->canSee($user_info['id'], $answer_info['q_id'])){
         $app->error("この問題の回答を閲覧するには、問題への回答が必須です");
     }
     
@@ -59,7 +59,7 @@ $app->get('/answer/:a_id', 'authorized' ,function ($a_id) use ($app) {
         $user_info['id'],
         $a_id
     );
-    $app->render('answer/answer.twig', array('user' => $user_info,'slimFlash' => $_SESSION['slim.flash'], 'answer' => $answerInfo ,'question' => $questionInfo, 'answerer' => $answererInfo, 'comment' => $answer_comment, 'sessionid' => $sessionid, 'like' => $like));
+    $app->render('answer/answer.twig', array('user' => $user_info,'slimFlash' => $_SESSION['slim.flash'], 'answer' => $answer_info ,'question' => $question_info, 'answerer' => $answerer_info, 'comment' => $answer_comment, 'sessionid' => $sessionid, 'like' => $like));
 });
 
 
@@ -156,55 +156,55 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
     $like = $app->factory->getGood();
     $user = $app->factory->getUser();
     $user_info = array();
-    $answerInfos = array();
+    $answer_infos = array();
 
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
 
-    if (($questionInfo = $question->getQuestionByID($q_id)) == null) { 
+    if (($question_info = $question->getQuestionByID($q_id)) == null) { 
         $app->error('問題が存在しません');
     } else {
-        if (($answerInfos = $answer->getAnswerByQuesId($questionInfo['id'])) == null) {
+        if (($answer_infos = $answer->getAnswerByQuesId($question_info['id'])) == null) {
            $app->error('回答がありません'); 
         } else {
             if (!$user->canSee($user_info['id'], $q_id)){
                 $app->error("回答一覧を見るには該当問題へ回答が必須です");
             }
 
-            $answererId = array();
-            $answererName = array();
-            $answererInfo = array();
-            $userInfo = array();
+            $answerer_id = array();
+            $answerer_name = array();
+            $answerer_info = array();
+            $user_items = array();
             $commentsinfo = $comment->getAllComments();
-            $countForComment = array();
-            $likeInfo = $like->getAllLike();
-            $countForLike = array();
+            $count_for_comment = array();
+            $like_info = $like->getAllLike();
+            $count_for_like = array();
             for($i = 0; $i < count($commentsinfo); $i++){
-                $countForComment[] = $commentsinfo[$i]['a_id'];    
+                $count_for_comment[] = $commentsinfo[$i]['a_id'];    
             }
-            $countForComment = array_count_values($countForComment);
-            for($i = 0; $i < count($likeInfo); $i++){
-                $countForLike[] = $likeInfo[$i]['a_id'];    
+            $count_for_comment = array_count_values($count_for_comment);
+            for($i = 0; $i < count($like_info); $i++){
+                $count_for_like[] = $like_info[$i]['a_id'];    
             }
-            $countForLike = array_count_values($countForLike);
+            $count_for_like = array_count_values($count_for_like);
 
-            foreach($answerInfos as $answerInfo){
-                $user_data[] = $answerInfo['u_id'];
+            foreach($answer_infos as $answer_info){
+                $user_data[] = $answer_info['u_id'];
             }
             foreach(array_unique($user_data) as $answerd_user){
-                $userInfo = $user->getUserById($answerd_user);
-                $answerdata[$answerd_user]['name'] = $userInfo['name'];
+                $user_items = $user->getUserById($answerd_user);
+                $answerdata[$answerd_user]['name'] = $user_items['name'];
                 $answerdata[$answerd_user]['answer'] = $answer->getAnswerByUserIdQuestionId($answerd_user,$q_id);
                 for($i = 0; $i < count($answerdata[$answerd_user]['answer']); $i++){
-                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForComment)){
-                        $answerdata[$answerd_user]['answer'][$i]['comment'] = $countForComment[$answerdata[$answerd_user]['answer'][$i]['id']];
+                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $count_for_comment)){
+                        $answerdata[$answerd_user]['answer'][$i]['comment'] = $count_for_comment[$answerdata[$answerd_user]['answer'][$i]['id']];
                     }else{
                         $answerdata[$answerd_user]['answer'][$i]['comment'] = 0;
                     }
-                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForLike)){
-                        $answerdata[$answerd_user]['answer'][$i]['like'] = $countForLike[$answerdata[$answerd_user]['answer'][$i]['id']];
+                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $count_for_like)){
+                        $answerdata[$answerd_user]['answer'][$i]['like'] = $count_for_like[$answerdata[$answerd_user]['answer'][$i]['id']];
                     }else{
                         $answerdata[$answerd_user]['answer'][$i]['like'] = 0;
                     }
@@ -213,7 +213,7 @@ $app->get('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($app
         }
     }
     $flash_msg = $_SESSION['slim.flash'];
-    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $questionInfo, 'flash_msg' => $flash_msg));
+    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $question_info, 'flash_msg' => $flash_msg));
 });
 
 
@@ -239,55 +239,55 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
     $footmark = $app->factory->getFootmark();
     $params  = $app->request()->post();
     $user_info = array();
-    $answerInfos = array();
+    $answer_infos = array();
 
     if ($session->get('user_id')) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
 
-    if (($questionInfo = $question->getQuestionByID($q_id)) == null) { 
+    if (($question_info = $question->getQuestionByID($q_id)) == null) { 
         $app->error('問題が存在しません');
     } else {
-        if (($answerInfos = $answer->getAnswerByQuesId($questionInfo['id'])) == null) {
+        if (($answer_infos = $answer->getAnswerByQuesId($question_info['id'])) == null) {
            $app->error('回答がありません'); 
         } else {
             if (!$user->canSee($user_info['id'], $q_id)){
                 $app->error("回答一覧を見るには該当問題へ回答が必須です");
             }
 
-            $answererId = array();
-            $answererName = array();
-            $answererInfo = array();
-            $userInfo = array();
+            $answerer_id = array();
+            $answerer_name = array();
+            $answerer_info = array();
+            $user_items = array();
             $commentsinfo = $comment->getAllComments();
-            $countForComment = array();
-            $likeInfo = $like->getAllLike();
-            $countForLike = array();
+            $count_for_comment = array();
+            $like_info = $like->getAllLike();
+            $count_for_like = array();
             for($i = 0; $i < count($commentsinfo); $i++){
-                $countForComment[] = $commentsinfo[$i]['a_id'];    
+                $count_for_comment[] = $commentsinfo[$i]['a_id'];    
             }
-            $countForComment = array_count_values($countForComment);
-            for($i = 0; $i < count($likeInfo); $i++){
-                $countForLike[] = $likeInfo[$i]['a_id'];    
+            $count_for_comment = array_count_values($count_for_comment);
+            for($i = 0; $i < count($like_info); $i++){
+                $count_for_like[] = $like_info[$i]['a_id'];    
             }
-            $countForLike = array_count_values($countForLike);
+            $count_for_like = array_count_values($count_for_like);
 
-            foreach($answerInfos as $answerInfo){
-                $user_data[] = $answerInfo['u_id'];
+            foreach($answer_infos as $answer_info){
+                $user_data[] = $answer_info['u_id'];
             }
             foreach(array_unique($user_data) as $answerd_user){
-                $userInfo = $user->getUserById($answerd_user);
-                $answerdata[$answerd_user]['name'] = $userInfo['name'];
+                $user_items = $user->getUserById($answerd_user);
+                $answerdata[$answerd_user]['name'] = $user_items['name'];
                 $answerdata[$answerd_user]['answer'] = $answer->getAnswerByUserIdQuestionId($answerd_user,$q_id);
                 for($i = 0; $i < count($answerdata[$answerd_user]['answer']); $i++){
-                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForComment)){
-                        $answerdata[$answerd_user]['answer'][$i]['comment'] = $countForComment[$answerdata[$answerd_user]['answer'][$i]['id']];
+                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $count_for_comment)){
+                        $answerdata[$answerd_user]['answer'][$i]['comment'] = $count_for_comment[$answerdata[$answerd_user]['answer'][$i]['id']];
                     }else{
                         $answerdata[$answerd_user]['answer'][$i]['comment'] = 0;
                     }
-                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $countForLike)){
-                        $answerdata[$answerd_user]['answer'][$i]['like'] = $countForLike[$answerdata[$answerd_user]['answer'][$i]['id']];
+                    if(array_key_exists($answerdata[$answerd_user]['answer'][$i]['id'], $count_for_like)){
+                        $answerdata[$answerd_user]['answer'][$i]['like'] = $count_for_like[$answerdata[$answerd_user]['answer'][$i]['id']];
                     }else{
                         $answerdata[$answerd_user]['answer'][$i]['like'] = 0;
                     }
@@ -302,73 +302,73 @@ $app->post('/answerlist/question/:id', 'authorized' ,  function ($q_id) use ($ap
                     }
                 }
                 if($params['sort'] === "like"){//同じ処理をしているので後にまとめる
-                    $likeRank = array();
+                    $like_rank = array();
                     for($i = 0; $i < count($arraytemp); $i++){
-                        $likeRank[$i] = $arraytemp[$i]['like'];
+                        $like_rank[$i] = $arraytemp[$i]['like'];
                     }
-                    arsort($likeRank);
+                    arsort($like_rank);
                     $answerdata = array();
-                    foreach($likeRank as $key => $value){
+                    foreach($like_rank as $key => $value){
                         $answerdata[] = $arraytemp[$key];
                     }   
                 }else if($params['sort'] === "comment"){
-                    $commentRank = array();
+                    $comment_rank = array();
                     for($i = 0; $i < count($arraytemp); $i++){
-                        $commentRank[$i] = $arraytemp[$i]['comment'];
+                        $comment_rank[$i] = $arraytemp[$i]['comment'];
                     }
-                    arsort($commentRank);
+                    arsort($comment_rank);
                     $answerdata = array();
-                    foreach($commentRank as $key => $value){
+                    foreach($comment_rank as $key => $value){
                         $answerdata[] = $arraytemp[$key];
                     }   
                 }else if($params['sort'] === "line"){
-                    $lineRank = array();
+                    $line_rank = array();
                     foreach($arraytemp as $key => $arraytemp_item){
-                        $lineRank[$key] = $arraytemp_item['line_count'];
+                        $line_rank[$key] = $arraytemp_item['line_count'];
                     }
-                    asort($lineRank);
+                    asort($line_rank);
                     $answerdata = array();
-                    foreach($lineRank as $key => $value){
+                    foreach($line_rank as $key => $value){
                         $answerdata[] = $arraytemp[$key];
                     }
                 }else if($params['sort'] === "PV"){
-                    $footmarksInfo = $footmark->getFootmarkByQID($q_id);
-                    $footmarkRank = array();
-                    foreach($footmarksInfo as $footmark_item){
-                        if(!isset($footmarkRank[$footmark_item['a_id']])){
-                            $footmarkRank[$footmark_item['a_id']] = 0;
+                    $footmarks_info = $footmark->getFootmarkByQID($q_id);
+                    $footmark_rank = array();
+                    foreach($footmarks_info as $footmark_item){
+                        if(!isset($footmark_rank[$footmark_item['a_id']])){
+                            $footmark_rank[$footmark_item['a_id']] = 0;
                         }
-                        $footmarkRank[$footmark_item['a_id']]++;
+                        $footmark_rank[$footmark_item['a_id']]++;
                     }
-                    arsort($footmarkRank);
+                    arsort($footmark_rank);
                     $answerdata = array();
                     $answerdata_key = array();
                     foreach($arraytemp as $key => $arraytemp_item){
                         $answerdata_key[$arraytemp_item['id']] = $key; 
                     }
-                    foreach($footmarkRank as $key => $footmarkRank_item){
-                        $arraytemp[$answerdata_key[$key]]['PV'] = $footmarkRank_item;
+                    foreach($footmark_rank as $key => $footmark_rank_item){
+                        $arraytemp[$answerdata_key[$key]]['PV'] = $footmark_rank_item;
                         $answerdata[] = $arraytemp[$answerdata_key[$key]];
                         unset($arraytemp[$answerdata_key[$key]]);
                     }
                     $answerdata = array_merge($answerdata,$arraytemp);
                 }
             }else if($params['sort'] === 'userABCsort'){
-                $userABCrank = array();
+                $user_abc_rank = array();
                 foreach($answerdata as $key => $answerdata_item){
-                    $userABCrank[$key] = $answerdata_item['name'];
+                    $user_abc_rank[$key] = $answerdata_item['name'];
                 }
-                asort($userABCrank);
+                asort($user_abc_rank);
                 $arraytemp = $answerdata;
                 $answerdata = array();
-                foreach($userABCrank as $key => $userABCrank_item){
+                foreach($user_abc_rank as $key => $user_abc_rank_item){
                     $answerdata[] = $arraytemp[$key];
                 }
             }
         }
     }
     $flash_msg = $_SESSION['slim.flash'];
-    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $questionInfo, 'flash_msg' => $flash_msg, 'lang_narrow' => $params['lang_narrow'], 'sort' => $params['sort']));
+    $app->render('answer/answerlist.twig', array('user' => $user_info, 'answer_data' => $answerdata, 'question' => $question_info, 'flash_msg' => $flash_msg, 'lang_narrow' => $params['lang_narrow'], 'sort' => $params['sort']));
 });
 
 
@@ -393,9 +393,9 @@ $app->get('/modify/answer/code/:id', 'authorized', function ($a_id) use ($app) {
     }
     $sessionid = $session->id();
     $session->set('sessionidQ', $sessionid);
-    $answerInfo = $answer->getAnswerByAnsId($a_id);
+    $answer_info = $answer->getAnswerByAnsId($a_id);
     try {
-        if (($question_item = $question->getQuestionByID($answerInfo['q_id'])) == null){
+        if (($question_item = $question->getQuestionByID($answer_info['q_id'])) == null){
             $app->error('その問題は存在しません');
         } else {
             $answer_user_num =$answer->getanswerpeoplenumbyquestionid($question_item['id']);
@@ -404,10 +404,10 @@ $app->get('/modify/answer/code/:id', 'authorized', function ($a_id) use ($app) {
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください'); 
     }
-    if($answerInfo['u_id'] !== $user_info['id']){
+    if($answer_info['u_id'] !== $user_info['id']){
         $app->redirect('/');
     }
-    $app->render('answer/modifyAnswerForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'session' => $sessionid, 'answer_user_num' => $answer_user_num, 'answerInfo' => $answerInfo));
+    $app->render('answer/modifyAnswerForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'session' => $sessionid, 'answer_user_num' => $answer_user_num, 'answerInfo' => $answer_info));
 });
 
 /**
@@ -433,9 +433,9 @@ $app->put('/modify/answer/code/:id', 'authorized', function ($a_id) use ($app) {
     }
     $sessionid = $session->id();
     $session->set('sessionidQ', $sessionid);
-    $answerInfo = $answer->getAnswerByAnsId($a_id);
+    $answer_info = $answer->getAnswerByAnsId($a_id);
     try {
-        if (($question_item = $question->getQuestionByID($answerInfo['q_id'])) == null){
+        if (($question_item = $question->getQuestionByID($answer_info['q_id'])) == null){
             $app->error('その問題は存在しません');
         } else {
             $answer_user_num =$answer->getanswerpeoplenumbyquestionid($question_item['id']);
@@ -444,10 +444,10 @@ $app->put('/modify/answer/code/:id', 'authorized', function ($a_id) use ($app) {
         echo $e->getMessage();
         $app->error('おかしいのでリロードしてください'); 
     }
-    if($answerInfo['u_id'] !== $user_info['id']){
+    if($answer_info['u_id'] !== $user_info['id']){
         $app->redirect('/');
     }
-    $app->render('answer/modifyAnswerForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'old_code' => $old_code, 'answer_user_num' => $answer_user_num, 'session' => $sessionid, 'answerInfo' => $answerInfo));
+    $app->render('answer/modifyAnswerForm.twig', array('user' => $user_info, 'errors' => $errors, 'question' => $question_item, 'old_code' => $old_code, 'answer_user_num' => $answer_user_num, 'session' => $sessionid, 'answerInfo' => $answer_info));
 });
 
 /**
