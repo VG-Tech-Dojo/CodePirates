@@ -7,108 +7,108 @@ class Answer extends Model
 
 
     /**
-     * すべてのAnswerを返す
+     * すべての回答を返す
      *
      */
     public function getAllAnswer()
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->getallanswer();
+        return $answer->getAllAnswerDao();
     }
 
 
     /**
-     * answer_idからAnswerを返す
+     * answer_idを指定して回答を返す
      *
      * @param string $a_id Answer_id
      */
     public function getAnswerByAnsId($a_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->getanswerbyansid($a_id);
+        return $answer->getAnswerByAnsIdDao($a_id);
     }
 
     /**
-     * answer_idからユーザーの名前を結合してAnswerを返す
+     * answer_idからユーザーのユーザー名を結合して回答を返す
      *
      * @param string $a_id Answer_id
      */
     public function getAnswerByAnsIdWithUName($a_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->getanswerbyansidwithuname($a_id);
+        return $answer->getAnswerByAnsIdWithUNameDao($a_id);
     }
 
     /**
-     * answer_idからAnswerを削除する
+     * answer_iを指定してカラムを削除する
      *
      * @param string $a_id Answer_id
      */
-    public function deleteAnswerById($a_id)
+    public function deleteAnswerByIdDao($a_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->deleteanswerbyid($a_id);
+        return $answer->deleteAnswerById($a_id);
     }
 
     /**
-     * question_idからAnswerを返す
+     * question_idを指定してAnswerを返す
      *
      * @param string $q_id Question_id
      */
     public function getAnswerByQuesId($q_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->getanswerbyquesid($q_id);
+        return $answer->getAnswerByQuesIdDao($q_id);
     }
 
     /**
-     * question_idから回答人数を返す
+     * question_idを指定して回答人数を返す
      *
      * @param string $q_id Question_id
      */
     public function getanswerpeoplenumbyquestionid($q_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->getanswerpeoplenumbyquestionid($q_id);
+        return $answer->getAnswerPeopleNumByQuestionIdDao($q_id);
     }
 
 
     /**
-     * User_idからAnswerを返す
+     * User_idを指定して回答を返す
      *
      * @param string $u_id User_id
      */
     public function getAnswerByUserId($u_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->getanswerbyuserid($u_id);
+        return $answer->getAnswerByUserIdDao($u_id);
     }
 
     /**
-     * User_idから問題番号順にAnswerを返す
+     * User_idを指定して問題番号順に回答を返す
      *
      * @param string $u_id User_id
      */
     public function getAnswerByUserIdOfQuestionNum($u_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->getanswerbyuseridofqnum($u_id);
+        return $answer->getAnswerByUserIdOfQNumDao($u_id);
     }
 
     /**
-     * Question_idから回答人数を返す
+     * Question_id指定して回答人数を返す
      *
      * @param string $q_id Question_id
      */
     public function getAnsweredPeopleByQuestionId($q_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->getanswerpeoplenumbyquestionid($q_id);
+        return $answer->getAnswerPeopleNumByQuestionIdDao($q_id);
     }
 
 
     /**
-     * User_id,Question_idからAnswerを返す
+     * User_id,Question_idを指定して回答を返す
      *
      * @param string $u_id User_id
      * @param string $q_id Question_id
@@ -116,7 +116,7 @@ class Answer extends Model
     public function getAnswerByUserIdQuestionId($u_id,$q_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->getanswerbyuseridquestionid($u_id,$q_id);
+        return $answer->getAnswerByUserIdQuestionIdDao($u_id,$q_id);
     }
 
     /**
@@ -146,6 +146,6 @@ class Answer extends Model
     public function update($a_id, $u_id, $q_id, $content, $lang, $linecount)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->updateans($a_id, $u_id, $q_id, $content, $lang, $linecount);
+        return $answer->update($a_id, $u_id, $q_id, $content, $lang, $linecount);
     }
 }

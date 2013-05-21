@@ -13,6 +13,6 @@ class Difficulty extends Model
     {
         
         $difficulty_dao = $this->getFactory()->getDb_Dao_Difficulty();
-        return $difficulty_dao->getdifficulty();
+        return $difficulty_dao->getDifficultyDao();
     }
 }

@@ -20,7 +20,7 @@ class Db_Dao_Comment extends Db_Dao_Abstract
      * @throws PDOException
      */
    
-    public function getallcomments()
+    public function getAllCommentsDao()
     {
         $dbh = $this->getDbHandler();
 
@@ -39,7 +39,7 @@ class Db_Dao_Comment extends Db_Dao_Abstract
      * @throws PDOException
      */
    
-    public function getcommentbyanswerid($a_id)
+    public function getCommentByAnswerIdDao($a_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -59,7 +59,7 @@ class Db_Dao_Comment extends Db_Dao_Abstract
      * @throws PDOException
      */
    
-    public function deletecommentfromaid($a_id)
+    public function deleteCommentFromAIdDao($a_id)
     {
         $dbh = $this->getDbHandler();
 

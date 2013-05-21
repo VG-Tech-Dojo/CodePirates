@@ -6,36 +6,36 @@ class Comment extends Model
 {
 
     /**
-     * すべてのコメントを取得する
+     * すべてのコメントを返す
      */
     public function getAllComments()
     {
         $comment = $this->getFactory()->getDb_Dao_Comment();
-        return $comment->getallcomments();
+        return $comment->getAllCommentsDao();
     }
 
 
     /**
-     * answer_idからCommentを返す
+     * answer_idを指定してコメントを返す
      *
      * @param string $a_id Answer_id
      */
     public function getCommentByAnsId($a_id)
     {
         $comment = $this->getFactory()->getDb_Dao_Comment();
-        return $comment->getcommentbyanswerid($a_id);
+        return $comment->getCommentByAnswerIdDao($a_id);
     }
 
 
     /**
-     * answer_idからCommentを削除する
+     * answer_idを指定してCommentを削除する
      *
      * @param string $a_id Answer_id
      */
     public function deleteCommentFromAId($a_id)
     {
         $comment = $this->getFactory()->getDb_Dao_Comment();
-        return $comment->deletecommentfromaid($a_id);
+        return $comment->deleteCommentFromAIdDao($a_id);
     }
 
 

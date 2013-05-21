@@ -20,7 +20,7 @@ class Db_Dao_Footmark extends Db_Dao_Abstract
      *
      * @throws PDOException
      */
-    public function getallfootmark()
+    public function getAllFootmarkDao()
     {
         $dbh = $this->getDbHandler();
 
@@ -38,7 +38,7 @@ class Db_Dao_Footmark extends Db_Dao_Abstract
      *
      * @throws PDOException
      */
-    public function getfootmarkbyqid($q_id)
+    public function getFootmarkByQIdDao($q_id)
     {
         $dbh = $this->getDbHandler();
 

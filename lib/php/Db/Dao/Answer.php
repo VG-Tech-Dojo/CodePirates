@@ -15,11 +15,11 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 {
 
     /**
-     * すべての回答情報を返す
+     * すべての回答を返す
      *
      * @throws PDOException
      */
-    public function getallanswer()
+    public function getAllAnswerDao()
     {
         $dbh = $this->getDbHandler();
 
@@ -32,13 +32,13 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
 
     /**
-     * AnswerIDを指定して回答情報を返す
+     * AnswerIDを指定して回答を返す
      *
      * @param string $a_id 回答ID
      * @return array ユーザー情報
      * @throws PDOException
      */
-    public function getanswerbyansid($a_id)
+    public function getAnswerByAnsIdDao($a_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -52,13 +52,13 @@ class Db_Dao_Answer extends Db_Dao_Abstract
      
 
     /**
-     * AnswerIDを指定してユーザー名を付与して回答情報を返す
+     * AnswerIDを指定してユーザー名を結合して回答を返す
      *
      * @param string $a_id 回答ID
      * @return array ユーザー情報
      * @throws PDOException
      */
-    public function getanswerbyansidwithuname($a_id)
+    public function getAnswerByAnsIdWithUNameDao($a_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -76,7 +76,7 @@ class Db_Dao_Answer extends Db_Dao_Abstract
      * @param string $a_id 回答ID
      * @throws PDOException
      */
-    public function deleteanswerbyid($a_id)
+    public function deleteAnswerByIdDao($a_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -91,13 +91,13 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
 
     /**
-     * QuestionIDを指定して回答情報を返す
+     * QuestionIDを指定して回答を返す
      *
      * @param string $q_id QuestionID
      * @return array ユーザー情報
      * @throws PDOException
      */
-    public function getanswerbyquesid($q_id)
+    public function getAnswerByQuesIdDao($q_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -118,7 +118,7 @@ class Db_Dao_Answer extends Db_Dao_Abstract
      * @return int 人数
      * @throws PDOException
      */
-    public function getanswerpeoplenumbyquestionid($q_id)
+    public function getAnswerPeopleNumByQuestionIdDao($q_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -135,13 +135,13 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
 
     /**
-     * UserIDを指定して回答情報を返す
+     * UserIDを指定して回答を返す
      *
      * @param string $u_id 回答ID
      * @return array ユーザー情報
      * @throws PDOException
      */
-    public function getanswerbyuserid($u_id)
+    public function getAnswerByUserIdDao($u_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -155,13 +155,13 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
 
     /**
-     * UserIDを指定して問題順に回答情報を返す
+     * UserIDを指定して問題順に回答を返す
      *
      * @param string $u_id 回答ID
      * @return array ユーザー情報
      * @throws PDOException
      */
-    public function getanswerbyuseridofqnum($u_id)
+    public function getAnswerByUserIdOfQNumDao($u_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -181,7 +181,7 @@ class Db_Dao_Answer extends Db_Dao_Abstract
      * @return boolean 回答したかどうか 
      * @throws PDOException
      */
-    public function isAnswered($user_id, $question_id)
+    public function isAnsweredDao($user_id, $question_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -196,14 +196,14 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
 
     /**
-     * UserID,QuestionIdを指定して回答情報を返す
+     * UserID,QuestionIdを指定して回答を返す
      *
      * @param string $u_id 回答ID
      * @param string $q_id QuestionID
      * @return array ユーザー情報
      * @throws PDOException
      */
-    public function getanswerbyuseridquestionid($u_id,$q_id)
+    public function getAnswerByUserIdQuestionIdDao($u_id,$q_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -255,7 +255,7 @@ class Db_Dao_Answer extends Db_Dao_Abstract
      * @param int $linecount コード行数
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
-    public function updateans($a_id, $u_id, $q_id, $content, $lang, $linecount)
+    public function update($a_id, $u_id, $q_id, $content, $lang, $linecount)
     {
         $dbh = $this->getDbHandler();
         $query = 'update answer set u_id = :U_ID, q_id = :Q_ID, content = :CONTENT, lang = :LANG, line_count = :LINECOUNT where id = :A_ID';

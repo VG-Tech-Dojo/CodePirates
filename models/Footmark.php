@@ -12,7 +12,7 @@ class Footmark extends Model
     public function getAllFootmark()
     {
         $footmark = $this->getFactory()->getDb_Dao_Footmark();
-        return $footmark->getallfootmark();
+        return $footmark->getAllFootmarkDao();
     }
 
     /**
@@ -23,7 +23,7 @@ class Footmark extends Model
     public function getFootmarkByQID($q_id)
     {
         $footmark = $this->getFactory()->getDb_Dao_Footmark();
-        return $footmark->getfootmarkbyqid($q_id);
+        return $footmark->getFootmarkByQIdDao($q_id);
     }
 
 

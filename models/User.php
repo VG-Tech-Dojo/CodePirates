@@ -77,7 +77,7 @@ class User extends Model
     public function canSee($user_id, $question_id)
     {
         $answer = $this->getFactory()->getDb_Dao_Answer();
-        return $answer->isAnswered($user_id, $question_id);
+        return $answer->isAnsweredDao($user_id, $question_id);
 
     }
 }

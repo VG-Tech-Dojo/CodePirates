@@ -20,7 +20,7 @@ class Db_Dao_Difficulty extends Db_Dao_Abstract
      * @throws PDOExeption
      *
      */
-    public function getdifficulty()
+    public function getDifficultyDao()
     {
         $dbh = $this->getDbHandler();
 
