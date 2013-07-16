@@ -75,6 +75,10 @@
             <pre class="brush: ruby;">{{answer.content}}</pre>
             {% elseif answer.lang == 'Python' %}
             <pre class="brush: python;">{{answer.content}}</pre>
+            {% elseif answer.lang == 'JS' %}
+            <pre class="brush: js;">{{answer.code}}</pre>
+            {% elseif answer.lang == 'PT' %}
+            <pre>{{answer.content}}</pre>
             {% endif %}
             {% if answer.u_id == user.id%}
                 <table>
