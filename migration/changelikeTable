@@ -1,2 +1,2 @@
-use demo;
+use treasure;
 source ./createsql/create_good.sql
