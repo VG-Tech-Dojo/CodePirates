@@ -1,2 +1,2 @@
-use demo;
+use treasure;
 source ./deletesql/delete_all_table.sql;
