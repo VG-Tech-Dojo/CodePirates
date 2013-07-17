@@ -2,19 +2,19 @@ setupdb:
 	cd migration;mysql -utreasure -ptreasure_pass < ./CREATE_TABLE
 
 deletedb:
-	cd migration;mysql -utreasure  < ./DELETE_TABLE
+	cd migration;mysql -utreasure -ptreasure_pass < ./DELETE_TABLE
 	
 insertdb:
-	cd migration;mysql -utreasure  < ./INSERT_TABLE
+	cd migration;mysql -utreasure -ptreasure_pass < ./INSERT_TABLE
 
 versionupdb101:
-	cd migration;mysql -utreasure  < ./VER101
+	cd migration;mysql -utreasure -ptreasure_pass < ./VER101
 
 changelikeTable:
-	cd migration;mysql -utreasure  < ./changelikeTable
+	cd migration;mysql -utreasure -ptreasure_pass < ./changelikeTable
 
 versionupdb201:
-	cd migration;mysql -utreasure  < ./VER201
+	cd migration;mysql -utreasure -ptreasure_pass < ./VER201
 
 deletemasterdb:
 	cd migration;mysql -utreasure -ptreasure_pass < ./DELETE_TABLE
