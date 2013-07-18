@@ -52,6 +52,25 @@ class Db_Dao_Answer extends Db_Dao_Abstract
      
 
     /**
+     * AnswerIDを指定してユーザー名を付与して回答情報を返す
+     *
+     * @param string $a_id 回答ID
+     * @return array ユーザー情報
+     * @throws PDOException
+     */
+    public function getanswerbyansidwithuname($a_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select answer.id as id, answer.u_id as u_id, answer.q_id as q_id, answer.content as content, answer.lang as lang, answer.line_count as line_count, answer.created_at as created_at, user.name as u_name from answer, user where answer.id = :ID and answer.u_id = user.id';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $a_id, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * AnswerIDを指定してカラムを削除する
      *
      * @param string $a_id 回答ID
@@ -127,6 +146,26 @@ class Db_Dao_Answer extends Db_Dao_Abstract
         $dbh = $this->getDbHandler();
 
         $query = 'select * from answer where u_id = :ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $u_id, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    /**
+     * UserIDを指定して問題順に回答情報を返す
+     *
+     * @param string $u_id 回答ID
+     * @return array ユーザー情報
+     * @throws PDOException
+     */
+    public function getanswerbyuseridofqnum($u_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select * from answer where u_id = :ID order by q_id';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':ID', $u_id, PDO::PARAM_INT);
         $statement->execute();

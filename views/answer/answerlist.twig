@@ -47,9 +47,10 @@
         <form method="post" action="/answerlist/question/{{question.id}}" name="sort">
             <select name="lang_narrow">
               <option value="All">すべての言語</option>
+              <option value="PT">PlainText</option>
               <option value="Ruby">Ruby</option>
               <option value="PHP">PHP</option>
-              <option value="Python">Python</option>
+              <option value="JS">JavaScript</option>
             </select>
             <select name="sort">
               <option value="All">ユーザー投稿順</option>
@@ -66,7 +67,7 @@
             {% if sort and sort != "All" and sort != 'userABCsort' %}
                 {% if lang_narrow == "All" or answerer_item.lang == lang_narrow %}
                     <tr>
-                    <th><strong>{{answerer_item.name}}さんの回答</strong></th>
+                    <th><strong><a href="/user/{{answerer_item.u_id}}">{{answerer_item.name}}</a>さんの回答</strong></th>
                     <td><a href="/answer/{{answerer_item.id}}" >{{answerer_item.created_at}}に投稿した内容</a></td>
                     <td><button class="btn disabled {{answerer_item.lang}}">{{answerer_item.lang}}</button></td>
                     <td><i class="icon-comment"></i>:{{answerer_item.comment}}件  <i class="icon-thumbs-up"></i>：{{answerer_item.like}}</td>
@@ -88,7 +89,7 @@
                     {% for item in answerer_item.answer %}
                         {% if lang_narrow == "All" or item.lang == lang_narrow %}
                             {% if nameFlag == 1%}
-                                <p><strong>{{answerer_item.name}}さんの回答</strong></p>
+                                <p><strong><a href="/user/{{answerer_item.answer.0.u_id}}">{{answerer_item.name}}</a>さんの回答</strong></p>
                                 {% set nameFlag = 0 %}
                             {% endif %}
                             <p>
@@ -100,7 +101,7 @@
                     {% endfor %}
                 {% else %}
                     {% if nameFlag == 1%}
-                        <p><strong>{{answerer_item.name}}さんの回答</strong></p>
+                        <p><strong><a href="/user/{{answerer_item.answer.0.u_id}}">{{answerer_item.name}}</a>さんの回答</strong></p>
                         {% set nameFlag = 0 %}
                     {% endif %}
                     {% for item in answerer_item.answer %}

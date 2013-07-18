@@ -28,6 +28,16 @@ class Answer extends Model
         return $answer->getanswerbyansid($a_id);
     }
 
+    /**
+     * answer_idからユーザーの名前を結合してAnswerを返す
+     *
+     * @param string $a_id Answer_id
+     */
+    public function getAnswerByAnsIdWithUName($a_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getanswerbyansidwithuname($a_id);
+    }
 
     /**
      * answer_idからAnswerを削除する
@@ -74,6 +84,16 @@ class Answer extends Model
         return $answer->getanswerbyuserid($u_id);
     }
 
+    /**
+     * User_idから問題番号順にAnswerを返す
+     *
+     * @param string $u_id User_id
+     */
+    public function getAnswerByUserIdOfQuestionNum($u_id)
+    {
+        $answer = $this->getFactory()->getDb_Dao_Answer();
+        return $answer->getanswerbyuseridofqnum($u_id);
+    }
 
     /**
      * Question_idから回答人数を返す

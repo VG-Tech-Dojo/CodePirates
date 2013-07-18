@@ -60,7 +60,7 @@
 	<script type="text/javascript">SyntaxHighlighter.all();</script>
         <div class="row">
             <div class="page-header">
-                <h1>{{answerer.name}}さんの{{question.title}}の回答</h1>
+                <h1><a href="/user/{{answerer.id}}">{{answerer.name}}</a>さんの{{question.title}}の回答</h1>
             </div>
             <a href="/question/{{question.id}}"><h2>問題</h2></a>
             {% autoescape false %}
@@ -75,6 +75,10 @@
             <pre class="brush: ruby;">{{answer.content}}</pre>
             {% elseif answer.lang == 'Python' %}
             <pre class="brush: python;">{{answer.content}}</pre>
+            {% elseif answer.lang == 'JS' %}
+            <pre class="brush: js;">{{answer.code}}</pre>
+            {% elseif answer.lang == 'PT' %}
+            <pre>{{answer.content}}</pre>
             {% endif %}
             {% if answer.u_id == user.id%}
                 <table>
@@ -95,7 +99,7 @@
                 <table class="table">
                 {% for comment_item in comment %}
                     <tr>
-                    <td>{{comment_item.name}}</td>
+                    <td><a href="/user/{{comment_item.u_id}}">{{comment_item.name}}</a></td>
                     <td>{{comment_item.content|nl2br}}</td>
                     <td>{{comment_item.created_at}}</td>
                     </tr>
