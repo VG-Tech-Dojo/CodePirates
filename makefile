@@ -1,35 +1,35 @@
 setupdb:
-	cd migration;mysql -udemo -pdemo < ./CREATE_TABLE
+	cd migration;mysql -utreasure -ptreasure_pass < ./CREATE_TABLE
 
 deletedb:
-	cd migration;mysql -uroot  < ./DELETE_TABLE
+	cd migration;mysql -utreasure -ptreasure_pass < ./DELETE_TABLE
 	
 insertdb:
-	cd migration;mysql -uroot  < ./INSERT_TABLE
+	cd migration;mysql -utreasure -ptreasure_pass < ./INSERT_TABLE
 
 versionupdb101:
-	cd migration;mysql -uroot  < ./VER101
+	cd migration;mysql -utreasure -ptreasure_pass < ./VER101
 
 changelikeTable:
-	cd migration;mysql -uroot  < ./changelikeTable
+	cd migration;mysql -utreasure -ptreasure_pass < ./changelikeTable
 
 versionupdb201:
-	cd migration;mysql -uroot  < ./VER201
+	cd migration;mysql -utreasure -ptreasure_pass < ./VER201
 
 deletemasterdb:
-	cd migration;mysql -uroot -psarumon < ./DELETE_TABLE
+	cd migration;mysql -utreasure -ptreasure_pass < ./DELETE_TABLE
 
 setupmasterdb:
-	cd migration;mysql -uroot -psarumon < ./CREATE_TABLE
+	cd migration;mysql -utreasure -ptreasure_pass < ./CREATE_TABLE
 
 insertmasterdb:
-	cd migration;mysql -uroot -psarumon < ./INSERT_TABLE
+	cd migration;mysql -utreasure -ptreasure_pass < ./INSERT_TABLE
 
 versionupmasterdb101:
-	cd migration;mysql -uroot -psarumon < ./VER101
+	cd migration;mysql -utreasure -ptreasure_pass < ./VER101
 
 changemasterlikeTable:
-	cd migration;mysql -uroot -psarumon < ./changelikeTable
+	cd migration;mysql -utreasure -ptreasure_pass < ./changelikeTable
 
 versionupmasterdb201:
-	cd migration;mysql -uroot -psarumon < ./VER201
+	cd migration;mysql -utreasure -ptreasure_pass < ./VER201

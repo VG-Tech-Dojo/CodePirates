@@ -1,2 +1,2 @@
-use demo;
+use treasure;
 source ./altersql/alter301.sql;
