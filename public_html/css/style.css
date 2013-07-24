@@ -74,3 +74,21 @@
    background: #f89406; 
    width: 70px;
 }
+
+.PT, .PT:hover, .PT:focus, .PT:active, .PT.active, .PT.disabled, .PT[disabled]{
+   color: black;
+   background: #D3D3D3; 
+   width: 70px;
+}
+
+.JS, .JS:hover, .JS:focus, .JS:active, .JS.active, .JS.disabled, .JS[disabled]{
+   color: white;
+   background: #228B22; 
+   width: 70px;
+}
+
+.SQL, .SQL:hover, .SQL:focus, .SQL:active, .SQL.active, .SQL.disabled, .SQL[disabled]{
+   color: white;
+   background: #4B0082; 
+   width: 70px;
+}
