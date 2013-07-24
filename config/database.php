@@ -2,8 +2,8 @@
 $active_group = 'demo';
 $db = array();
 $db['demo'] = array();
-$db['demo']['dbname'] = 'demo';
+$db['demo']['dbname'] = 'treasure_db';
 $db['demo']['hostname'] = 'localhost';
 $db['demo']['port'] = '3306';
-$db['demo']['user'] = 'demo';
-$db['demo']['password'] = 'demo';
+$db['demo']['user'] = 'treasure';
+$db['demo']['password'] = 'treasure_pass';

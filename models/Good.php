@@ -22,7 +22,7 @@ class Good extends Model
     public function getLikeFromUID($u_id)
     {
         $good = $this->getFactory()->getDb_Dao_Good();
-        return $good->getlikefromqid($u_id);
+        return $good->getlikefromuid($u_id);
     }
 
     /**

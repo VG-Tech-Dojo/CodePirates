@@ -35,6 +35,10 @@
             <pre class="brush: ruby;">{{code}}</pre>
             {% elseif langtype == 'Python' %}
             <pre class="brush: python;">{{code}}</pre>
+            {% elseif langtype == 'JS' %}
+            <pre class="brush: js;">{{code}}</pre>
+            {% elseif langtype == 'PT' %}
+            <pre>{{code}}</pre>
             {% endif %}
             <form id="submit" class="answer_button" action="/question/save" method="post">
                 <input type="hidden" name="code" value="{{code}}">

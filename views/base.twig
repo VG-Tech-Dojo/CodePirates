@@ -74,7 +74,7 @@ mixpanel.init("c29126e001c9e21a4629b870e4f877c0");</script><!-- end Mixpanel -->
             <ul class="nav pull-right">
                 {% block login %}
                     {% if user.id %}
-                        <li><a href="/question" >{{ user.name }}</a></li>
+                        <li><a href="/user/{{user.id}}" >{{ user.name }}</a></li>
                         <li><a href="/user/logout">ログアウト</a></li>
                     {% else %}
                         <li><a href="/user/login">ログイン</a></li>
