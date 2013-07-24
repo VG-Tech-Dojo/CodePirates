@@ -3,7 +3,7 @@
 /**
  * 問題投稿画面
  */
-$app->get('/admin/postQuestion' ,function () use ($app) {
+$app->get('/admin/postQuestion', 'admin_auth' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/User.php';
     require_once MODELS_DIR . '/Difficulty.php';
@@ -26,7 +26,7 @@ $app->get('/admin/postQuestion' ,function () use ($app) {
 /**
  *問題修正のための問題リスト画面
  */
-$app->get('/admin/modifyQuestion' ,function () use ($app) {
+$app->get('/admin/modifyQuestion' , 'admin_auth' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/User.php';
@@ -48,7 +48,7 @@ $app->get('/admin/modifyQuestion' ,function () use ($app) {
 /**
  * 問題修正画面
  */
-$app->get('/admin/modifyQuestion/:id' ,function ($id) use ($app) {
+$app->get('/admin/modifyQuestion/:id' , 'admin_auth' ,function ($id) use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/User.php';
     require_once MODELS_DIR . '/Question.php';
@@ -75,7 +75,7 @@ $app->get('/admin/modifyQuestion/:id' ,function ($id) use ($app) {
 /**
  * 問題修正確認画面
  */
-$app->post('/admin/modifyQuestion/confirm' ,function () use ($app) {
+$app->post('/admin/modifyQuestion/confirm' , 'admin_auth' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once LIB_DIR . '/FormValidator/AdminPostQuestionFormValidator.php';
     require_once MODELS_DIR . '/Question.php';
@@ -115,7 +115,7 @@ $app->post('/admin/modifyQuestion/confirm' ,function () use ($app) {
 /**
  * 問題投稿確認画面
  */
-$app->post('/admin/confirm' ,function () use ($app) {
+$app->post('/admin/confirm' , 'admin_auth' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once LIB_DIR . '/FormValidator/AdminPostQuestionFormValidator.php';
     require_once MODELS_DIR . '/Question.php';
@@ -156,7 +156,7 @@ $app->post('/admin/confirm' ,function () use ($app) {
 /**
  * 問題投稿完了画面
  */
-$app->post('/admin/posted' ,function () use ($app) {
+$app->post('/admin/posted' , 'admin_auth' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Question.php';
 
@@ -201,7 +201,7 @@ $app->post('/admin/posted' ,function () use ($app) {
 /**
  * 問題修正完了画面
  */
-$app->post('/admin/modifyQuestion/posted' ,function () use ($app) {
+$app->post('/admin/modifyQuestion/posted' , 'admin_auth' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Question.php';
 
