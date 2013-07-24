@@ -44,7 +44,7 @@ function admin_auth()
     $app = Slim::getInstance();
     $session = $app->factory->getSession();
 
-    if ($session->get('user_name') !== "Treasure_admin") {
+    if ($session->get('user_name') !== "treasureAdmin") {
         $app->redirect('/');
     }
 }
