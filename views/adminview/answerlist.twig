@@ -1,0 +1,102 @@
+{% extends "base.twig" %}
+{% block title %}answer.twig{% endblock %}
+{% block content %}
+<div class="row">
+    {% if flash_msg.confarm_msg %}
+    <div class="alert alert-success">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+       {{flash_msg.confarm_msg}} 
+    </div>
+    {% endif %}
+    {% if flash_msg.del_ans %}
+    <div class="alert alert-success">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+       {{flash_msg.del_ans}} 
+    </div>
+    {% endif %}
+    <div class="page-header">
+        <h1>{{question.title}}のみんなの解答一覧</h1>
+    </div>
+    <a href="/question/{{question.id}}"><h2>問題</h2></a>
+    <div class="box">
+        {% autoescape false %}
+        {{question.content}}
+        {% endautoescape %}
+    </div>
+    <br>
+    <h2>みんなの回答一覧</h2>
+        <form method="post" action="/adminview/question/{{question.id}}" name="sort">
+            <select name="lang_narrow">
+              <option value="All">すべての言語</option>
+              <option value="PT">PlainText</option>
+              <option value="Ruby">Ruby</option>
+              <option value="PHP">PHP</option>
+              <option value="JS">JavaScript</option>
+              <option value="SQL">SQL</option>
+            </select>
+            <select name="sort">
+              <option value="All">ユーザー投稿順</option>
+              <option value="userABCsort">ユーザー五十音順</option>
+              <option value="like">いいね順</option>
+              <option value="comment">コメント順</option>
+              <option value="PV">閲覧数順</option>
+              <option value="line">コード行数順</option>
+            </select>
+            <input type="submit" value="絞り込む" onclick="sorting()">
+        </form>
+        <table>
+        {% for answerer_item in answer_data %}
+            {% if sort and sort != "All" and sort != 'userABCsort' %}
+                {% if lang_narrow == "All" or answerer_item.lang == lang_narrow %}
+                    <tr>
+                    <th><strong><a href="/user/{{answerer_item.u_id}}">{{answerer_item.name}}</a>さんの回答</strong></th>
+                    <td><a href="/adminview/{{answerer_item.id}}" >{{answerer_item.created_at}}に投稿した内容</a></td>
+                    <td><button class="btn disabled {{answerer_item.lang}}">{{answerer_item.lang}}</button></td>
+                    <td><i class="icon-comment"></i>:{{answerer_item.comment}}件  <i class="icon-thumbs-up"></i>：{{answerer_item.like}}</td>
+                    {% if sort == 'PV' and answerer_item.PV != 0 %}
+                        <td><i class="icon-user"></i>:{{answerer_item.PV}}回</td>
+                    {% elseif sort == 'PV' %}
+                        <td><i class="icon-user"></i>:0回</td>
+                    {% endif %}
+                    {% if sort == 'line' and answerer_item.line_count != 0 %}
+                        <td><i class="icon-align-justify"></i>:{{answerer_item.line_count}}行</td>
+                    {% elseif sort == 'line' %}
+                        <td><i class="icon-align-justify"></i>:0行</td>
+                    {% endif %}
+                    </tr>
+                {% endif %}
+            {% else %}
+                {% set nameFlag = 1 %}
+                {% if lang_narrow %}
+                    {% for item in answerer_item.answer %}
+                        {% if lang_narrow == "All" or item.lang == lang_narrow %}
+                            {% if nameFlag == 1%}
+                                <p><strong><a href="/user/{{answerer_item.answer.0.u_id}}">{{answerer_item.name}}</a>さんの回答</strong></p>
+                                {% set nameFlag = 0 %}
+                            {% endif %}
+                            <p>
+                                |-<a href="/adminview/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
+                                <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
+                                <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% if nameFlag == 1%}
+                        <p><strong><a href="/user/{{answerer_item.answer.0.u_id}}">{{answerer_item.name}}</a>さんの回答</strong></p>
+                        {% set nameFlag = 0 %}
+                    {% endif %}
+                    {% for item in answerer_item.answer %}
+                        <p>
+                            |-<a href="/adminview/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
+                            <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
+                            <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </table>
+    <a href="/question"><button class="btn" type="button">問題リストに戻る</button></a>
+</div>
+{% endblock %}

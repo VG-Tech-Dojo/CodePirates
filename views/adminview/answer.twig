@@ -1,0 +1,64 @@
+{% extends "base.twig" %}
+{% block title %}answer.twig{% endblock %}
+{% block content %}
+  {% if slimFlash.like %}
+      <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+        {{slimFlash.like}}
+      </div>
+  {% endif %}
+  {% if slimFlash.ans_modify %}
+      <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+        {{slimFlash.ans_modify}}
+      </div>
+  {% endif %}
+	<script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
+  <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCore.css" />
+	<script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPython.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushSql.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushRuby.js"></script>
+	<link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+        <div class="row">
+            <div class="page-header">
+                <h1><a href="/user/{{answerer.id}}">{{answerer.name}}</a>さんの{{question.title}}の回答</h1>
+            </div>
+            <a href="/question/{{question.id}}"><h2>問題</h2></a>
+            {% autoescape false %}
+            {{question.content}}
+            {% endautoescape %}
+            <br>
+            <br>
+            <h2>回答<button class="btn disabled {{answer.lang}}">{{answer.lang}}</button></h2>
+            {% if answer.lang == 'PHP' %}
+            <pre class="brush: php;">{{answer.content}}</pre>
+            {% elseif answer.lang == 'Ruby' %}
+            <pre class="brush: ruby;">{{answer.content}}</pre>
+            {% elseif answer.lang == 'Python' %}
+            <pre class="brush: python;">{{answer.content}}</pre>
+            {% elseif answer.lang == 'JS' %}
+            <pre class="brush: js;">{{answer.content}}</pre>
+            {% elseif answer.lang == 'SQL' %}
+            <pre class="brush: sql;">{{answer.content}}</pre>
+            {% elseif answer.lang == 'PT' %}
+            <pre>{{answer.content}}</pre>
+            {% endif %}
+            {% if comment %}
+                <table class="table">
+                {% for comment_item in comment %}
+                    <tr>
+                    <td><a href="/user/{{comment_item.u_id}}">{{comment_item.name}}</a></td>
+                    <td>{{comment_item.content|nl2br}}</td>
+                    <td>{{comment_item.created_at}}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% endif%}
+
+            <a href="/adminview/question/{{question.id}}"><button class="btn" type="button">問題{{question.id}}のみんなの回答一覧に戻る</button></a>
+            <a href="/adminview"><button class="btn" type="button">問題リストに戻る</button></a>
+        </div>
+{% endblock %}
