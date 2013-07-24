@@ -18,6 +18,7 @@
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPhp.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushPython.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushRuby.js"></script>
+    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushSql.js"></script>
 	  <link type="text/css" rel="stylesheet" href="/syntaxhighlighter/styles/shCoreDefault.css"/>
 	  <script type="text/javascript">SyntaxHighlighter.all();</script>
     <div class="row">
@@ -37,6 +38,8 @@
             <pre class="brush: python;">{{code}}</pre>
             {% elseif langtype == 'JS' %}
             <pre class="brush: js;">{{code}}</pre>
+            {% elseif langtype == 'SQL' %}
+            <pre class="brush: sql;">{{code}}</pre>
             {% elseif langtype == 'PT' %}
             <pre>{{code}}</pre>
             {% endif %}
