@@ -33,3 +33,18 @@ function authorized()
         $app->redirect('/');
     }
 }
+
+/**
+ * adminじゃない場合はトップにリダイレクトするfor Treasure2013
+ */
+function admin_auth()
+{
+    require_once LIB_DIR . '/Session.php';
+
+    $app = Slim::getInstance();
+    $session = $app->factory->getSession();
+
+    if ($session->get('user_name') !== "Treasure_admin") {
+        $app->redirect('/');
+    }
+}
