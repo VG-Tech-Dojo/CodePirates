@@ -19,10 +19,14 @@ $app->get('/adminview', 'admin_auth' ,function () use ($app) {
         $user_info['id'] = $session->get('user_id');
         $user_info['name'] = $session->get('user_name');
     }
-    $all_users = $user->getAllUsers();
+    $all_users_unready = $user->getAllUsers();
     $all_comments = $comment->getAllComments();
     $all_answers = $answer->getAllAnswer();
     $questionList = $question->getAllQuestion();
+    $all_users = array();
+    foreach($all_users_unready as $user_item){
+        $all_users[$user_item['id']] = $user_item;
+    }
     foreach($questionList as $question){
         foreach($all_users as &$user){
             $user[$question['id']] = '☓';
