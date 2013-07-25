@@ -50,7 +50,7 @@
                 {% if lang_narrow == "All" or answerer_item.lang == lang_narrow %}
                     <tr>
                     <th><strong><a href="/user/{{answerer_item.u_id}}">{{answerer_item.name}}</a>さんの回答</strong></th>
-                    <td><a href="/adminview/{{answerer_item.id}}" >{{answerer_item.created_at}}に投稿した内容</a></td>
+                    <td><a href="/adminview/answer/{{answerer_item.id}}" >{{answerer_item.created_at}}に投稿した内容</a></td>
                     <td><button class="btn disabled {{answerer_item.lang}}">{{answerer_item.lang}}</button></td>
                     <td><i class="icon-comment"></i>:{{answerer_item.comment}}件  <i class="icon-thumbs-up"></i>：{{answerer_item.like}}</td>
                     {% if sort == 'PV' and answerer_item.PV != 0 %}
@@ -75,7 +75,7 @@
                                 {% set nameFlag = 0 %}
                             {% endif %}
                             <p>
-                                |-<a href="/adminview/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
+                                |-<a href="/adminview/answer/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
                                 <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
                                 <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
                             </p>
@@ -88,7 +88,7 @@
                     {% endif %}
                     {% for item in answerer_item.answer %}
                         <p>
-                            |-<a href="/adminview/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
+                            |-<a href="/adminview/answer/{{item.id}}" >{{item.created_at}}に投稿した内容</a>
                             <button class="btn disabled {{item.lang}}">{{item.lang}}</button>
                             <i class="icon-comment"></i>:{{item.comment}}件  <i class="icon-thumbs-up"></i>：{{item.like}}
                         </p>

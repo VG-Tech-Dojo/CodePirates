@@ -13,6 +13,24 @@ require_once dirname(__FILE__) . '/Abstract.php';
  */
 class Db_Dao_User extends Db_Dao_Abstract
 {
+
+    /**
+     * すべてのユーザ情報を返す
+     *
+     * @return array 
+     * @throws PDOExeption
+     *
+     */
+    public function getAllUsers()
+    {
+        $dbh = $this->getDbHandler();
+
+        $query  = 'select * from user';
+        $statement = $dbh->prepare($query);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
     /**
      * ユーザIDを指定して任意のユーザ情報を返す
      *

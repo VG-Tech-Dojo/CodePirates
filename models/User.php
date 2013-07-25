@@ -32,6 +32,14 @@ class User extends Model
     }
 
     /**
+     * すべてのユーザIDを返す
+     */
+    public function getAllUsers()
+    {
+        $user = $this->getFactory()->getDb_Dao_User();
+        return $user->getAllUsers();
+    }
+    /**
      * 会員か非会員かを判定する
      *
      * @param string $user_name ユーザー名
