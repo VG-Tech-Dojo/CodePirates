@@ -1,9 +1,55 @@
 <?php
 
+
+$app->get('/adminview', 'admin_auth' ,function () use ($app) {
+    require_once LIB_DIR . '/Session.php';
+    require_once MODELS_DIR . '/Answer.php';
+    require_once MODELS_DIR . '/Question.php';
+    require_once MODELS_DIR . '/User.php';
+    require_once MODELS_DIR . '/Comment.php';
+
+
+    $session = $app->factory->getSession();
+    $question = $app->factory->getQuestion();
+    $user = $app->factory->getUser();
+    $answer = $app->factory->getAnswer();
+    $comment = $app->factory->getComment();
+    $user_info = array();
+    if ($session->get('user_id')) {
+        $user_info['id'] = $session->get('user_id');
+        $user_info['name'] = $session->get('user_name');
+    }
+    $all_users = $user->getAllUsers();
+    $all_comments = $comment->getAllComments();
+    $all_answers = $answer->getAllAnswer();
+    $questionList = $question->getAllQuestion();
+    foreach($questionList as $question){
+        foreach($all_users as &$user){
+            $user[$question['id']] = '☓';
+            unset($user['password']);
+            unset($user['salt']);
+            unset($user['updated_time']);
+            unset($user['created_time']);
+        }
+    }
+    foreach($all_answers as $answer_item){
+        $all_users[$answer_item['u_id']][$answer_item['q_id']] = '◯';
+    }
+    $ans_report = array_slice($all_answers, count($all_answers) - 5);
+    foreach($ans_report as &$report){
+        $report['u_name'] = $all_users[$report['u_id']]['name'];
+    }
+    $comment_report = array_slice($all_comments, count($all_comments) - 5);
+    foreach($comment_report as &$com_report){
+        $com_report['u_name'] = $all_users[$com_report['u_id']]['name'];
+    }
+    $app->render('adminview/dashboard.twig', array('user' => $user_info, 'questionList' => $questionList, 'all_users' => $all_users, 'ans_report' => $ans_report, 'comment_report' => $comment_report));
+});
+
 /**
  *問題修正のための問題リスト画面
  */
-$app->get('/adminview', 'admin_auth' ,function () use ($app) {
+$app->get('/adminview/questionlist', 'admin_auth' ,function () use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Question.php';
     require_once MODELS_DIR . '/User.php';
@@ -23,7 +69,7 @@ $app->get('/adminview', 'admin_auth' ,function () use ($app) {
 /**
  * 回答のコード表示画面
  */
-$app->get('/adminview/:a_id', 'admin_auth'  ,function ($a_id) use ($app) {
+$app->get('/adminview/answer/:a_id', 'admin_auth'  ,function ($a_id) use ($app) {
     require_once LIB_DIR . '/Session.php';
     require_once MODELS_DIR . '/Answer.php';
     require_once MODELS_DIR . '/Good.php';
@@ -68,9 +114,6 @@ $app->get('/adminview/:a_id', 'admin_auth'  ,function ($a_id) use ($app) {
         $like = true;
     }
 
-    if (!$user->canSee($user_info['id'], $answerInfo['q_id'])){
-        $app->error("この問題の回答を閲覧するには、問題への回答が必須です");
-    }
     
     if (!($answer_comment = $comment->getCommentByAnsId($a_id))) {
         $answer_comment = "";    
@@ -116,9 +159,6 @@ $app->get('/adminview/question/:id','admin_auth'  ,  function ($q_id) use ($app)
         if (($answerInfos = $answer->getAnswerByQuesId($questionInfo['id'])) == null) {
            $app->error('回答がありません'); 
         } else {
-            if (!$user->canSee($user_info['id'], $q_id)){
-                $app->error("回答一覧を見るには該当問題へ回答が必須です");
-            }
 
             $answererId = array();
             $answererName = array();
@@ -199,9 +239,6 @@ $app->post('/adminview/question/:id', 'admin_auth'  ,  function ($q_id) use ($ap
         if (($answerInfos = $answer->getAnswerByQuesId($questionInfo['id'])) == null) {
            $app->error('回答がありません'); 
         } else {
-            if (!$user->canSee($user_info['id'], $q_id)){
-                $app->error("回答一覧を見るには該当問題へ回答が必須です");
-            }
 
             $answererId = array();
             $answererName = array();
