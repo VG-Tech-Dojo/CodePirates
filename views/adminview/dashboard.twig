@@ -1,0 +1,67 @@
+{% extends "base.twig" %}
+{% block title %}dashboard.twig{% endblock %}
+{% block content %}
+    <h1>CodePirates管理画面</h1>
+    <a href=/adminview/questionlist><h3>問題リストへ</h3></a>
+    <table border=4 width=300 align=left frame=above>
+        <caption><strong>回答速報</strong></caption>
+            <tr>
+                <th>answer_time</th>
+                <th>name</th>
+                <th>問題ID</th>
+            </tr>
+            {% for report in ans_report %}
+                <tr>
+                <td>{{report.created_at}}</td>
+                <td><a href="/user/{{report.u_id}}">{{report.u_name}}</a></td>
+                <td><a href="/question/{{report.q_id}}">{{report.q_id}}</a></td>
+                </tr>
+            {% endfor %}
+    </table>
+    <table border=4 width=300 align=left frame=above>
+        <caption><strong>コメント速報</strong></caption>
+            <tr>
+                <th>comment_time</th>
+                <th>name</th>
+                <th>回答ID</th>
+            </tr>
+            {% for comment_report_item in comment_report %}
+                <tr>
+                <td>{{comment_report_item.created_at}}</td>
+                <td><a href="/user/{{comment_report_item.u_id}}">{{comment_report_item.u_name}}</a></td>
+                <td><a href="/adminview/answer/{{comment_report_item.a_id}}">{{comment_report_item.a_id}}</a></td>
+                </tr>
+            {% endfor %}
+    </table>
+    <table  border=4 width=400 align=right>
+        <caption><strong>問題IDと問題タイトル一覧</strong></caption>
+        <tr>
+            <th>問題ID</th>
+            <th>問題のタイトル</th>
+        </tr>
+        {% for question in questionList %}
+            <tr>
+                <td><a href="/question/{{question.id}}">{{question.id}}</a></td>
+                <td>{{question.title}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br><br>
+    <table  border=4 width=250 align=left>
+        <caption><strong>問題への回答状況</strong></caption>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+                {% for question in questionList %}
+                    <td>Q.{{question.id}}</td>
+                {% endfor %}
+        </tr>
+        {% for user_item in all_users %}
+            <tr>
+                {% for user_info in user_item %}
+                    <td>{{user_info}}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
