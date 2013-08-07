@@ -39,11 +39,13 @@ $app->get('/adminview', 'admin_auth' ,function () use ($app) {
     foreach($all_answers as $answer_item){
         $all_users[$answer_item['u_id']][$answer_item['q_id']] = '◯';
     }
-    $ans_report = array_slice($all_answers, count($all_answers) - 5);
+    $ans_report = array_slice($all_answers, count($all_answers) - 100);
+    $ans_report = array_reverse($ans_report);
     foreach($ans_report as &$report){
         $report['u_name'] = $all_users[$report['u_id']]['name'];
     }
-    $comment_report = array_slice($all_comments, count($all_comments) - 5);
+    $comment_report = array_slice($all_comments, count($all_comments) - 100);
+    $comment_report = array_reverse($comment_report);
     foreach($comment_report as &$com_report){
         $com_report['u_name'] = $all_users[$com_report['u_id']]['name'];
     }

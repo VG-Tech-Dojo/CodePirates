@@ -8,13 +8,13 @@
             <tr>
                 <th>answer_time</th>
                 <th>name</th>
-                <th>問題ID</th>
+                <th>回答ID</th>
             </tr>
             {% for report in ans_report %}
                 <tr>
                 <td>{{report.created_at}}</td>
                 <td><a href="/user/{{report.u_id}}">{{report.u_name}}</a></td>
-                <td><a href="/question/{{report.q_id}}">{{report.q_id}}</a></td>
+                <td><a href="/adminview/answer/{{report.id}}">{{report.id}}</a></td>
                 </tr>
             {% endfor %}
     </table>
