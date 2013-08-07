@@ -84,6 +84,7 @@
             <pre>{{answer.content}}</pre>
             {% endif %}
             {% if answer.u_id == user.id%}
+                <h6>※回答の修正は新規投稿で行なってください<h6>
                 <table>
                 <td><form><a href="/modify/answer/code/{{answer.id}}" class="btn btn-primary">修正する</a></form></td>
                 <td><form action="/answerdelete/{{answer.id}}" method="post" name="delpost" onSubmit="return delConfirm()">
