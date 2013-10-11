@@ -60,12 +60,13 @@ class User extends Model
      * @param string $name ユーザー名
      * @param string $password パスワード
      * @param string $salt サルト
+     * @param string $email メールアドレス
      * @return boolean 処理が成功した場合true, 失敗した場合false
      */
-    public function register($user_name, $password, $salt)
+    public function register($user_name, $password, $salt, $email)
     {
         $user = $this->getFactory()->getDb_Dao_User();
-        return $user->insert($user_name, $password, $salt);
+        return $user->insert($user_name, $password, $salt, $email);
     }
 
     /**

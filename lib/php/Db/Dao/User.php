@@ -95,16 +95,18 @@ class Db_Dao_User extends Db_Dao_Abstract
      * @param string $name ユーザー名
      * @param string $pass パスワード
      * @param string $salt サルト
+     * @param string $email メールアドレス
      * @return boolean 追加が成功して場合true, 失敗した場合false
      */
-    public function insert($name, $pass, $salt)
+    public function insert($name, $pass, $salt, $email)
     {
         $dbh = $this->getDbHandler();
-        $query = 'insert into user (name, password, salt, created_time) values (:NAME, :PASSWORD, :SALT, now())';
+        $query = 'insert into user (name, password, salt,email, created_time) values (:NAME, :PASSWORD, :SALT, :EMAIL, now())';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':NAME', $name, PDO::PARAM_STR);
         $statement->bindValue(':PASSWORD', $pass, PDO::PARAM_STR);
         $statement->bindValue(':SALT', $salt, PDO::PARAM_STR);
+        $statement->bindValue(':EMAIL', $email, PDO::PARAM_STR);
         $statement->execute();
         echo "OK";
 

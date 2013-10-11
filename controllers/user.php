@@ -81,7 +81,8 @@ $app->post('/user/register', 'noauthorized', function () use ($app) {
                 $user->register(
                     $params['user_name'],
                     PasswordUtil::hashPassword($params['password'], $salt),
-                    $salt
+                    $salt,
+                    $params['email']
                 );
 
                 $user->loadByName($params['user_name']);
