@@ -35,12 +35,26 @@ class User extends Model
      * 会員か非会員かを判定する
      *
      * @param string $user_name ユーザー名
+     * @param string $email メールアドレス
      * @return boolean 会員の場合true, 非会員の場合falseを返す
      */
-    public function isMember($user_name)
+    public function isSameName($user_name)
     {
         $user = $this->getFactory()->getDb_Dao_User();
         return $user->countByName($user_name) > 0;
+    }
+
+    /**
+     * 会員か非会員かを判定する
+     *
+     * @param string $user_name ユーザー名
+     * @param string $email メールアドレス
+     * @return boolean 会員の場合true, 非会員の場合falseを返す
+     */
+    public function isSameEmail($email)
+    {
+        $user = $this->getFactory()->getDb_Dao_User();
+        return $user->countByEmail($email) > 0;
     }
 
     /**

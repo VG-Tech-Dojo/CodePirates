@@ -70,6 +70,7 @@ class Db_Dao_User extends Db_Dao_Abstract
 
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
+
     /**
      * ユーザー名を指定してユーザー数を返す
      *
@@ -83,6 +84,25 @@ class Db_Dao_User extends Db_Dao_Abstract
         $query = 'select count(id) cnt from user where name = :NAME';
         $statement = $dbh->prepare($query);
         $statement->bindValue(':NAME', $name, PDO::PARAM_STR);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return intval($result['cnt']);
+    }
+
+    /**
+     * ユーザー名を指定してユーザー数を返す
+     *
+     * @param string $email メールアドレス
+     * @return int ユーザー数
+     * @throws PDOException
+     */
+    public function countByEmail($email)
+    {
+        $dbh = $this->getDbHandler();
+        $query = 'select count(id) cnt from user where email = :EMAIL';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':EMAIL', $email, PDO::PARAM_STR);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
 
