@@ -41,5 +41,21 @@ class FormValidator_UserFormValidator extends Validator
         );
         return $this->regExp($field, $val, $label, $pattern);
     }
+    /**
+     * メールアドレスフィルタ
+     *
+     * @param string $field フィールド名
+     * @param string $label メッセージ用ラベル名
+     * @param string $opts オプション
+     * @return boolean バリデーションでエラーがない場合true, ある場合false
+     */
+    public function email($field, $val, $label)
+    {
+      $pattern = array(
+        'pattern' => '/^[-+.\\w]+@[-a-z0-9]+(\\.[-a-z0-9]+)*\\.[a-z]{2,6}$/i',
+        'pattern_name' => '適切な形'
+      );
+      return $this->regExp($field, $val, $label, $pattern);
+    }
 }
 

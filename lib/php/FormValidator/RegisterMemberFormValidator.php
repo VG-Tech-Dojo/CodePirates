@@ -6,6 +6,7 @@ class FormValidator_RegisterMemberFormValidator extends FormValidator_UserFormVa
     public $labels = array(
         'user_name' => 'ユーザー名',
         'password' => 'パスワード',
+        'email' => 'メールアドレス',
     );
 
     public function __construct()
@@ -15,7 +16,9 @@ class FormValidator_RegisterMemberFormValidator extends FormValidator_UserFormVa
         $this->addRule('user_name', 'required', $this->labels['user_name'])
             ->addRule('user_name', 'userName', $this->labels['user_name'])
             ->addRule('password', 'required', $this->labels['password'])
-            ->addRule('password', 'password', $this->labels['password']);
+            ->addRule('password', 'password', $this->labels['password'])
+            ->addRule('email', 'required', $this->labels['email'])
+            ->addRule('email', 'email', $this->labels['email']);
     }
 
     public function date($field, $val, $label)

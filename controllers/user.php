@@ -74,14 +74,18 @@ $app->post('/user/register', 'noauthorized', function () use ($app) {
     if ($form_validator->run($params)) {
         $user = $app->factory->getUser();
         try {
-            if ($user->isMember($params['user_name'])) {
+            if ($user->isSameName($params['user_name'])) {
                 $errors['user_name'] = '既に登録されているユーザー名です';
+            }
+            else if ($user->isSameEmail($params['email'])) {
+                $errors['email'] = '既に登録されているアドレスです';
             } else {
                 $salt = PasswordUtil::generateSalt();
                 $user->register(
                     $params['user_name'],
                     PasswordUtil::hashPassword($params['password'], $salt),
-                    $salt
+                    $salt,
+                    $params['email']
                 );
 
                 $user->loadByName($params['user_name']);
