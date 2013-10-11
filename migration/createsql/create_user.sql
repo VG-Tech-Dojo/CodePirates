@@ -6,5 +6,6 @@ CREATE  TABLE IF NOT EXISTS `user` (
   `email` VARCHAR(255) NOT NULL ,
   `created_time` DATETIME NOT NULL ,
   `updated_time` DATETIME NULL ,
+  unique(`name`,`email`),
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
