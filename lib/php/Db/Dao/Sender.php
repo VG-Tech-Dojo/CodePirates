@@ -4,6 +4,9 @@ require_once dirname(__FILE__) . '/Abstract.php';
 
 class Db_Dao_Sender extends Db_Dao_Abstract
 {
+  /**
+   * コメントをしてくれた人の名前を取得
+   */
   public function getCommentUserName($u_id)
   {
         $dbh = $this->getDbHandler();
@@ -15,6 +18,9 @@ class Db_Dao_Sender extends Db_Dao_Abstract
         return $statement->fetch(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * コメントをもらった人のIDを取得 
+   */
   public function getMailUserID($a_id)
   {
         $dbh = $this->getDbHandler();
@@ -26,13 +32,16 @@ class Db_Dao_Sender extends Db_Dao_Abstract
         return $statement->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function getMailUserAddress($u_id)
+  /**
+   * コメントをもらった人のアドレスを取得 
+   */
+  public function getMailUserAddress($a_id)
   {
         $dbh = $this->getDbHandler();
 
-        $query = 'select email from user where id=:U_ID';
+        $query = 'select u.email as email from user u inner join answer a where a.u_id=u.id and a.id=:A_ID';
         $statement = $dbh->prepare($query);
-        $statement->bindValue(':U_ID', $u_id, PDO::PARAM_INT);
+        $statement->bindValue(':A_ID', $a_id, PDO::PARAM_INT);
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
   }

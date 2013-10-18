@@ -15,7 +15,7 @@ class Sender extends Model
     $sender = $this->getFactory()->getDb_Dao_Sender();
     $commentUserName = $sender->getCommentUserName($u_id);
     $mailUserID = $sender->getMailUserID($a_id);
-    $mailUserAddress = $sender->getMailUserAddress($mailUserID['u_id']);
+    $mailUserAddress = $sender->getMailUserAddress($a_id);
     if($u_id != $mailUserID['u_id']){
       $to = $mailUserAddress['email'];
       $subject = 'CodePiratesからのお知らせ';
@@ -23,7 +23,7 @@ class Sender extends Model
 
       $mail_result = mb_send_mail($to, $subject, $message);
     }else{
-      //TODO : 送信に失敗した時の例外処理を記述
+      //TODO : 送信に失敗した時の例外処理を記述(今後try-catchに変更予定)
       echo '送信していません';
       exit;
     }
