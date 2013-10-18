@@ -2,9 +2,9 @@
 
 require_once dirname(__FILE__) . '/Abstract.php';
 
-class Db_Dao_SendMail extends Db_Dao_Abstract
+class Db_Dao_Sender extends Db_Dao_Abstract
 {
-  public function getMailUserName($u_id)
+  public function getCommentUserName($u_id)
   {
         $dbh = $this->getDbHandler();
 
@@ -15,7 +15,7 @@ class Db_Dao_SendMail extends Db_Dao_Abstract
         return $statement->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function getCommentUser($a_id)
+  public function getMailUserID($a_id)
   {
         $dbh = $this->getDbHandler();
 
