@@ -1,6 +1,5 @@
 <?php
 
-//require_once PROJECT_DIR . '/lib/php/Db/Abstract.php';
 require_once dirname(__FILE__) . '/Abstract.php';
 
 /**
@@ -270,4 +269,22 @@ class Db_Dao_Answer extends Db_Dao_Abstract
 
         return ($statement->rowCount() === 1);
     }
+
+    /**
+     * AnswerIDを指定してコメントをもらったユーザーのIDを返す
+     *
+     * @param int $a_id 回答ID
+     * @return 
+     */
+    public function getCommentedUserID($a_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select u_id from answer where id=:A_ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':A_ID', $a_id, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    } 
+
 }

@@ -132,4 +132,20 @@ class Db_Dao_User extends Db_Dao_Abstract
 
         return ($statement->rowCount() === 1);
     }
+
+    /**
+     * AnswerIDを指定してコメントをもらったユーザーのメールアドレスを取得
+     * @param int $a_id 回答ID
+     * @return
+     */
+    public function getCommentedUserAddress($a_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select u.email as email from user u inner join answer a where a.u_id=u.id and a.id=:A_ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':A_ID', $a_id, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
 }

@@ -528,14 +528,14 @@ $app->post('/modify/answer/result', 'authorized', function () use ($app) {
  */
 $app->post('/comment/register', 'authorized', function () use ($app) {
     require_once MODELS_DIR . '/Comment.php';
-    require_once MODELS_DIR . '/Sender.php';
+    require_once MODELS_DIR . '/MailNotifier.php';
     require_once LIB_DIR . '/Session.php';
     require_once LIB_DIR . '/FormValidator/CommentFormValidator.php';
 
     $params  = $app->request()->post();
     $session = $app->factory->getSession();
     $comment = $app->factory->getComment();
-    $sender = $app->factory->getSender();
+    $mailNotifier = $app->factory->getMailNotifier();
     $errors  = array();
 
     $form_validator = $app->factory->getFormValidator_CommentFormValidator();
@@ -557,7 +557,7 @@ $app->post('/comment/register', 'authorized', function () use ($app) {
                     $params['answer_num'],
                     $confarmcomment
                 );
-                $sender->sendCommentMail(
+                $mailNotifier->sendMail(
                     $user_info['id'],
                     $params['answer_num']
                 );
