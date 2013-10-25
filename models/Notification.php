@@ -2,55 +2,50 @@
 require_once dirname(__FILE__) . '/Model.php';
 require_once dirname(__FILE__) . '/../lib/php/Db/Dao/User.php';
 require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Answer.php';
+require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Comment.php';
 
 class Notification extends Model
 {
-  public function MailNotifier($u_id, $a_id)
+  public function MailNotifier($answerPostedUserID, $postedAnswerID)
   {
-    $judgeSendingMail = $this->judgeSendingMail($u_id);
-    if($judgeSendingMail == "true"){
-      $mailContents = $this->getMailContents($u_id, $a_id);
-      $sendMail = $this->sendMail($mailContents["to"], $mailContents["subject"], $mailContents["message"]);
-    }
+    $judgementedFlag = $this->judgeTransmissionMail($answerPostedUserID, $postedAnswerID);
   }
   
   /**
    *  メールを送るかどうかを判定
-   *  @param int commentedUserID コメントをされたひとのユーザーID
-   *  @return boolian メールを送信する場合はtrueそうでなければfalseを返す 
    */
-  private function judgeSendingMail($u_id)
+  private function judgeTransmissionMail($answerPostedUserID, $postedAnswerID)
   {
     $answer = $this->getFactory()->getDb_Dao_Answer();
+    $comment = $this->getFactory()->getDb_Dao_Comment();
 
-    $commentedUserID = $answer->getCommentedUserID($u_id);
-
-    if($u_id != $commentedUserID['u_id']){
-      return true;
-    }else{
-      return false;
+    $commentedUsersID = $comment->findCommentedUserIDByAnswerID($postedAnswerID);
+    foreach($commentedUsersID as $uniqueID => $ID){
+      if($answerPostedUserID != $ID){
+        $mailContents = $this->getMailContents($answerPostedUserID,$commentedUsersID, $ID);
+        $sendMail = $this->sendMail($mailContents["to"], $mailContents["subject"], $mailContents["message"]);
+      }
     }
   }
 
   /**
-   *  メール本文取得
-   *  @param array $commentedUserName コメントしたひとの情報
-   *  @param array commentedUserAddress コメントされたひとのアドレス
+   *  メール送信に必要な情報を取得
    */
-  private function getMailContents($u_id, $a_id)
+  private function getMailContents($answerPostedUserID,$commentedUserID, $postedAnswerUserID)
   {
     $user = $this->getFactory()->getDb_Dao_User();
     $answer = $this->getFactory()->getDb_Dao_Answer();
 
-    $commentUser = $user->findByUserId($u_id);
-    $commentedUserAddress = $user->getCommentedUserAddress($a_id);
+    $commentUser = $user->findByUserId($answerPostedUserID);
+    $commentedUser = $user->getuserbyid($postedAnswerUserID);
 
-    $mailContents["to"] = $commentedUserAddress['email'];
+    $mailContents["to"] = $commentedUser['email'];
     $mailContents["subject"] = 'CodePiratesからのお知らせ';
     $mailContents["message"] = $commentUser['name'] . 'さんからコメントがつきました';
 
     return $mailContents;
   }
+
   /**
    *  メールを送信
    */

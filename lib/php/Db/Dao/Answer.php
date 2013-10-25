@@ -276,7 +276,7 @@ class Db_Dao_Answer extends Db_Dao_Abstract
      * @param int $a_id 回答ID
      * @return 
      */
-    public function getCommentedUserID($a_id)
+    public function findCommentedUserID($a_id)
     {
         $dbh = $this->getDbHandler();
 
@@ -286,5 +286,4 @@ class Db_Dao_Answer extends Db_Dao_Abstract
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
     } 
-
 }
