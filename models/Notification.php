@@ -31,13 +31,13 @@ class Notification extends Model
     //回答者へメールを送信
     if($commentPostUserID != $answerUserInformation['id']){
       $mailContents = $this->getAnsweredUserMailContents($commentPostUserID, $answerID);
-      $mail_result = mb_send_mail($to, $subject, $message);
+      $mail_result = mb_send_mail($mailContents["to"], $mailContents["subject"], $mailContents["message"]);
     }
     //コメントをくれたユーザーへメールを送信
     foreach($commentedAllUserID as $uniqueID => $commentedUserID){
       if($commentPostUserID != $commentedUserID){
         $mailContents = $this->getCommentedUserMailContents($commentPostUserID, $commentedUserID, $answerID);
-        $mail_result = mb_send_mail($to, $subject, $message);
+        $mail_result = mb_send_mail($mailContents["to"], $mailContents["subject"], $mailContents["message"]);
       }
     }
   }
