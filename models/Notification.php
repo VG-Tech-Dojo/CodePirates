@@ -35,7 +35,7 @@ class Notification extends Model
     }
     //コメントをくれたユーザーへメールを送信
     foreach($commentedAllUserID as $uniqueID => $commentedUserID){
-      if($commentPostUserID != $commentedUserID && $commentPostUserID != $answerUserInformation['id']){
+      if($commentPostUserID != $commentedUserID){
         $mailContents = $this->getCommentedUserMailContents($commentPostUserID, $commentedUserID, $answerID);
         $sendMail = $this->sendMail($mailContents["to"], $mailContents["subject"], $mailContents["message"]);
       }
