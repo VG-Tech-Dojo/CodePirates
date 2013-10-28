@@ -78,21 +78,39 @@ class Db_Dao_Comment extends Db_Dao_Abstract
      * @return int 人数
      * @throws PDOException
      */
-    /*
     public function getcommentnumbyanswerid($a_id)
     {
         $dbh = $this->getDbHandler();
 
-        $query = ' a_id = :ID';
+        $query = 'select count(id) cnt from comment where a_id = :ID';
         $statement = $dbh->prepare($query);
-        $statement->bindValue(':ID', $q_id, PDO::PARAM_INT);
+        $statement->bindValue(':ID', $a_id, PDO::PARAM_INT);
         $statement->execute();
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $result['cnt'];
     }
-    */
+
+    /**
+     * AnswerIDを指定してコメントしてくれたユーザーのIDを返す
+     *
+     * @param string $a_id AnswerID
+     * @return array ユーザーID
+     * @throws PDOException
+     */
+    public function findCommentedUserIDByAnswerID($a_id)
+    {
+        $dbh = $this->getDbHandler();
+
+        $query = 'select distinct u_id from comment where a_id = :ID';
+        $statement = $dbh->prepare($query);
+        $statement->bindValue(':ID', $a_id, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetchALL(PDO::FETCH_COLUMN);
+    }
+
     /**
      * コメントを追加する
      *
