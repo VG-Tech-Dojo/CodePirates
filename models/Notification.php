@@ -3,6 +3,7 @@ require_once dirname(__FILE__) . '/Model.php';
 require_once dirname(__FILE__) . '/../lib/php/Db/Dao/User.php';
 require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Answer.php';
 require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Comment.php';
+require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Maillog.php';
 
 class Notification extends Model
 {
@@ -23,6 +24,7 @@ class Notification extends Model
     $answer = $this->getFactory()->getDb_Dao_Answer();
     $comment = $this->getFactory()->getDb_Dao_Comment();
     $user = $this->getFactory()->getDb_Dao_User();
+    $maillog = $this->getFactory()->getDb_Dao_Maillog();
 
     $commentedAllUserID = $comment->findCommentedUserIDByAnswerID($answerID);
     $answerInformation = $answer->getanswerbyansid($answerID);
@@ -32,12 +34,17 @@ class Notification extends Model
     if($commentPostUserID != $answerUserInformation['id']){
       $mailContents = $this->getAnsweredUserMailContents($commentPostUserID, $answerID);
       $mail_result = mb_send_mail($mailContents["to"], $mailContents["subject"], $mailContents["message"]);
+      //送信内容をDBに書き込む
+      $maillogInsert = $maillog->insert($answerID,$mailContents["to"], $mailContents["subject"], $mailContents["message"]);
     }
+
     //コメントをくれたユーザーへメールを送信
     foreach($commentedAllUserID as $uniqueID => $commentedUserID){
-      if($commentPostUserID != $commentedUserID){
+      if($commentPostUserID != $commentedUserID && $answerUserInformation['id'] != $commentedUserID){
         $mailContents = $this->getCommentedUserMailContents($commentPostUserID, $commentedUserID, $answerID);
         $mail_result = mb_send_mail($mailContents["to"], $mailContents["subject"], $mailContents["message"]);
+        //送信内容をDBに書き込む
+        $maillogInsert = $maillog->insert($answerID,$mailContents["to"], $mailContents["subject"], $mailContents["message"]);
       }
     }
   }
