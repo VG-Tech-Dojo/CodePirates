@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . '/Model.php';
 require_once dirname(__FILE__) . '/../lib/php/Db/Dao/User.php';
 require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Answer.php';
 require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Comment.php';
-require_once dirname(__FILE__) . '/../lib/php/Db/Dao/Maillog.php';
+require_once dirname(__FILE__) . '/../lib/php/Db/Dao/MailLog.php';
 
 class Notification extends Model
 {
@@ -24,27 +24,27 @@ class Notification extends Model
     $answer = $this->getFactory()->getDb_Dao_Answer();
     $comment = $this->getFactory()->getDb_Dao_Comment();
     $user = $this->getFactory()->getDb_Dao_User();
-    $maillog = $this->getFactory()->getDb_Dao_Maillog();
+    $mailLog = $this->getFactory()->getDb_Dao_MailLog();
 
     $commentedAllUserID = $comment->findCommentedUserIDByAnswerID($answerID);
     $answerInformation = $answer->getanswerbyansid($answerID);
-    $answerUserInformation = $user->findByUserId($answerInformation['u_id']);
+    $answeredUserInformation = $user->findByUserId($answerInformation['u_id']);
 
     //回答者へメールを送信
-    if($commentPostUserID != $answerUserInformation['id']){
+    if($commentPostUserID != $answeredUserInformation['id']){
       $mailContents = $this->getAnsweredUserMailContents($commentPostUserID, $answerID);
       $mail_result = mb_send_mail($mailContents["to"], $mailContents["subject"], $mailContents["message"]);
       //送信内容をDBに書き込む
-      $maillogInsert = $maillog->insert($answerID,$mailContents["to"], $mailContents["subject"], $mailContents["message"]);
+      $insertedMailLog = $mailLog->insert($answerID,$mailContents["to"], $mailContents["subject"], $mailContents["message"]);
     }
 
     //コメントをくれたユーザーへメールを送信
     foreach($commentedAllUserID as $uniqueID => $commentedUserID){
-      if($commentPostUserID != $commentedUserID && $answerUserInformation['id'] != $commentedUserID){
+      if($commentPostUserID != $commentedUserID && $answeredUserInformation['id'] != $commentedUserID){
         $mailContents = $this->getCommentedUserMailContents($commentPostUserID, $commentedUserID, $answerID);
         $mail_result = mb_send_mail($mailContents["to"], $mailContents["subject"], $mailContents["message"]);
         //送信内容をDBに書き込む
-        $maillogInsert = $maillog->insert($answerID,$mailContents["to"], $mailContents["subject"], $mailContents["message"]);
+        $maillogInsert = $mailLog->insert($answerID,$mailContents["to"], $mailContents["subject"], $mailContents["message"]);
       }
     }
   }
@@ -55,7 +55,7 @@ class Notification extends Model
    * @param int $commentedUserID 今までに回答者が回答した問題に対してコメントを投稿したユーザー個人のID
    * @param int $answerID 回答者が回答した問題のID
    * @param array $commentPostUserInformation 今、コメントを投稿したユーザーの情報
-   * @param array $answerUserInformation 回答を投稿したユーザーの情報
+   * @param array $answeredUserInformation 回答を投稿したユーザーの情報
    * @return array $mailContents メール送信に必要な情報を返す(アドレス、タイトル、内容)
    */
   private function getAnsweredUserMailContents($commentPostUserID, $answerID) 
@@ -67,9 +67,9 @@ class Notification extends Model
     $commentPostUserInformation = $user->findByUserId($commentPostUserID);
     //本文に必要な情報を取得
     $answerInformation = $answer->getanswerbyansid($answerID);
-    $answerUserInformation = $user->findByUserId($answerInformation['u_id']);
+    $answeredUserInformation = $user->findByUserId($answerInformation['u_id']);
 
-    $mailContents["to"] = $answerUserInformation['email'];
+    $mailContents["to"] = $answeredUserInformation['email'];
     $mailContents["subject"] = 'CodePiratesからのお知らせ';
     $mailContents["message"] = 'あなたが投稿した問題に' . $commentPostUserInformation['name'] . 'さんからコメントがつきました';
 
@@ -82,7 +82,7 @@ class Notification extends Model
    * @param int $commentedUserID 今までに回答者が回答した問題に対してコメントを投稿したユーザー個人のID
    * @param int $answerID 回答者が回答した問題のID
    * @param array $commentPostUserInformation 今、コメントを投稿したユーザーの情報
-   * @param array $answerUserInformation 回答を投稿したユーザーの情報
+   * @param array $answeredUserInformation 回答を投稿したユーザーの情報
    * @param array $commentedUserInformation 今までにコメントを投稿したユーザーの情報
    * @return array $mailContents メール送信に必要な情報を返す(アドレス、タイトル、内容)
    */
@@ -95,12 +95,12 @@ class Notification extends Model
     $commentPostUserInformation = $user->findByUserId($commentPostUserID);
     //本文に必要な情報を取得
     $answerInformation = $answer->getanswerbyansid($answerID);
-    $answerUserInformation = $user->findByUserId($answerInformation['u_id']);
+    $answeredUserInformation = $user->findByUserId($answerInformation['u_id']);
     $commentedUserInformation = $user->getuserbyid($commentedUserID);
 
     $mailContents["to"] = $commentedUserInformation['email'];
     $mailContents["subject"] = 'CodePiratesからのお知らせ';
-    $mailContents["message"] = $answerUserInformation['name'] . 'さんが投稿した問題に' . $commentPostUserInformation['name'] . 'さんからコメントがつきました';
+    $mailContents["message"] = $answeredUserInformation['name'] . 'さんが投稿した問題に' . $commentPostUserInformation['name'] . 'さんからコメントがつきました';
 
     return $mailContents;
   }
