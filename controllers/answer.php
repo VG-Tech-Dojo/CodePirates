@@ -557,7 +557,7 @@ $app->post('/comment/register', 'authorized', function () use ($app) {
                     $params['answer_num'],
                     $confarmcomment
                 );
-                $notification->MailNotifier(
+                $notification->judgeTransmissionMail(
                     $user_info['id'],
                     $params['answer_num']
                 );
