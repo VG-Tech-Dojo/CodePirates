@@ -1,13 +1,13 @@
 <?php
 require_once dirname(__FILE__) . '/Abstract.php';
 /**
- * Db_Dao_Maillogクラス
+ * Db_Dao_MailLogクラス
  *
  * @package Db
  * @subpackage Dao
  *
  */
-class Db_Dao_Maillog extends Db_Dao_Abstract
+class Db_Dao_MailLog extends Db_Dao_Abstract
 {
   /**
    * メール送信時に、内容をDBに記録する
@@ -22,7 +22,7 @@ class Db_Dao_Maillog extends Db_Dao_Abstract
   {
     $dbh = $this->getDBHandler();
 
-    $query = 'insert into maillog (u_id,email_address,subject,message,created_at) values (:U_ID, :EMAIL_ADDRESS, :SUBJECT, :MESSAGE, now())';
+    $query = 'insert into mail_log (u_id, email_address, subject, message, created_at) values (:U_ID, :EMAIL_ADDRESS, :SUBJECT, :MESSAGE, now())';
     $statement = $dbh->prepare($query);
     $statement->bindValue(':U_ID', $u_id, PDO::PARAM_INT);
     $statement->bindValue(':EMAIL_ADDRESS', $email_address, PDO::PARAM_STR);

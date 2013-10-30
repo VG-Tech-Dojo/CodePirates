@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `maillog` (
+CREATE TABLE IF NOT EXISTS `mail_log` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `u_id` INT NOT NULL,
   `email_address` TEXT NOT NULL
