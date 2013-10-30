@@ -2,3 +2,4 @@ use treasure;
 source ./createsql/create_user.sql;
 source ./createsql/create_answer.sql;
 source ./createsql/create_question.sql;
+source ./createsql/create_maillog.sql;
